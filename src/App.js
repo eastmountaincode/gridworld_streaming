@@ -1,30 +1,32 @@
-import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import AdminPanel from './admin/AdminPanel';
 import './App.css';
 
+import DefaultHome from './DefaultHome';
+
 function App() {
-  const [apiData, setApiData] = useState(null);
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('/api/example');
-      const data = await response.json();
-      setApiData(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
   return (
-    <div className="App">
-      <p>Hello111</p>
-      <button onClick={fetchData}>Fetch API Data</button>
-      {apiData && (
-        <div>
-          <h2>API Response:</h2>
-          <pre>{JSON.stringify(apiData, null, 2)}</pre>
-        </div>
-      )}
-    </div>
+    <Router>
+      <div className="App">
+        <nav style={{ backgroundColor: 'lightblue', padding: '10px' }}>
+          <h1>Navbar</h1>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/admin">Admin Panel</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <Routes>
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/" element={<DefaultHome />} />
+        </Routes>
+
+      </div>
+    </Router>
   );
 }
 
