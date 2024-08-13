@@ -19,9 +19,10 @@ module.exports = async function handler(req, res) {
     switch (method) {
       case 'GET':
         // Input: None required
-        // Output: JSON object with count of users
-        const count = await collection.countDocuments();
-        res.status(200).json({ count });
+        // Output: JSON object with count of users and array of user objects
+        const records = await collection.find({}).toArray();
+        const count = records.length;
+        res.status(200).json({ count, records });
         break;
       case 'POST':
         // Input: Array of user objects in request body
@@ -30,10 +31,21 @@ module.exports = async function handler(req, res) {
         res.status(200).json({ message: `${result.insertedCount} users inserted` });
         break;
       case 'DELETE':
-        // Input: None required
-        // Output: JSON object with message indicating number of users deleted
-        const deleteResult = await collection.deleteMany({});
-        res.status(200).json({ message: `${deleteResult.deletedCount} users deleted` });
+        if (req.query.all === 'true') {
+          // Delete all users
+          const deleteAllResult = await collection.deleteMany({});
+          res.status(200).json({ message: `All ${deleteAllResult.deletedCount} users deleted` });
+        } else if (req.query.id) {
+          // Delete a specific user by ID
+          const deleteOneResult = await collection.deleteOne({ _id: new ObjectId(req.query.id) });
+          if (deleteOneResult.deletedCount === 1) {
+            res.status(200).json({ message: `User with ID ${req.query.id} deleted` });
+          } else {
+            res.status(404).json({ message: `User with ID ${req.query.id} not found` });
+          }
+        } else {
+          res.status(400).json({ message: 'Specify ?all=true to delete all users or provide an id to delete a specific user' });
+        }
         break;
       default:
         // Handle unsupported HTTP methods

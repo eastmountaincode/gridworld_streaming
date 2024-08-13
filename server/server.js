@@ -1,5 +1,4 @@
 const cors = require('cors');
-app.use(cors());
 require('dotenv').config();
 const express = require('express');
 const usersHandler = require('../api/users');
@@ -8,6 +7,7 @@ const securityQuestionsHandler = require('../api/security_questions');
 const app = express();
 const port = 3001; // Use a different port than your React app
 
+app.use(cors());
 app.use(express.json());
 
 app.all('/api/users', async (req, res) => {
