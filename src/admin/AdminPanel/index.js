@@ -6,7 +6,7 @@ const AdminPanel = () => {
 
   const handleClear = async (table) => {
     try {
-      const response = await fetch(`/api/clear?table=${table}`, { method: 'DELETE' });
+      const response = await fetch(`/api/admin?table=${table}`, { method: 'DELETE' });
       const data = await response.json();
       setMessage(data.message);
     } catch (error) {
@@ -16,7 +16,7 @@ const AdminPanel = () => {
 
   const handleFetch = async (table) => {
     try {
-      const response = await fetch(`/api/fetch?table=${table}`, { method: 'GET' });
+      const response = await fetch(`http://localhost:3001/api/fetch?table=${table}`, { method: 'GET' });
       const data = await response.json();
       setMessage(`Fetched ${data.count} records from ${table}`);
     } catch (error) {
@@ -26,17 +26,28 @@ const AdminPanel = () => {
 
   const handleSeed = async (table) => {
     try {
-      const response = await fetch(`/api/seed?table=${table}`, { method: 'POST' });
+      const seedData = require(`./seed_data/${table}_seed.json`)[table];
+      const response = await fetch(`http://localhost:3001/api/${table}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(seedData),
+      });
       const data = await response.json();
       setMessage(data.message);
     } catch (error) {
       setMessage(`Error seeding data: ${error.message}`);
     }
   };
+  
 
   return (
     <div className="admin-panel">
       <h1>Admin Panel</h1>
+
+      {message && <div className="message">{message}</div>}
+
       {tables.map(table => (
         <div key={table} className="table-controls">
           <h2>{table}</h2>
@@ -45,7 +56,6 @@ const AdminPanel = () => {
           <button onClick={() => handleSeed(table)}>Seed</button>
         </div>
       ))}
-      {message && <div className="message">{message}</div>}
     </div>
   );
 };

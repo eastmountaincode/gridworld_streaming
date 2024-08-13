@@ -48,7 +48,7 @@ async function handleSeed(req, res, table) {
     const collection = database.collection(table);
 
     // Load seed data from a JSON file
-    const seedData = require(`../../seed_data/${table}_seed.json`)[table];
+    const seedData = require(`./seed_data/${table}_seed.json`)[table];
     if (!seedData) {
       return res.status(404).json({ message: `No seed data available for ${table}` });
     }
