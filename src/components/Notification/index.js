@@ -1,0 +1,35 @@
+import React, { useEffect } from 'react';
+import { toast, ToastContainer, Flip } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNotification } from '../../context/NotificationContext';
+
+const Notification = () => {
+  const { notification } = useNotification();
+
+  useEffect(() => {
+    if (notification) {
+      const { message, type, duration } = notification;
+      toast[type](message, { autoClose: duration });
+    }
+  }, [notification]);
+
+  return (
+    <ToastContainer
+      position="bottom-right"
+      hideProgressBar={false}
+      newestOnTop
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss={false}
+      draggable={false}
+      pauseOnHover={false}
+      theme="dark"
+      transition={Flip}
+    />
+  );
+};
+
+export default Notification;
+
+
+

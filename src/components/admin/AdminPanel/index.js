@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactJson from '@microlink/react-json-view'
+import AdminNavbar from './AdminNavbar';
 
 
 const AdminPanel = () => {
@@ -55,10 +56,10 @@ const AdminPanel = () => {
 
       {message && <div className="message">{message}</div>}
       {fetchedRecords && (
-        <div className="json-view-container" style={{textAlign: 'left'}}>
-          <ReactJson src={fetchedRecords} 
-          collapsed={true}
-          enableClipboard={false} />
+        <div className="json-view-container" style={{ textAlign: 'left' }}>
+          <ReactJson src={fetchedRecords}
+            collapsed={true}
+            enableClipboard={false} />
         </div>
       )}
 
@@ -70,6 +71,9 @@ const AdminPanel = () => {
           <button onClick={() => handleSeed(table)}>Seed</button>
         </div>
       ))}
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
+        <AdminNavbar></AdminNavbar>
+      </div>
     </div>
   );
 };

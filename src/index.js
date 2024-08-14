@@ -4,9 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { AuthProvider } from './context/AuthContext';
+import { NotificationProvider } from './context/NotificationContext';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <App />
+    <NotificationProvider>
+        <AuthProvider>
+            <App />
+        </AuthProvider>
+    </NotificationProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
