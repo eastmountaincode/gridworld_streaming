@@ -4,7 +4,7 @@ import AdminNavbar from './AdminNavbar';
 
 
 const AdminPanel = () => {
-  const tables = ['users', 'security_questions'];
+  const tables = ['users', 'security-questions'];
   const [message, setMessage] = useState('');
   const [fetchedRecords, setFetchedRecords] = useState(null);
 

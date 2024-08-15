@@ -1,9 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../context/AuthContext';
 
 const MainNavbarAccountArea = () => {
   const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleAccountClick = () => {
+    navigate('/account');
+  };
 
   if (!isAuthenticated) {
     return (
@@ -16,7 +21,7 @@ const MainNavbarAccountArea = () => {
 
   return (
     <div>
-      <span>{user.email}</span>
+      <span onClick={handleAccountClick} style={{ cursor: 'pointer' }}>{user.email}</span>
       <img 
         src={user.hasAccessToken ? "/path-to-premium-icon.png" : "/path-to-regular-icon.png"} 
         alt="User status" 

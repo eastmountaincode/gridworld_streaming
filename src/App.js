@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AdminPanel from './components/admin/AdminPanel';
 import './App.css';
 
@@ -8,6 +8,8 @@ import CreateAccount from './components/account/CreateAccount';
 import Notification from './components/Notification';
 import Login from './components/account/Login';
 import MainNavbar from './components/navigation/MainNavbar';
+import ForgotPassword from './components/account/ForgotPassword';
+import AccountPage from './components/account/AccountPage';
 
 
 function App() {
@@ -22,6 +24,9 @@ function App() {
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/account" element={<AccountPage />} />
+
 
 
         </Routes>

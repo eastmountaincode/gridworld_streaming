@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         console.log('token:', token)
         console.log('user:', user);
         try {
-          const response = await fetch('http://localhost:3001/api/auth/validate_token', {
+          const response = await fetch('http://localhost:3001/api/auth/validate-token', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

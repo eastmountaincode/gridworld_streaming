@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNotification } from '../../../context/NotificationContext';
 import { useAuth } from '../../../context/AuthContext';
 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
@@ -70,6 +70,9 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
       </form>
+      <div>
+        <Link to="/forgot-password">Forgot Password</Link>
+      </div>
     </div>
   );
 };

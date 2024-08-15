@@ -43,7 +43,8 @@ const handler = async (req, res) => {
                 token,
                 user: {
                     email: user.email,
-                    hasAccessToken: user.has_access_token
+                    hasAccessToken: user.has_access_token,
+                    dateCreated: user.date_created
                 }
             });
         } catch (error) {
