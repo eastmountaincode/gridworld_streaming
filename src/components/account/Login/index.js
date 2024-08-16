@@ -30,17 +30,17 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('Login successful:', data);
-        // store the token and the user in AuthContext
-        login(data.token, data.user);
-        showNotification('Login successful', 'success', 5000);
+        // store the token and the userData in AuthContext
+        login(data.token, data.userData);
+        showNotification('Login successful', 'success');
         navigate('/', {replace: true});
 
       } else {
         const errorData = await response.json();
-        showNotification(errorData.message || 'Login failed', 'error', 5000);
+        showNotification(errorData.message || 'Login failed', 'error');
       }
     } catch (error) {
-      showNotification('An error occurred during login', 'error', 5000);
+      showNotification('An error occurred during login', 'error');
     }
   };
 

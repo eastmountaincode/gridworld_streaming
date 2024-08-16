@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 
 const Account = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, userData } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,9 +19,9 @@ const Account = () => {
   return (
     <div className="account-page">
       <h1>Account Information</h1>
-      <p>Email: {user.email}</p>
-      <p>Access Token: {user.hasAccessToken ? 'Yes' : 'No'}</p>
-      <p>Created on: {new Date(user.dateCreated).toLocaleDateString()}</p>
+      <p>Email: {userData.email}</p>
+      <p>Access Token: {userData.hasAccessToken ? 'Yes' : 'No'}</p>
+      <p>Created on: {new Date(userData.dateCreated).toLocaleDateString()}</p>
     </div>
   );
 };

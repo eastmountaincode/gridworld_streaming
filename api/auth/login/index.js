@@ -41,7 +41,7 @@ const handler = async (req, res) => {
             return res.status(200).json({
                 message: 'Login successful',
                 token,
-                user: {
+                userData: {
                     userId: user._id,
                     email: user.email,
                     hasAccessToken: user.has_access_token,

@@ -1,7 +1,8 @@
 const validateJwtToken = async () => {
     const storedSession = localStorage.getItem('userSession');
     if (storedSession) {
-      const { token } = JSON.parse(storedSession);
+      const { token, userData } = JSON.parse(storedSession);
+      console.log("validating token, info:", token, userData);
       try {
         const response = await fetch('http://localhost:3001/api/auth/validate-token', {
           method: 'POST',
@@ -12,14 +13,13 @@ const validateJwtToken = async () => {
         });
         if (response.ok) {
           const data = await response.json();
-          return { isValid: true, user: data.user };
+          console.log("validating token, response:", data);
+          return { isValid: true };
         } else {
-          localStorage.removeItem('userSession');
-          return { isValid: false };
+          return { isValid: false }; 
         }
       } catch (error) {
         console.error('Token validation error:', error);
-        localStorage.removeItem('userSession');
         return { isValid: false };
       }
     }

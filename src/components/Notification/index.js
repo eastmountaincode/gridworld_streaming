@@ -8,7 +8,7 @@ const Notification = () => {
 
   useEffect(() => {
     if (notification) {
-      const { message, type, duration } = notification;
+      const { message, type, duration=4200 } = notification;
       toast[type](message, { autoClose: duration });
     }
   }, [notification]);

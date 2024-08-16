@@ -12,9 +12,9 @@ const PaymentResult = () => {
       const status = params.get('status');
   
       if (status === 'success') {
-        showNotification('Access token purchase successful!', 'success', 5000);
+        showNotification('Access token purchase successful!', 'success');
       } else if (status === 'cancel') {
-        showNotification('Purchase canceled.', 'info', 3000);
+        showNotification('Purchase canceled.', 'info');
       }
   
       navigate('/');

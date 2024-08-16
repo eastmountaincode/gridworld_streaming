@@ -16,7 +16,7 @@ const CreateAccount = () => {
   // showNotification requires:
   // - message
   // - type (info, successs, warning, error)
-  // - duration (ms)
+  // - duration (ms) (optional)
   const { showNotification } = useNotification();
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const CreateAccount = () => {
   
       if (response.ok) {
         // Account created successfully
-        showNotification('Account created successfully!', 'success', 5000);
+        showNotification('Account created successfully!', 'success');
         navigate('/');
 
       } else {
@@ -62,7 +62,7 @@ const CreateAccount = () => {
         if (data.message === 'Email already exists') {
           showNotification('This email is already registered. Please use a different email or try logging in.', 'error', 5000);
         } else {
-          showNotification(`Account creation failed: ${data.message}`, 'error', 5000);
+          showNotification(`Account creation failed: ${data.message}`, 'error');
         }
 
       }
@@ -130,7 +130,7 @@ const CreateAccount = () => {
         {/* END FORM */}
         <button type="submit">Create Account</button>
       </form>
-      <button onClick={() => showNotification("hello", "success", 5000)}>notify</button>
+      <button onClick={() => showNotification("hello", "success")}>notify</button>
     </div>
   );
 };
