@@ -7,7 +7,7 @@ const MainNavbarAccountArea = () => {
   const navigate = useNavigate();
 
   const handleAccountClick = () => {
-    navigate('/account');
+    navigate('/account', {replace: true});
   };
 
   if (!isAuthenticated) {
@@ -21,11 +21,22 @@ const MainNavbarAccountArea = () => {
 
   return (
     <div>
-      <span onClick={handleAccountClick} style={{ cursor: 'pointer' }}>{user.email}</span>
-      <img 
-        src={user.hasAccessToken ? "/path-to-premium-icon.png" : "/path-to-regular-icon.png"} 
-        alt="User status" 
-        style={{ height: '30px', marginLeft: '10px' }}
+      <span
+        onClick={handleAccountClick}
+        style={{
+          cursor: 'pointer',
+          textDecoration: 'none',
+          transition: 'text-decoration 0.3s'
+        }}
+        onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
+        onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
+      >
+        {user.email}
+      </span>
+      <img
+        src={user.hasAccessToken ? "/images/yes_token.png" : "/images/no_token.png"}
+        alt="User status"
+        style={{ height: '50px', marginLeft: '10px' }}
       />
       <button onClick={logout}>Logout</button>
     </div>

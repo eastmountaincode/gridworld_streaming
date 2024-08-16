@@ -8,12 +8,12 @@ const Account = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login');
+      navigate('/', {replace: true});
     }
   }, [isAuthenticated, navigate]);
 
   if (!isAuthenticated) {
-    return null; // or a loading spinner
+    return null; 
   }
 
   return (

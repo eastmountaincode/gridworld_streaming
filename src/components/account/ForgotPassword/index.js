@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNotification } from '../../../context/NotificationContext';
 import { FaArrowLeft } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 
 const ForgotPassword = () => {
@@ -11,6 +12,8 @@ const ForgotPassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const { showNotification } = useNotification();
+
+    const navigate = useNavigate();
 
     const handleBack = () => {
         setStep(step - 1);
@@ -77,7 +80,7 @@ const ForgotPassword = () => {
           const data = await response.json();
           if (response.ok) {
             showNotification('Password reset successful', 'success');
-            // Redirect to login page or handle success as needed
+            navigate('/login', { replace: true });
           } else {
             showNotification(data.message, 'error');
           }

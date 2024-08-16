@@ -33,7 +33,7 @@ const Login = () => {
         // store the token and the user in AuthContext
         login(data.token, data.user);
         showNotification('Login successful', 'success', 5000);
-        navigate('/');
+        navigate('/', {replace: true});
 
       } else {
         const errorData = await response.json();
