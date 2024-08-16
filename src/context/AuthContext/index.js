@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import validateJwtToken from '../../utils/validateJwtToken';
+import validateJwtToken from '../../utils/validateUserSession';
 
 const AuthContext = createContext();
 

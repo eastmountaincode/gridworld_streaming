@@ -4,6 +4,7 @@ const handler = async (req, res) => {
   if (req.method === 'POST') {
     try {
       const { userId } = req.body;
+      console.log("in create checkout session. userId:", userId);
 
       const session = await stripe.checkout.sessions.create({
         line_items: [

@@ -6,7 +6,7 @@ const usersHandler = require('../api/users');
 const securityQuestionsHandler = require('../api/security-questions');
 const createAccountHandler = require('../api/auth/create-account');
 const loginHandler = require('../api/auth/login');
-const validateTokenHandler = require('../api/auth/validate-token')
+const validateSessionHandler = require('../api/auth/validate-session')
 const checkEmailHandler = require('../api/auth/forgot-password/check-email');
 const answerSecurityQuestionHandler = require('../api/auth/forgot-password/answer-security-question');
 const changePasswordHandler = require('../api/auth/forgot-password/change-password');
@@ -16,6 +16,12 @@ const app = express();
 const port = 3001; 
 
 app.use(cors());
+
+// this needs to go before express.json() apparently
+app.post('/api/webhook/stripeEventHandler', express.raw({type: 'application/json'}), async (req, res) => {
+  await require('../api/webhook/stripeEventHandler')(req, res);
+});
+
 app.use(express.json());
 
 app.all('/api/users', async (req, res) => {
@@ -34,8 +40,8 @@ app.all('/api/auth/login', async (req, res) => {
   await loginHandler(req, res);
 });
 
-app.all('/api/auth/validate-token', async (req, res) => {
-  await validateTokenHandler(req, res);
+app.all('/api/auth/validate-session', async (req, res) => {
+  await validateSessionHandler(req, res);
 });
 
 app.all('/api/auth/forgot-password/check-email', async (req, res) => {

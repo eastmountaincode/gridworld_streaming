@@ -1,10 +1,10 @@
 import React from 'react';
 import { useAuth } from './context/AuthContext';
 import { useNotification } from './context/NotificationContext';
-import validateJwtToken from './utils/validateJwtToken';
+import validateJwtToken from './utils/validateUserSession';
 
 const DefaultHome = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, userData } = useAuth();
   const { showNotification } = useNotification();
 
   const handleBuyAccessToken = async () => {
@@ -21,12 +21,14 @@ const DefaultHome = () => {
     }
 
     try {
+      console.log("in default home. in handlebuyaccesstoken. userData.userId:", userData.userId);
       const response = await fetch('http://localhost:3001/api/checkout/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('userSession')}`
         },
+        body: JSON.stringify({ userId: userData.userId})
       });
 
       if (response.ok) {
