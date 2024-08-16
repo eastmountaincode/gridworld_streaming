@@ -42,6 +42,7 @@ const handler = async (req, res) => {
                 message: 'Login successful',
                 token,
                 user: {
+                    userId: user._id,
                     email: user.email,
                     hasAccessToken: user.has_access_token,
                     dateCreated: user.date_created

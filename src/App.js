@@ -10,6 +10,7 @@ import Login from './components/account/Login';
 import MainNavbar from './components/navigation/MainNavbar';
 import ForgotPassword from './components/account/ForgotPassword';
 import AccountPage from './components/account/AccountPage';
+import PaymentResult from './components/checkout/PaymentResult';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/payment-result" element={<PaymentResult />} />
 
 
 

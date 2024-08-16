@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import validateJwtToken from '../../utils/validateJwtToken';
 
 const AuthContext = createContext();
 
@@ -6,35 +7,16 @@ export const AuthProvider = ({ children }) => {
   const [userSession, setUserSession] = useState(null);
 
   useEffect(() => {
-    const validateToken = async () => {
-      const storedSession = localStorage.getItem('userSession');
-      if (storedSession) {
-        console.log("Attempting to validate token");
-        console.log('Stored Session:', storedSession);
-        const { token, user } = JSON.parse(storedSession);
-        console.log('token:', token)
-        console.log('user:', user);
-        try {
-          const response = await fetch('http://localhost:3001/api/auth/validate-token', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          if (response.ok) {
-            setUserSession({ token, user });
-          } else {
-            localStorage.removeItem('userSession');
-          }
-        } catch (error) {
-          console.error('Token validation error:', error);
-          localStorage.removeItem('userSession');
-        }
+    const checkToken = async () => {
+      const { isValid, user } = await validateJwtToken();
+      if (isValid) {
+        setUserSession({ token: localStorage.getItem('userSession'), user });
+      } else {
+        setUserSession(null);
       }
     };
 
-    validateToken();
+    checkToken();
   }, []);
 
   const login = (token, userData) => {

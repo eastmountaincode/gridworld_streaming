@@ -10,6 +10,7 @@ const validateTokenHandler = require('../api/auth/validate-token')
 const checkEmailHandler = require('../api/auth/forgot-password/check-email');
 const answerSecurityQuestionHandler = require('../api/auth/forgot-password/answer-security-question');
 const changePasswordHandler = require('../api/auth/forgot-password/change-password');
+const createCheckoutSessionHandler = require('../api/checkout/create-checkout-session');
 
 const app = express();
 const port = 3001; 
@@ -47,6 +48,10 @@ app.all('/api/auth/forgot-password/answer-security-question', async (req, res) =
 
 app.all('/api/auth/forgot-password/change-password', async (req, res) => {
   await changePasswordHandler(req, res);
+});
+
+app.all('/api/checkout/create-checkout-session', async (req, res) => {
+  await createCheckoutSessionHandler(req, res);
 });
 
 

@@ -19,6 +19,7 @@ const ForgotPassword = () => {
         setStep(step - 1);
     }
 
+    // We use email as primary key here. Hence why emails need to be unique in the table.
     const handleEmailSubmit = async (e) => {
         e.preventDefault();
         try {
