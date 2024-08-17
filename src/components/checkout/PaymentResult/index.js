@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useNotification } from '../../../context/NotificationContext';
 import { useAuth } from '../../../context/AuthContext';
-import validateJwtToken from '../../../utils/validateUserSession';
+import validateSession from '../../../utils/validateSession';
 
 const PaymentResult = () => {
   const navigate = useNavigate();
@@ -19,11 +19,11 @@ const PaymentResult = () => {
         showNotification('Access token purchase successful!', 'success');
         
         // Fetch updated user data
-        const { isValid, userData } = await validateJwtToken();
+        const { isValid } = await validateSession();
         if (isValid) {
           const session = JSON.parse(localStorage.getItem('userSession'));
 
-          login(localStorage.getItem('userSession'), userData);
+          //login(localStorage.getItem('userSession'), userData);
         }
       } else if (status === 'cancel') {
         showNotification('Purchase canceled.', 'info');

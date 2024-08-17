@@ -1,7 +1,7 @@
-const validateUserSession = async () => {
+const validateSession = async () => {
   const storedSession = localStorage.getItem('userSession');
   if (storedSession) {
-    const { token, userData } = JSON.parse(storedSession);
+    const { token } = JSON.parse(storedSession);
     try {
       const response = await fetch('http://localhost:3001/api/auth/validate-session', {
         method: 'POST',
@@ -11,21 +11,21 @@ const validateUserSession = async () => {
         }
       });
       if (response.ok) {
-        const data = await response.json();
-        return { isValid: true, userData: data.userData };
+        return { isValid: true };
       } else {
         localStorage.removeItem('userSession');
-        return { isValid: false, userData: null };
+        return { isValid: false };
       }
     } catch (error) {
       console.error('Session validation error:', error);
       localStorage.removeItem('userSession');
-      return { isValid: false, userData: null };
+      return { isValid: false };
     }
   }
-  return { isValid: false, userData: null };
+  return { isValid: false };
 };
 
-export default validateUserSession;
+export default validateSession;
+
 
   

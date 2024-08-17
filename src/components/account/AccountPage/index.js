@@ -1,19 +1,16 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 
-const Account = () => {
-  const { isAuthenticated, userData } = useAuth();
-  const navigate = useNavigate();
+const AccountPage = () => {
+  const { isAuthenticated, userData, isLoading } = useAuth();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/', {replace: true});
-    }
-  }, [isAuthenticated, navigate]);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   if (!isAuthenticated) {
-    return null; 
+    return <Navigate to="/" replace />;
   }
 
   return (
@@ -26,4 +23,5 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default AccountPage;
+

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from './context/AuthContext';
 import { useNotification } from './context/NotificationContext';
-import validateJwtToken from './utils/validateUserSession';
+import validateSession from './utils/validateSession';
 
 const DefaultHome = () => {
   const { isAuthenticated, logout, userData } = useAuth();
@@ -13,7 +13,7 @@ const DefaultHome = () => {
       return;
     }
 
-    const { isValid } = await validateJwtToken();
+    const { isValid } = await validateSession();
     if (!isValid) {
       showNotification('Your session has expired. Please log in again.', 'error', 4000);
       logout();

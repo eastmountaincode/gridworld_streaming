@@ -1,30 +1,35 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import validateJwtToken from '../../utils/validateUserSession';
+import validateSession from '../../utils/validateSession';
+import refreshUserData from '../../utils/refreshUserData';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [userSession, setUserSession] = useState(null);
-
-  const checkToken = async () => {
-    const { isValid } = await validateJwtToken();
-    const session = JSON.parse(localStorage.getItem('userSession'));
-    if (isValid && session) {
-      setUserSession(session);
-    } else {
-      localStorage.removeItem('userSession');
-      setUserSession(null);
-    }
-  };
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    checkToken();
+    const validateAndRefresh = async () => {
+      setIsLoading(true);
+      const { isValid } = await validateSession();
+      if (isValid) {
+        const { isRefreshed, userData } = await refreshUserData();
+        if (isRefreshed) {
+          const storedSession = JSON.parse(localStorage.getItem('userSession'));
+          setUserSession({ token: storedSession.token, userData });
+        } else {
+          setUserSession(null);
+        }
+      } else {
+        setUserSession(null);
+      }
+      setIsLoading(false);
+    };
+
+    validateAndRefresh();
   }, []);
 
   const login = (token, userData) => {
-    console.log("in login");
-    console.log("in login token", token);
-    console.log("in login userData", userData);
     const session = { token, userData };
     localStorage.setItem('userSession', JSON.stringify(session));
     setUserSession(session);
@@ -39,6 +44,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={{
       isAuthenticated: !!userSession,
       userData: userSession?.userData,
+      isLoading,
       login,
       logout
     }}>
@@ -48,3 +54,4 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
