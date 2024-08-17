@@ -1,63 +1,43 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
 const { MongoClient, ObjectId } = require('mongodb');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-const uri = process.env.MONGODB_URI;
+
+const MONGODB_URI = process.env.MONGODB_URI;
 
 module.exports = async (req, res) => {
-  if (req.method === 'POST') {
-    const sig = req.headers['stripe-signature'];
+  const event = req.body;
 
-    let event;
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    const userId = session.client_reference_id;
 
+    console.log('in stripeEventHandler.js. before mongo access. userId:', userId);
+
+    const client = new MongoClient(MONGODB_URI);
     try {
-      event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-    } catch (err) {
-      return res.status(400).json({ error: `Webhook Error: ${err.message}` });
-    }
+      await client.connect();
+      const db = client.db('main_db');
+      const usersCollection = db.collection('users');
 
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
-      const userId = session.metadata.userId;
-      console.log('in stripeEventHandler.js. before mongo access. userId:', userId);
+      const result = await usersCollection.updateOne(
+        { _id: ObjectId.createFromHexString(userId) },
+        { $set: { has_access_token: true } }
+      );
 
-      if (!userId || userId.length !== 24) {
-        console.error('Invalid userId:', userId);
-        return res.status(400).json({ error: 'Invalid userId' });
+      if (result.modifiedCount === 1) {
+        console.log(`Updated user ${userId} with access token`);
+        res.json({ received: true });
+      } else {
+        console.log(`Failed to update user ${userId}`);
+        res.status(404).json({ error: 'User not found or not updated' });
       }
-
-      const client = new MongoClient(uri);
-      try {
-        await client.connect();
-        const database = client.db("main_db");
-        const users = database.collection("users");
-
-        const result = await users.updateOne(
-          { _id: ObjectId.createFromHexString(userId) },
-          { $set: { has_access_token: true } }
-        );
-
-        if (result.modifiedCount === 1) {
-          console.log(`Updated user ${userId} with access token`);
-        } else {
-          console.log(`User ${userId} not found or already updated`);
-        }
-        res.status(200).json({ received: true });
-      } catch (error) {
-        console.error('Error updating user:', error);
-        res.status(500).json({ error: 'Internal server error' });
-      } finally {
-        await client.close();
-      }
-    } else {
-      res.status(200).json({ received: true });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    } finally {
+      await client.close();
     }
-
-
-    res.status(200).json({ received: true });
   } else {
-    res.setHeader('Allow', 'POST');
-    res.status(405).end('Method Not Allowed');
+    res.json({ received: true });
   }
 };
