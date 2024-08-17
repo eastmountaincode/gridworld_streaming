@@ -15,6 +15,8 @@ export const AuthProvider = ({ children }) => {
       if (isValid) {
         const { isRefreshed, userData } = await refreshUserData();
         if (isRefreshed) {
+          console.log('User data refreshed successfully');
+          console.log('User data:', userData);
           const storedSession = JSON.parse(localStorage.getItem('userSession'));
           setUserSession({ token: storedSession.token, userData });
         } else {

@@ -30,9 +30,14 @@ const handler = async (req, res) => {
         return res.status(404).json({ message: 'User not found' });
       }
 
-      delete user.password;
+      const camelCasedUserData = {
+        userId: user._id,
+        email: user.email,
+        hasAccessToken: user.has_access_token,
+        dateCreated: user.date_created
+      };
 
-      return res.status(200).json({ message: 'User data refreshed', userData: user });
+      return res.status(200).json({ message: 'User data refreshed', userData: camelCasedUserData });
     } catch (error) {
       if (error instanceof jwt.JsonWebTokenError) {
         return res.status(401).json({ message: 'Invalid token', error: 'token_invalid' });
