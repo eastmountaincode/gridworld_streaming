@@ -38,7 +38,7 @@ const MainNavbarAccountArea = () => {
         {userData.email}
       </span>
       <img
-        src={userData.hasAccessToken ? "/images/yes_token.png" : "/images/no_token.png"}
+        src={userData.hasAccessToken ? "/images/yes_token.png" : "/images/access_token/griddy_empty.png"}
         alt="User status"
         style={{ height: '50px', marginLeft: '10px' }}
       />

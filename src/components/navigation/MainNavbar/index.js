@@ -5,7 +5,7 @@ import MainNavbarAccountArea from './MainNavbarAccountArea';
 const MainNavbar = () => {
 
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#f0f0f0' }}>
+    <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: 'slategray' }}>
       {/* LOGO */}
       <div className="logo-area">
         <Link to="/">

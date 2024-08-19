@@ -1,11 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from './context/AuthContext';
 import { useNotification } from './context/NotificationContext';
 import validateSession from './utils/validateSession';
+import config from './utils/config';
 
 const DefaultHome = () => {
   const { isAuthenticated, logout, userData } = useAuth();
   const { showNotification } = useNotification();
+
+  const [currentTokenIndex, setCurrentTokenIndex] = React.useState(0);
+  const token_images = [
+    'bw.png',
+    'griddy.png',
+    'new_W.png',
+    // 'OG_animation.gif',
+    'OG_minimal.png',
+    'OG.png',
+    // 'slow_animation.gif',
+    'token_active.PNG',
+    'token_inactive.PNG',
+    'bw_empty.png',
+    'griddy_empty.png',
+    'bounce_2.gif'
+  ]
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'ArrowLeft') {
+        setCurrentTokenIndex((prevIndex) => 
+          prevIndex > 0 ? prevIndex - 1 : token_images.length - 1
+        );
+      } else if (event.key === 'ArrowRight') {
+        setCurrentTokenIndex((prevIndex) => 
+          prevIndex < token_images.length - 1 ? prevIndex + 1 : 0
+        );
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [token_images.length]);
 
   const handleBuyAccessToken = async () => {
     if (!isAuthenticated) {
@@ -42,10 +76,19 @@ const DefaultHome = () => {
     }
   };
 
+  console.log(config.ACCESS_TOKEN_IMAGE_PATH);
+
   return (
     <div className="default-home">
       <h1>Welcome to Gridworld Streaming</h1>
-      <button onClick={handleBuyAccessToken}>Buy Access Token</button>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px' }}>
+        <button onClick={handleBuyAccessToken}>Buy Access Token</button>
+        <img 
+          src={`/images/access_token/${token_images[currentTokenIndex]}`} 
+          alt="Token" 
+          style={{ width: '80px', marginLeft: '20px' }}
+        />      
+      </div>
     </div>
   );
 };
