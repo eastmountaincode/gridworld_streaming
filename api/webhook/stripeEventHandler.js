@@ -4,40 +4,56 @@ require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
+console.log('stripeEventHandler.js loaded');
+
+const parseEvent = (req) => {
+  if (req.body instanceof Buffer) {
+    return JSON.parse(req.body.toString('utf8'));
+  }
+  return req.body;
+};
+
+const updateUserAccessToken = async (userId) => {
+  const client = new MongoClient(MONGODB_URI);
+  try {
+    await client.connect();
+    const db = client.db('main_db');
+    const usersCollection = db.collection('users');
+
+    const result = await usersCollection.updateOne(
+      { _id: ObjectId.createFromHexString(userId) },
+      { $set: { has_access_token: true } }
+    );
+
+    return result.modifiedCount === 1;
+  } finally {
+    await client.close();
+  }
+};
+
 module.exports = async (req, res) => {
-  const event = req.body;
+  try {
+    const event = parseEvent(req);
+    console.log('Event received:', event.type);
 
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    const userId = session.client_reference_id;
+    if (event.type === 'checkout.session.completed') {
+      const userId = event.data.object.metadata.userId;
+      console.log('Processing checkout for userId:', userId);
 
-    console.log('in stripeEventHandler.js. before mongo access. userId:', userId);
+      const updated = await updateUserAccessToken(userId);
 
-    const client = new MongoClient(MONGODB_URI);
-    try {
-      await client.connect();
-      const db = client.db('main_db');
-      const usersCollection = db.collection('users');
-
-      const result = await usersCollection.updateOne(
-        { _id: ObjectId.createFromHexString(userId) },
-        { $set: { has_access_token: true } }
-      );
-
-      if (result.modifiedCount === 1) {
+      if (updated) {
         console.log(`Updated user ${userId} with access token`);
-        res.json({ received: true });
+        res.json({ received: true, updated: true });
       } else {
         console.log(`Failed to update user ${userId}`);
         res.status(404).json({ error: 'User not found or not updated' });
       }
-    } catch (error) {
-      console.error('Error updating user:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    } finally {
-      await client.close();
+    } else {
+      res.json({ received: true, unhandled: true });
     }
-  } else {
-    res.json({ received: true });
+  } catch (error) {
+    console.error('Error processing webhook:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
