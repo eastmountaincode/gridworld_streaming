@@ -12,6 +12,7 @@ const answerSecurityQuestionHandler = require('../api/auth/forgot-password/answe
 const changePasswordHandler = require('../api/auth/forgot-password/change-password');
 const createCheckoutSessionHandler = require('../api/checkout/create-checkout-session');
 const createRefreshUserDataHandler = require('../api/auth/refresh-user-data');
+const addTrackHandler = require('../api/tracks');
 
 const app = express();
 const port = 3001; 
@@ -63,6 +64,10 @@ app.all('/api/auth/forgot-password/change-password', async (req, res) => {
 
 app.all('/api/checkout/create-checkout-session', async (req, res) => {
   await createCheckoutSessionHandler(req, res);
+});
+
+app.all('/api/tracks', async (req, res) => {
+  await addTrackHandler(req, res);
 });
 
 
