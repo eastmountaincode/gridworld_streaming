@@ -6,14 +6,17 @@ import reportWebVitals from './reportWebVitals';
 
 import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
+import { AudioPlayerProvider } from './context/AudioPlayerContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <NotificationProvider>
-        <AuthProvider>
-            <App />
-        </AuthProvider>
-    </NotificationProvider>
+    <AudioPlayerProvider>
+        <NotificationProvider>
+            <AuthProvider>
+                <App />
+            </AuthProvider>
+        </NotificationProvider>
+    </AudioPlayerProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
