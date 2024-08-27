@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useNotification } from '../../../context/NotificationContext';
 import { useAuth } from '../../../context/AuthContext';
 import validateSession from '../../../utils/validateSession';
+import refreshUserData from '../../../utils/refreshUserData';
 
 const PaymentResult = () => {
   const navigate = useNavigate();
@@ -21,9 +22,13 @@ const PaymentResult = () => {
         // Fetch updated user data
         const { isValid } = await validateSession();
         if (isValid) {
-          const session = JSON.parse(localStorage.getItem('userSession'));
-
-          //login(localStorage.getItem('userSession'), userData);
+          const { isRefreshed, userData } = await refreshUserData();
+          if (isRefreshed && userData) {
+            login(JSON.parse(localStorage.getItem('userSession')), userData);
+          }
+        } else {
+          showNotification('Session expired. Please log in again.', 'warning');
+          return;
         }
       } else if (status === 'cancel') {
         showNotification('Purchase canceled.', 'info');
@@ -39,4 +44,3 @@ const PaymentResult = () => {
 };
 
 export default PaymentResult;
-

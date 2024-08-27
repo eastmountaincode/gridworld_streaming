@@ -9,7 +9,11 @@ const FreeView = () => {
       <p>Upgrade to access premium content and start streaming!</p>
       <BuyAccessToken />
       <div style={{ marginTop: '20px' }}>
-        <AudioShelf title="Gridworld Lite" />
+        <AudioShelf albumTitle="Gridworld Lite" />
+      </div>
+
+      <div style={{ marginTop: '20px' }}>
+        <AudioShelf albumTitle="Gridworld Instrumentals" />
       </div>
     </div>
   );

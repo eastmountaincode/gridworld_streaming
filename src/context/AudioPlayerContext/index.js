@@ -3,12 +3,23 @@ import React, { createContext, useState, useRef } from 'react';
 const AudioPlayerContext = createContext();
 
 const AudioPlayerProvider = ({ children }) => {
-  const [trackList, setTrackList] = useState([]);
+  const [tracklist, setTracklist] = useState(null);
+  const [albumData, setAlbumData] = useState(null);
+  const [albumArtworkUrl, setAlbumArtworkUrl] = useState(null);
   const [currentTrackId, setCurrentTrackId] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(new Audio());
+
+  const updateAudioPlayerData = (newAlbumData, newTracklist, newAlbumArtworkUrl) => {
+    setAlbumData(newAlbumData);
+    setTracklist(newTracklist);
+    setAlbumArtworkUrl(newAlbumArtworkUrl);
+    if (newTracklist && newTracklist.tracks.length > 0) {
+      setCurrentTrackId(newTracklist.tracks[0].trackId);
+    }
+  };
 
   const play = () => {
     audioRef.current.play();
@@ -21,32 +32,27 @@ const AudioPlayerProvider = ({ children }) => {
   };
 
   const nextTrack = () => {
-    const currentIndex = trackList.findIndex(track => track.trackId === currentTrackId);
-    const nextIndex = (currentIndex + 1) % trackList.length;
-    setCurrentTrackId(trackList[nextIndex].trackId);
+    const currentIndex = tracklist.findIndex(track => track.trackId === currentTrackId);
+    const nextIndex = (currentIndex + 1) % tracklist.length;
+    setCurrentTrackId(tracklist[nextIndex].trackId);
   };
 
   const previousTrack = () => {
-    const currentIndex = trackList.findIndex(track => track.trackId === currentTrackId);
-    const previousIndex = (currentIndex - 1 + trackList.length) % trackList.length;
-    setCurrentTrackId(trackList[previousIndex].trackId);
+    const currentIndex = tracklist.findIndex(track => track.trackId === currentTrackId);
+    const previousIndex = (currentIndex - 1 + tracklist.length) % tracklist.length;
+    setCurrentTrackId(tracklist[previousIndex].trackId);
   };
 
   const selectTrack = (trackId) => {
     setCurrentTrackId(trackId);
   };
 
-  const updateTrackList = (newTrackList) => {
-    setTrackList(newTrackList);
-    if (newTrackList.length > 0) {
-      setCurrentTrackId(newTrackList[0].trackId);
-    }
-  };
-
   return (
     <AudioPlayerContext.Provider
       value={{
-        trackList,
+        tracklist,
+        albumData,
+        albumArtworkUrl,
         currentTrackId,
         isPlaying,
         currentTime,
@@ -56,7 +62,7 @@ const AudioPlayerProvider = ({ children }) => {
         nextTrack,
         previousTrack,
         selectTrack,
-        updateTrackList,
+        updateAudioPlayerData,
         audioRef,
         setCurrentTime,
         setDuration,

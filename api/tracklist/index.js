@@ -13,11 +13,28 @@ module.exports = async (req, res) => {
       await client.connect();
       const db = client.db('main_db');
       const tracklistsCollection = db.collection('tracklists');
+      const tracksCollection = db.collection('tracks');
 
       const tracklist = await tracklistsCollection.findOne({ _id: ObjectId.createFromHexString(id) });
 
       if (tracklist) {
-        res.status(200).json(tracklist);
+        const trackIds = tracklist.tracks.map(track => ObjectId.createFromHexString(track.trackId));
+        const tracks = await tracksCollection.find({ _id: { $in: trackIds } }).toArray();
+
+        const tracklistWithDetails = {
+          ...tracklist,
+          tracks: tracklist.tracks.map(track => {
+            const fullTrackInfo = tracks.find(t => t._id.toString() === track.trackId);
+            return {
+              ...track,
+              trackTitle: fullTrackInfo.trackTitle,
+              trackDuration: fullTrackInfo.trackDuration,
+              firebaseURL: fullTrackInfo.firebaseURL
+            };
+          })
+        };
+
+        res.status(200).json(tracklistWithDetails);
       } else {
         res.status(404).json({ error: 'Tracklist not found' });
       }
