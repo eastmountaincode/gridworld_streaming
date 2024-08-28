@@ -2,28 +2,29 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
 const ProgressBar = ({ audioPlayerId }) => {
-  const { audioRef, currentTime, duration, setCurrentTime, activeAudioPlayerId } = useContext(AudioPlayerContext);
+  const { audioRef, currentTime, duration, setCurrentTime, activeAudioPlayerId, currentTrack } = useContext(AudioPlayerContext);
   const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const progressBarRef = useRef(null);
 
-  const isActive = activeAudioPlayerId === audioPlayerId;
-  const displayTime = isActive ? currentTime : 0;
-  const displayDuration = isActive ? duration : 0;
+  const isActiveAudioPlayer = activeAudioPlayerId === audioPlayerId;
+  const displayTime = isActiveAudioPlayer ? currentTime : 0;
+  const displayDuration = isActiveAudioPlayer ? duration : 0;
 
+  // set progress
   useEffect(() => {
-    if (isActive && !isDragging) {
+    if (isActiveAudioPlayer && !isDragging && currentTrack) {
       const calculatedProgress = (currentTime / duration) * 100;
       setProgress(calculatedProgress);
-    } else if (!isActive) {
+    } else if (!isActiveAudioPlayer) {
       setProgress(0);
     }
-  }, [currentTime, duration, isActive, isDragging]);
+  }, [currentTime, duration, isActiveAudioPlayer, isDragging]);
 
   const handleSeek = (e) => {
-    if (progressBarRef.current && isActive) {
+    if (progressBarRef.current && isActiveAudioPlayer) {
       const rect = progressBarRef.current.getBoundingClientRect();
-      const seekPosition = (e.clientX - rect.left) / rect.width;
+      const seekPosition = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
       const seekTime = seekPosition * duration;
       audioRef.current.currentTime = seekTime;
       setCurrentTime(seekTime);
@@ -32,14 +33,14 @@ const ProgressBar = ({ audioPlayerId }) => {
   };
 
   const handleMouseDown = (e) => {
-    if (isActive) {
+    if (isActiveAudioPlayer) {
       setIsDragging(true);
       handleSeek(e);
     }
   };
 
   const handleMouseMove = (e) => {
-    if (isDragging && isActive) {
+    if (isDragging && isActiveAudioPlayer) {
       handleSeek(e);
     }
   };
@@ -55,11 +56,11 @@ const ProgressBar = ({ audioPlayerId }) => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, isActive]);
+  }, [isDragging, isActiveAudioPlayer]);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
+    const seconds = Math.round(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
@@ -72,7 +73,7 @@ const ProgressBar = ({ audioPlayerId }) => {
           width: '100%',
           height: '10px',
           backgroundColor: '#ddd',
-          cursor: isActive ? 'pointer' : 'default',
+          cursor: isActiveAudioPlayer ? 'pointer' : 'default',
           position: 'relative'
         }}
         onClick={handleSeek}
@@ -80,7 +81,7 @@ const ProgressBar = ({ audioPlayerId }) => {
         <div
           className="progress"
           style={{
-            width: `${progress}%`,
+            width: currentTrack ? `${progress}%` : '0%',
             height: '100%',
             backgroundColor: '#007bff'
           }}
@@ -89,23 +90,22 @@ const ProgressBar = ({ audioPlayerId }) => {
           className="seek-node"
           style={{
             position: 'absolute',
-            left: `calc(${progress}% - 10px)`,
+            left: currentTrack ? `calc(${progress}% - 10px)` : '-10px',
             top: '-5px',
             width: '20px',
             height: '20px',
             borderRadius: '50%',
             backgroundColor: '#007bff',
-            cursor: isActive ? 'grab' : 'default'
+            cursor: isActiveAudioPlayer ? 'grab' : 'default'
           }}
           onMouseDown={handleMouseDown}
         />
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '5px' }}>
-        <span>{formatTime(displayTime)}</span>
-        <span>{formatTime(displayDuration)}</span>
+        <span>{currentTrack ? formatTime(displayTime) : '0:00'}</span>
+        <span>{currentTrack ? formatTime(displayDuration) : '0:00'}</span>
       </div>
     </div>
   );
 };
-
 export default ProgressBar;

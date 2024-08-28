@@ -4,19 +4,63 @@ const AudioPlayerContext = createContext();
 
 const AudioPlayerProvider = ({ children }) => {
   const [currentTrack, setCurrentTrack] = useState(null);
+  const [currentTracklist, setCurrentTracklist] = useState(null);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [currentTracklist, setCurrentTracklist] = useState(null);
+
   const [activeAudioPlayerId, setActiveAudioPlayerId] = useState(null);
+
   const audioRef = useRef(new Audio());
 
+  // updates the currentTime state
   useEffect(() => {
     const audio = audioRef.current;
     const updateTime = () => setCurrentTime(audio.currentTime);
     audio.addEventListener('timeupdate', updateTime);
     return () => audio.removeEventListener('timeupdate', updateTime);
   }, []);
+
+  // automatically play the next track when the current one ends
+  useEffect(() => {
+    const audio = audioRef.current;
+    const handleEnded = () => {
+      setIsPlaying(false);
+      playNextTrack();
+    };
+    audio.addEventListener('ended', handleEnded);
+    return () => audio.removeEventListener('ended', handleEnded);
+  }, [currentTracklist, currentTrack]);
+
+  const playNextTrack = () => {
+    console.log('playNextTrack called');
+    console.log('do we have a currentTracklist?', currentTracklist);
+    console.log('do we have a currentTrack?', currentTrack);
+    if (currentTracklist && currentTrack) {
+      const nextTrackNumber = currentTrack.trackNumber + 1;
+      const nextTrack = currentTracklist.tracks.find(track => track.trackNumber === nextTrackNumber);
+      if (nextTrack) {
+        play(nextTrack, currentTracklist, activeAudioPlayerId);
+      } else {
+        // If it's the last track, zero everything out and stop playing
+        pause();
+        setCurrentTime(0);
+        setCurrentTrack(null);
+        setIsPlaying(false);
+      }
+    }
+  };
+
+  const playPrevTrack = () => {
+    if (currentTracklist && currentTrack) {
+      const prevTrackNumber = currentTrack.trackNumber - 1;
+      const prevTrack = currentTracklist.tracks.find(track => track.trackNumber === prevTrackNumber);
+      if (prevTrack) {
+        play(prevTrack, currentTracklist, activeAudioPlayerId);
+      }
+    }
+  };
 
   const play = async (track, tracklist, audioPlayerId) => {
     if (currentTrack?.trackId !== track.trackId || currentTracklist?._id !== tracklist._id) {
@@ -44,26 +88,6 @@ const AudioPlayerProvider = ({ children }) => {
     }
   };
 
-  const nextTrack = () => {
-    if (currentTracklist && currentTrack) {
-      const nextTrackNumber = (currentTrack.trackNumber % currentTracklist.tracks.length) + 1;
-      const nextTrack = currentTracklist.tracks.find(track => track.trackNumber === nextTrackNumber);
-      if (nextTrack) {
-        play(nextTrack, currentTracklist, activeAudioPlayerId);
-      }
-    }
-  };
-
-  const previousTrack = () => {
-    if (currentTracklist && currentTrack) {
-      const previousTrackNumber = ((currentTrack.trackNumber - 2 + currentTracklist.tracks.length) % currentTracklist.tracks.length) + 1;
-      const previousTrack = currentTracklist.tracks.find(track => track.trackNumber === previousTrackNumber);
-      if (previousTrack) {
-        play(previousTrack, currentTracklist, activeAudioPlayerId);
-      }
-    }
-  };
-
   return (
     <AudioPlayerContext.Provider
       value={{
@@ -75,8 +99,8 @@ const AudioPlayerProvider = ({ children }) => {
         activeAudioPlayerId,
         play,
         pause,
-        nextTrack,
-        previousTrack,
+        playNextTrack,
+        playPrevTrack,
         audioRef,
         setCurrentTime,
         setDuration,
@@ -86,5 +110,4 @@ const AudioPlayerProvider = ({ children }) => {
     </AudioPlayerContext.Provider>
   );
 };
-
 export { AudioPlayerContext, AudioPlayerProvider };
