@@ -1,5 +1,6 @@
 import React from 'react';
 import Playlist from './Playlist'
+import ProgressBar from './ProgressBar.js';
 
 const AudioPlayer = ({ albumData, tracklist, albumArtworkUrl }) => {
   console.log('albumData:', albumData);
@@ -15,6 +16,7 @@ const AudioPlayer = ({ albumData, tracklist, albumArtworkUrl }) => {
           style={{ width: '200px', height: '200px' }}
         />
       )}
+      <ProgressBar />
       <Playlist tracklist={tracklist} />
     </div>
   );

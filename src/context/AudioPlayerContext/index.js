@@ -1,68 +1,54 @@
-import React, { createContext, useState, useRef } from 'react';
+import React, { createContext, useState, useRef, useEffect } from 'react';
 
 const AudioPlayerContext = createContext();
 
 const AudioPlayerProvider = ({ children }) => {
-  const [tracklist, setTracklist] = useState(null);
-  const [albumData, setAlbumData] = useState(null);
-  const [albumArtworkUrl, setAlbumArtworkUrl] = useState(null);
   const [currentTrackId, setCurrentTrackId] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(new Audio());
 
-  const updateAudioPlayerData = (newAlbumData, newTracklist, newAlbumArtworkUrl) => {
-    setAlbumData(newAlbumData);
-    setTracklist(newTracklist);
-    setAlbumArtworkUrl(newAlbumArtworkUrl);
-    if (newTracklist && newTracklist.tracks.length > 0) {
-      setCurrentTrackId(newTracklist.tracks[0].trackId);
+  useEffect(() => {
+    const audio = audioRef.current;
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    audio.addEventListener('timeupdate', updateTime);
+    return () => audio.removeEventListener('timeupdate', updateTime);
+  }, []);
+
+  const play = async (trackId, firebaseURL, trackDuration) => {
+    if (currentTrackId !== trackId) {
+      await pause();
+      setCurrentTrackId(trackId);
+      audioRef.current.src = firebaseURL;
+      setDuration(trackDuration);
+    }
+    try {
+      await audioRef.current.play();
+      setIsPlaying(true);
+    } catch (error) {
+      console.error('Error playing audio:', error);
     }
   };
 
-  const play = () => {
-    audioRef.current.play();
-    setIsPlaying(true);
-  };
-
-  const pause = () => {
-    audioRef.current.pause();
-    setIsPlaying(false);
-  };
-
-  const nextTrack = () => {
-    const currentIndex = tracklist.findIndex(track => track.trackId === currentTrackId);
-    const nextIndex = (currentIndex + 1) % tracklist.length;
-    setCurrentTrackId(tracklist[nextIndex].trackId);
-  };
-
-  const previousTrack = () => {
-    const currentIndex = tracklist.findIndex(track => track.trackId === currentTrackId);
-    const previousIndex = (currentIndex - 1 + tracklist.length) % tracklist.length;
-    setCurrentTrackId(tracklist[previousIndex].trackId);
-  };
-
-  const selectTrack = (trackId) => {
-    setCurrentTrackId(trackId);
+  const pause = async () => {
+    try {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } catch (error) {
+      console.error('Error pausing audio:', error);
+    }
   };
 
   return (
     <AudioPlayerContext.Provider
       value={{
-        tracklist,
-        albumData,
-        albumArtworkUrl,
         currentTrackId,
         isPlaying,
         currentTime,
         duration,
         play,
         pause,
-        nextTrack,
-        previousTrack,
-        selectTrack,
-        updateAudioPlayerData,
         audioRef,
         setCurrentTime,
         setDuration,
