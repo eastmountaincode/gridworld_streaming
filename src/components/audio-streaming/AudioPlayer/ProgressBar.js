@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
 const ProgressBar = ({ audioPlayerId }) => {
-  const { audioRef, currentTime, duration, setCurrentTime, activeAudioPlayerId, currentTrack } = useContext(AudioPlayerContext);
+  const { currentTime, setCurrentTime, duration, activeAudioPlayerId, currentTrack, setAudioTime } = useContext(AudioPlayerContext);
   const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const progressBarRef = useRef(null);
@@ -22,12 +22,11 @@ const ProgressBar = ({ audioPlayerId }) => {
   }, [currentTime, duration, isActiveAudioPlayer, isDragging]);
 
   const handleSeek = (e) => {
-    if (progressBarRef.current && isActiveAudioPlayer) {
+    if (progressBarRef.current) {
       const rect = progressBarRef.current.getBoundingClientRect();
       const seekPosition = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
       const seekTime = seekPosition * duration;
-      audioRef.current.currentTime = seekTime;
-      setCurrentTime(seekTime);
+      setAudioTime(seekTime);
       setProgress(seekPosition * 100);
     }
   };
@@ -41,7 +40,7 @@ const ProgressBar = ({ audioPlayerId }) => {
 
   const handleMouseMove = (e) => {
     if (isDragging && isActiveAudioPlayer) {
-      handleSeek(e);
+      requestAnimationFrame(() => handleSeek(e));
     }
   };
 
