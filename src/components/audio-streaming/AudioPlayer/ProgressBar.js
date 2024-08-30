@@ -2,31 +2,30 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
 const ProgressBar = ({ audioPlayerId }) => {
-  const { currentTime, setCurrentTime, duration, activeAudioPlayerId, currentTrack, setAudioTime } = useContext(AudioPlayerContext);
+  const { currentTime, setCurrentTime, totalDuration, activeAudioPlayerId, currentTrack, setAudioTime, soundInstance, isPlaying } = useContext(AudioPlayerContext);
   const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const progressBarRef = useRef(null);
 
   const isActiveAudioPlayer = activeAudioPlayerId === audioPlayerId;
   const displayTime = isActiveAudioPlayer ? currentTime : 0;
-  const displayDuration = isActiveAudioPlayer ? duration : 0;
+  const displayDuration = isActiveAudioPlayer ? totalDuration : 0;
 
   // set progress
   useEffect(() => {
     if (isActiveAudioPlayer && !isDragging && currentTrack) {
-      const calculatedProgress = (currentTime / duration) * 100;
+      const calculatedProgress = (currentTime / totalDuration) * 100;
       setProgress(calculatedProgress);
-    } else if (!isActiveAudioPlayer) {
-      setProgress(0);
     }
-  }, [currentTime, duration, isActiveAudioPlayer, isDragging]);
+  }, [isActiveAudioPlayer, isDragging, currentTrack, currentTime, totalDuration]);
 
   const handleSeek = (e) => {
     if (progressBarRef.current) {
       const rect = progressBarRef.current.getBoundingClientRect();
       const seekPosition = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      const seekTime = seekPosition * duration;
+      const seekTime = seekPosition * totalDuration;
       setAudioTime(seekTime);
+      setCurrentTime(seekTime);
       setProgress(seekPosition * 100);
     }
   };
@@ -103,6 +102,13 @@ const ProgressBar = ({ audioPlayerId }) => {
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '5px' }}>
         <span>{currentTrack ? formatTime(displayTime) : '0:00'}</span>
         <span>{currentTrack ? formatTime(displayDuration) : '0:00'}</span>
+      </div>
+      <div style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>
+        <p>Progress: {progress.toFixed(2)}%</p>
+        <p>Current Time: {currentTime.toFixed(2)} seconds</p>
+        <p>soundRef Time: {soundInstance ? soundInstance.currentTime().toFixed(2) : "0:00"} seconds</p>
+        <p>Duration: {totalDuration.toFixed(2)} seconds</p>
+        <p>isPlaying: {isPlaying.toString()}</p>
       </div>
     </div>
   );

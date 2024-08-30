@@ -10,49 +10,59 @@ const AudioPlayerProvider = ({ children }) => {
   const [currentTracklist, setCurrentTracklist] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [totalDuration, setTotalDuration] = useState(0);
   const [activeAudioPlayerId, setActiveAudioPlayerId] = useState(null);
+  const [tempSetTime, setTempSetTime] = useState(null); // Temporary set time
 
   const p5Ref = useRef(null);
   const soundRef = useRef(null);
 
+  // Initialize new instance of p5 when the component mounts
   useEffect(() => {
     p5Ref.current = new p5(() => {});
   }, []);
 
+  // Update currentTime as the sound plays
   useEffect(() => {
-    if (soundRef.current) {
-      const updateTime = () => {
+    if (soundRef.current && isPlaying) {
+      const interval = setInterval(() => {
         setCurrentTime(soundRef.current.currentTime());
-      };
-      //p5Ref.current.frameRate(30);  // Set frame rate to 30 fps
-      p5Ref.current.draw = updateTime;  // Set draw function to update time
-      return () => {
-        p5Ref.current.draw = () => {};  // Clear draw function on cleanup
-      };
+      }, 50); // Update every __ milliseconds
+
+      return () => clearInterval(interval);
     }
-  }, [soundRef.current]);
+  }, [soundRef.current, isPlaying]);
 
   const play = async (track, tracklist, audioPlayerId) => {
+    // If track or tracklist is different than the current one, proceed
     if (currentTrack?.trackId !== track.trackId || currentTracklist?._id !== tracklist._id) {
       await pause();
       setCurrentTrack(track);
       setCurrentTracklist(tracklist);
       setActiveAudioPlayerId(audioPlayerId);
       soundRef.current = p5Ref.current.loadSound(track.firebaseURL, () => {
-        setDuration(soundRef.current.duration());
+        // These things happen only AFTER loadSound is done
+        setTotalDuration(soundRef.current.duration());
         soundRef.current.play();
         setIsPlaying(true);
+        if (tempSetTime !== null) {
+          soundRef.current.jump(tempSetTime);
+          setTempSetTime(null);
+        }
       });
     } else if (soundRef.current) {
       soundRef.current.play();
       setIsPlaying(true);
+      if (tempSetTime !== null) {
+        soundRef.current.jump(tempSetTime);
+        setTempSetTime(null);
+      }
     }
   };
 
   const pause = async () => {
     if (soundRef.current) {
-      soundRef.current.pause();
+      await soundRef.current.pause();
       setIsPlaying(false);
     }
   };
@@ -60,7 +70,7 @@ const AudioPlayerProvider = ({ children }) => {
   const playNextTrack = () => {
     if (currentTracklist && currentTrack) {
       const nextTrackNumber = currentTrack.trackNumber + 1;
-      const nextTrack = currentTracklist.tracks.find(track => track.trackNumber === nextTrackNumber);
+      const nextTrack = currentTracklist.find(track => track.trackNumber === nextTrackNumber);
       if (nextTrack) {
         play(nextTrack, currentTracklist, activeAudioPlayerId);
       } else {
@@ -75,7 +85,7 @@ const AudioPlayerProvider = ({ children }) => {
   const playPrevTrack = () => {
     if (currentTracklist && currentTrack) {
       const prevTrackNumber = currentTrack.trackNumber - 1;
-      const prevTrack = currentTracklist.tracks.find(track => track.trackNumber === prevTrackNumber);
+      const prevTrack = currentTracklist.find(track => track.trackNumber === prevTrackNumber);
       if (prevTrack) {
         play(prevTrack, currentTracklist, activeAudioPlayerId);
       }
@@ -84,7 +94,13 @@ const AudioPlayerProvider = ({ children }) => {
 
   const setAudioTime = (time) => {
     if (soundRef.current) {
-      soundRef.current.jump(time);
+      console.log('setAudioTime in AudioPlayerContext. setting time to', time);
+      if (isPlaying) {
+        soundRef.current.jump(time);
+      } else {
+        console.log("not playing. setting time to", time);
+        setTempSetTime(time);
+      }
       setCurrentTime(time);
     }
   };
@@ -95,7 +111,7 @@ const AudioPlayerProvider = ({ children }) => {
         currentTrack,
         isPlaying,
         currentTime,
-        duration,
+        totalDuration,
         currentTracklist,
         activeAudioPlayerId,
         play,
@@ -105,7 +121,7 @@ const AudioPlayerProvider = ({ children }) => {
         p5Instance: p5Ref.current,
         soundInstance: soundRef.current,
         setCurrentTime,
-        setDuration,
+        setTotalDuration,
         setAudioTime
       }}
     >

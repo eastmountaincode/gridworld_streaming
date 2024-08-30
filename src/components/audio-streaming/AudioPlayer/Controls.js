@@ -8,7 +8,7 @@ const Controls = ({ audioPlayerId }) => {
   const isInteractive = isActiveAudioPlayer && currentTrack;
 
   const hasPreviousTrack = isActiveAudioPlayer && currentTrack && currentTrack.trackNumber > 1;
-  const hasNextTrack = isActiveAudioPlayer && currentTrack && currentTracklist && currentTrack.trackNumber < currentTracklist.tracks.length;
+  const hasNextTrack = isActiveAudioPlayer && currentTrack && currentTracklist && currentTrack.trackNumber < currentTracklist.length;
 
   const handlePrevious = () => {
     if (isActiveAudioPlayer && hasPreviousTrack) {
@@ -36,5 +36,4 @@ const Controls = ({ audioPlayerId }) => {
     </div>
   );
 };
-
 export default Controls;

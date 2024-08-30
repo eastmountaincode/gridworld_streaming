@@ -33,7 +33,7 @@ const Playlist = ({ tracklist, audioPlayerId }) => {
                             {currentTrack?.trackId === track.trackId && isPlaying ? '⏸️' : '▶️'}
                         </button>
                         <span className="track-number">{track.trackNumber}</span>
-                        <span className="track-title" onClick={() => handlePlayPause(track)}>{track.trackTitle}</span>
+                        <span className="track-title">{track.trackTitle}</span>
                         <span className="track-duration">{formatDuration(track.trackDuration)}</span>
                     </div>
                 </div>

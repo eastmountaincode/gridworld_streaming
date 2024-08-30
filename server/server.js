@@ -12,10 +12,7 @@ const answerSecurityQuestionHandler = require('../api/auth/forgot-password/answe
 const changePasswordHandler = require('../api/auth/forgot-password/change-password');
 const createCheckoutSessionHandler = require('../api/checkout/create-checkout-session');
 const createRefreshUserDataHandler = require('../api/auth/refresh-user-data');
-const addTrackHandler = require('../api/tracks');
 const getAlbumHandler = require('../api/album');
-const tracklistHandler = require('../api/tracklist')
-const albumArtworkHandler = require('../api/album-artwork');
 
 
 const app = express();
@@ -70,20 +67,8 @@ app.all('/api/checkout/create-checkout-session', async (req, res) => {
   await createCheckoutSessionHandler(req, res);
 });
 
-app.all('/api/tracks', async (req, res) => {
-  await addTrackHandler(req, res);
-});
-
 app.all('/api/album', async (req, res) => {
   await getAlbumHandler(req, res);
-});
-
-app.all('/api/tracklist', async (req, res) => {
-  await tracklistHandler(req, res);
-});
-
-app.all('/api/album-artwork', async (req, res) => {
-  await albumArtworkHandler(req, res);
 });
 
 
