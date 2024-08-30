@@ -7,7 +7,7 @@ import PlayerHeader from './PlayerHeader';
 
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
-const AudioPlayer = ({ albumData, tracklist, albumArtworkUrl }) => {
+const AudioPlayer = ({ tracklist, albumArtworkUrl }) => {
   // assign unique ID to help keep track of which audio player is active
   const [audioPlayerId] = useState(() => uuidv4());
   // get the ID of the active audio player

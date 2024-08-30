@@ -20,7 +20,7 @@ const Playlist = ({ tracklist, audioPlayerId }) => {
 
     return (
         <div className="playlist" style={{border: '2px solid yellow'}}>
-            {tracklist.tracks.map((track) => (
+            {tracklist.map((track) => (
                 <div key={track.trackId}
                     className={`playlist-item ${currentTrack?.trackId === track.trackId ? 'active' : ''}`}
                     style={{ margin: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}

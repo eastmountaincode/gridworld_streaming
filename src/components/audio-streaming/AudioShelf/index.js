@@ -8,8 +8,6 @@ const AudioShelf = ({ albumTitle }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [albumData, setAlbumData] = useState(null);
-  const [tracklist, setTracklist] = useState(null);
-  const [albumArtworkUrl, setAlbumArtworkUrl] = useState(null);
 
   useEffect(() => {
     const fetchAlbumData = async () => {
@@ -17,29 +15,11 @@ const AudioShelf = ({ albumTitle }) => {
         const response = await fetch(`http://localhost:3001/api/album?title=${albumTitle}`);
         const data = await response.json();
 
-        if (!data || !data.tracklistId || !data.albumArtworkId) {
+        if (!data || !data.tracklist || !data.albumArtworkUrl) {
           throw new Error('Incomplete album data');
         }
 
         setAlbumData(data);
-
-        const trackListResponse = await fetch(`http://localhost:3001/api/tracklist?id=${data.tracklistId}`);
-        const trackListData = await trackListResponse.json();
-
-        if (!trackListData || !trackListData.tracks) {
-          throw new Error('Incomplete track list data');
-        }
-
-        setTracklist(trackListData);
-
-        const albumArtworkResponse = await fetch(`http://localhost:3001/api/album-artwork?id=${data.albumArtworkId}`);
-        const albumArtworkData = await albumArtworkResponse.json();
-
-        if (!albumArtworkData || !albumArtworkData.firebaseUrl) {
-          throw new Error('Incomplete album artwork data');
-        }
-
-        setAlbumArtworkUrl(albumArtworkData.firebaseUrl);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching album data:', error);
@@ -61,7 +41,7 @@ const AudioShelf = ({ albumTitle }) => {
     borderRadius: '10%',
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Loading...</div>;
   if (error) return <div>Error loading album data: {error.message}</div>;
 
   return (
@@ -85,9 +65,12 @@ const AudioShelf = ({ albumTitle }) => {
             <FaChevronDown />
           </div>
         </div>
-        {isExpanded && albumData && tracklist && albumArtworkUrl && (
+        {isExpanded && albumData && (
           <div className="audio-shelf-content">
-            <AudioPlayer albumData={albumData} tracklist={tracklist} albumArtworkUrl={albumArtworkUrl} />
+            <AudioPlayer 
+              tracklist={albumData.tracklist} 
+              albumArtworkUrl={albumData.albumArtworkUrl} 
+            />
           </div>
         )}
       </div>
