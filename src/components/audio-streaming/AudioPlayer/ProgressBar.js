@@ -2,7 +2,15 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
 const ProgressBar = ({ audioPlayerId }) => {
-  const { currentTime, setCurrentTime, totalDuration, activeAudioPlayerId, currentTrack, setAudioTime, soundInstance, isPlaying } = useContext(AudioPlayerContext);
+  const { currentTime,
+          setCurrentTime,
+          totalDuration,
+          activeAudioPlayerId,
+          currentTrack,
+          setAudioTime,
+          soundInstance,
+          isPlaying } = useContext(AudioPlayerContext);
+
   const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const progressBarRef = useRef(null);

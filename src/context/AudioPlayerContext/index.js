@@ -33,6 +33,13 @@ const AudioPlayerProvider = ({ children }) => {
     }
   }, [soundRef.current, isPlaying]);
 
+  const handleSongEnd = () => {
+    console.log('Song ended');
+    if (isPlaying) {
+      playNextTrack();
+    }
+  };
+
   const play = async (track, tracklist, audioPlayerId) => {
     // If track or tracklist is different than the current one, proceed
     if (currentTrack?.trackId !== track.trackId || currentTracklist?._id !== tracklist._id) {
@@ -49,6 +56,9 @@ const AudioPlayerProvider = ({ children }) => {
           soundRef.current.jump(tempSetTime);
           setTempSetTime(null);
         }
+        // Add event listener for when the song ends
+        soundRef.current.onended(handleSongEnd);
+        console.log('Event listener for song end added');
       });
     } else if (soundRef.current) {
       soundRef.current.play();
@@ -57,6 +67,9 @@ const AudioPlayerProvider = ({ children }) => {
         soundRef.current.jump(tempSetTime);
         setTempSetTime(null);
       }
+      // Add event listener for when the song ends
+      soundRef.current.onended(handleSongEnd);
+      console.log('Event listener for song end added');
     }
   };
 
