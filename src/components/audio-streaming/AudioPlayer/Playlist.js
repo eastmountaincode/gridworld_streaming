@@ -12,6 +12,7 @@ const Playlist = ({ tracklist, audioPlayerId }) => {
 
     const handlePlayPause = (track) => {
         if (currentTrack?.trackId === track.trackId && isPlaying) {
+            console.log('current track is this one, and isPlaying is true. pausing.')
             pause();
         } else {
             play(track, tracklist, audioPlayerId);

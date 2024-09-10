@@ -19,7 +19,12 @@ const ProgressBar = ({ audioPlayerId }) => {
   const displayTime = isActiveAudioPlayer ? currentTime : 0;
   const displayDuration = isActiveAudioPlayer ? totalDuration : 0;
 
-  // set progress
+  // Debugging logs
+  //console.log('audioPlayerId:', audioPlayerId);
+  //console.log('activeAudioPlayerId:', activeAudioPlayerId);
+  //console.log('isActiveAudioPlayer:', isActiveAudioPlayer);
+
+  // Set progress
   useEffect(() => {
     if (isActiveAudioPlayer && !isDragging && currentTrack) {
       const calculatedProgress = (currentTime / totalDuration) * 100;
@@ -28,10 +33,12 @@ const ProgressBar = ({ audioPlayerId }) => {
   }, [isActiveAudioPlayer, isDragging, currentTrack, currentTime, totalDuration]);
 
   const handleSeek = (e) => {
+    console.log('handleSeek called');
     if (progressBarRef.current) {
       const rect = progressBarRef.current.getBoundingClientRect();
       const seekPosition = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
       const seekTime = seekPosition * totalDuration;
+      console.log('setting seekTime to', seekTime);
       setAudioTime(seekTime);
       setCurrentTime(seekTime);
       setProgress(seekPosition * 100);
@@ -51,8 +58,11 @@ const ProgressBar = ({ audioPlayerId }) => {
     }
   };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
+  const handleMouseUp = (e) => {
+    if (isActiveAudioPlayer) {
+      handleSeek(e); // Ensure the final seek position is set
+      setIsDragging(false);
+    }
   };
 
   useEffect(() => {
@@ -62,7 +72,7 @@ const ProgressBar = ({ audioPlayerId }) => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, isActiveAudioPlayer]);
+  }, []);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -117,8 +127,11 @@ const ProgressBar = ({ audioPlayerId }) => {
         <p>soundRef Time: {soundInstance ? soundInstance.currentTime().toFixed(2) : "0:00"} seconds</p>
         <p>Duration: {totalDuration.toFixed(2)} seconds</p>
         <p>isPlaying: {isPlaying.toString()}</p>
+        <p>isActiveAudioPlayer: {isActiveAudioPlayer.toString()}</p>
+        <p>currentTrack: {currentTrack ? currentTrack.title : "No Track"}</p>
       </div>
     </div>
   );
 };
+
 export default ProgressBar;

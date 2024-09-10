@@ -2,7 +2,6 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import PaidView from './home/PaidView';
 import FreeView from './home/FreeView';
-import TestVisualizer from './home/TestVisualizer';
 
 const DefaultHome = () => {
   const { isLoading, isAuthenticated, userData } = useAuth();
@@ -14,7 +13,6 @@ const DefaultHome = () => {
   if (!isAuthenticated) {
     return <div>
       <FreeView />
-      {/* <TestVisualizer /> */}
     </div>;
   }
 
