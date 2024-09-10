@@ -1,134 +1,112 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
+import './ProgressBar.css'
 
 const ProgressBar = ({ audioPlayerId }) => {
   const { currentTime,
-          setCurrentTime,
-          totalDuration,
-          activeAudioPlayerId,
-          currentTrack,
-          setAudioTime,
-          soundInstance,
-          isPlaying } = useContext(AudioPlayerContext);
-
-  const [progress, setProgress] = useState(0);
+    totalDuration,
+    setAudioTime,
+    activeAudioPlayerId } = useContext(AudioPlayerContext);
   const [isDragging, setIsDragging] = useState(false);
+  const [dragTime, setDragTime] = useState(null);
   const progressBarRef = useRef(null);
 
   const isActiveAudioPlayer = activeAudioPlayerId === audioPlayerId;
-  const displayTime = isActiveAudioPlayer ? currentTime : 0;
-  const displayDuration = isActiveAudioPlayer ? totalDuration : 0;
 
-  // Debugging logs
-  //console.log('audioPlayerId:', audioPlayerId);
-  //console.log('activeAudioPlayerId:', activeAudioPlayerId);
-  //console.log('isActiveAudioPlayer:', isActiveAudioPlayer);
-
-  // Set progress
   useEffect(() => {
-    if (isActiveAudioPlayer && !isDragging && currentTrack) {
-      const calculatedProgress = (currentTime / totalDuration) * 100;
-      setProgress(calculatedProgress);
-    }
-  }, [isActiveAudioPlayer, isDragging, currentTrack, currentTime, totalDuration]);
+    const handleMouseMove = (e) => {
+      if (isDragging && isActiveAudioPlayer) {
+        updateDragTime(e);
+      }
+    };
 
-  const handleSeek = (e) => {
-    console.log('handleSeek called');
-    if (progressBarRef.current) {
-      const rect = progressBarRef.current.getBoundingClientRect();
-      const seekPosition = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      const seekTime = seekPosition * totalDuration;
-      console.log('setting seekTime to', seekTime);
-      setAudioTime(seekTime);
-      setCurrentTime(seekTime);
-      setProgress(seekPosition * 100);
-    }
-  };
+    const handleMouseUp = () => {
+      if (isDragging && isActiveAudioPlayer) {
+        setIsDragging(false);
+        setAudioTime(dragTime);
+        document.body.classList.remove('no-select'); // Remove no-select class when dragging ends
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, dragTime, setAudioTime]);
 
   const handleMouseDown = (e) => {
     if (isActiveAudioPlayer) {
       setIsDragging(true);
-      handleSeek(e);
+      updateDragTime(e);
+      document.body.classList.add('no-select'); // Add no-select class when dragging starts
     }
   };
 
-  const handleMouseMove = (e) => {
-    if (isDragging && isActiveAudioPlayer) {
-      requestAnimationFrame(() => handleSeek(e));
-    }
+  const updateDragTime = (e) => {
+    const progressBar = progressBarRef.current;
+    const rect = progressBar.getBoundingClientRect();
+    const clickPosition = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const newTime = Math.min(clickPosition * totalDuration, totalDuration);
+    setDragTime(newTime);
   };
-
-  const handleMouseUp = (e) => {
-    if (isActiveAudioPlayer) {
-      handleSeek(e); // Ensure the final seek position is set
-      setIsDragging(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, []);
 
   const formatTime = (time) => {
+    if (!isActiveAudioPlayer) return '0:00';
     const minutes = Math.floor(time / 60);
-    const seconds = Math.round(time % 60);
+    const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const progress = isActiveAudioPlayer && totalDuration > 0 
+  ? ((isDragging ? dragTime : currentTime) / totalDuration) * 100 
+  : 0;
+  
   return (
-    <div className="progress-bar-container" style={{ padding: '20px 20px', border: '2px solid red' }}>
+    <div style={{ margin: "25px 15px" }}>
       <div
         ref={progressBarRef}
-        className="progress-bar"
+        onMouseDown={handleMouseDown}
         style={{
           width: '100%',
           height: '10px',
           backgroundColor: '#ddd',
           cursor: isActiveAudioPlayer ? 'pointer' : 'default',
-          position: 'relative'
+          position: 'relative',
+          margin: '10px 0',
+          borderRadius: '5px'
         }}
-        onClick={handleSeek}
       >
         <div
-          className="progress"
           style={{
-            width: currentTrack ? `${progress}%` : '0%',
+            width: `${progress}%`,
             height: '100%',
-            backgroundColor: '#007bff'
+            backgroundColor: '#007bff',
+            borderRadius: '5px'
           }}
         />
         <div
-          className="seek-node"
           style={{
             position: 'absolute',
-            left: currentTrack ? `calc(${progress}% - 10px)` : '-10px',
+            left: `${progress}%`,
             top: '-5px',
             width: '20px',
             height: '20px',
             borderRadius: '50%',
             backgroundColor: '#007bff',
-            cursor: isActiveAudioPlayer ? 'grab' : 'default'
+            transform: 'translateX(-50%)',
+            boxShadow: '0 0 5px rgba(0,0,0,0.2)'
           }}
-          onMouseDown={handleMouseDown}
         />
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '5px' }}>
-        <span>{currentTrack ? formatTime(displayTime) : '0:00'}</span>
-        <span>{currentTrack ? formatTime(displayDuration) : '0:00'}</span>
+        <span>{formatTime(isDragging ? dragTime : currentTime)}</span>
+        <span>{formatTime(totalDuration)}</span>
       </div>
-      <div style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>
-        <p>Progress: {progress.toFixed(2)}%</p>
-        <p>Current Time: {currentTime.toFixed(2)} seconds</p>
-        <p>soundRef Time: {soundInstance ? soundInstance.currentTime().toFixed(2) : "0:00"} seconds</p>
-        <p>Duration: {totalDuration.toFixed(2)} seconds</p>
-        <p>isPlaying: {isPlaying.toString()}</p>
-        <p>isActiveAudioPlayer: {isActiveAudioPlayer.toString()}</p>
-        <p>currentTrack: {currentTrack ? currentTrack.title : "No Track"}</p>
+      <div>
+        <span>Progress: {progress.toFixed(1)}%</span>
       </div>
     </div>
   );

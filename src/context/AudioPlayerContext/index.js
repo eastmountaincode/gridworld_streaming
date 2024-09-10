@@ -13,7 +13,7 @@ const AudioPlayerProvider = ({ children }) => {
   const audioContextRef = useRef(null);
   const audioElementRef = useRef(null);
   const sourceNodeRef = useRef(null);
-  
+
   const currentTrackRef = useRef(currentTrack);
   const currentTracklistRef = useRef(currentTracklist);
   const activeAudioPlayerIdRef = useRef(activeAudioPlayerId);
@@ -29,10 +29,10 @@ const AudioPlayerProvider = ({ children }) => {
   useEffect(() => {
     audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
     audioElementRef.current = new Audio();
-    
+
     // Set crossOrigin attribute to allow loading audio from different domains
     audioElementRef.current.crossOrigin = "anonymous";
-    
+
     // Create a MediaElementSource node from the Audio element
     sourceNodeRef.current = audioContextRef.current.createMediaElementSource(audioElementRef.current);
 
@@ -49,7 +49,7 @@ const AudioPlayerProvider = ({ children }) => {
 
     // Cleanup function to remove event listeners when component unmounts
     return () => {
-      audioElementRef.current.removeEventListener('timeupdate', () => {});
+      audioElementRef.current.removeEventListener('timeupdate', () => { });
       audioElementRef.current.removeEventListener('ended', handleEnded);
     };
   }, []); // Empty dependency array ensures this effect runs only once on mount
@@ -59,14 +59,6 @@ const AudioPlayerProvider = ({ children }) => {
     console.log('in event listener, currentTrack:', currentTrackRef.current);
     console.log('in event listener, currentTracklist:', currentTracklistRef.current);
     playNextTrack();
-  };
-
-  const disableEndedListener = () => {
-    audioElementRef.current.removeEventListener('ended', handleEnded);
-  };
-
-  const enableEndedListener = () => {
-    audioElementRef.current.addEventListener('ended', handleEnded);
   };
 
   const play = async (track, tracklist, audioPlayerId) => {
@@ -84,12 +76,12 @@ const AudioPlayerProvider = ({ children }) => {
       setActiveAudioPlayerId(audioPlayerId);
       audioElementRef.current.src = track.firebaseURL;
       audioElementRef.current.load();
-      
+
       // Log the audio element and its properties
       console.log('in context, in play, Audio element:', audioElementRef.current);
       console.log('in context, in play, Audio element crossOrigin:', audioElementRef.current.crossOrigin);
       console.log('in context, in play, Audio element src:', audioElementRef.current.src);
-      
+
       audioElementRef.current.onloadedmetadata = () => {
         setTotalDuration(audioElementRef.current.duration);
         audioElementRef.current.play();
@@ -123,6 +115,7 @@ const AudioPlayerProvider = ({ children }) => {
         console.log('in play next track, no next track, pausing and resetting');
         pause();
         setCurrentTime(0);
+        setTotalDuration(null);
         setCurrentTrack(null);
         setIsPlaying(false);
       }
@@ -141,7 +134,6 @@ const AudioPlayerProvider = ({ children }) => {
 
   const setAudioTime = (time) => {
     if (audioElementRef.current) {
-      console.log('setAudioTime in AudioPlayerContext. setting time to', time);
       audioElementRef.current.currentTime = time;
       setCurrentTime(time);
     }
@@ -163,8 +155,7 @@ const AudioPlayerProvider = ({ children }) => {
         setCurrentTime,
         setTotalDuration,
         setAudioTime,
-        disableEndedListener,
-        enableEndedListener
+        
       }}
     >
       {children}
