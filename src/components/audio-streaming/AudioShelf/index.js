@@ -11,8 +11,33 @@ const AudioShelf = ({ albumTitle }) => {
 
   useEffect(() => {
     const fetchAlbumData = async () => {
+      const storedSession = localStorage.getItem('userSession');
+      let headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (storedSession) {
+        const { token } = JSON.parse(storedSession);
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       try {
-        const response = await fetch(`http://localhost:3001/api/album?title=${albumTitle}`);
+        const response = await fetch(`http://localhost:3001/api/album?title=${albumTitle}`, {
+          method: 'GET',
+          headers: headers
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          if (errorData.error === 'token_invalid' || errorData.error === 'token_expired') {
+            // Do not show any error message on the audio shelf for token errors
+            setLoading(false);
+            return;
+          } else {
+            throw new Error(errorData.message || 'Error fetching album data');
+          }
+        }
+
         const data = await response.json();
 
         if (!data || !data.tracklist || !data.albumArtworkUrl) {
@@ -42,6 +67,7 @@ const AudioShelf = ({ albumTitle }) => {
   };
 
   if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Loading...</div>;
+  if (error && error.message !== 'Incomplete album data') return null;
   if (error) return <div>Error loading album data: {error.message}</div>;
 
   return (
@@ -77,5 +103,4 @@ const AudioShelf = ({ albumTitle }) => {
     </div>
   );
 };
-
 export default AudioShelf;

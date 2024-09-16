@@ -13,9 +13,9 @@ const PlayerHeader = ({ albumArtworkUrl, audioPlayerId }) => {
 
     return (
         <div className="player-header" style={{ height: '350px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '2px solid blue', borderRadius: '5px' }}>
-            <button onClick={toggleView} style={{ marginBottom: '10px' }}>
+            {/* <button onClick={toggleView} style={{ marginBottom: '10px' }}>
                 {isArtworkView ? 'Show Visualizer' : 'Show Album Artwork'}
-            </button>
+            </button> */}
             {isArtworkView ? (
                 albumArtworkUrl && (
                     <img
