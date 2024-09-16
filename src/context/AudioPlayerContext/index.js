@@ -8,7 +8,7 @@ const AudioPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
-  const [activeAudioPlayerId, setActiveAudioPlayerId] = useState(null);
+  const [activeAudioShelfId, setActiveAudioShelfId] = useState(null);
 
   const audioContextRef = useRef(null);
   const audioElementRef = useRef(null);
@@ -16,14 +16,14 @@ const AudioPlayerProvider = ({ children }) => {
 
   const currentTrackRef = useRef(currentTrack);
   const currentTracklistRef = useRef(currentTracklist);
-  const activeAudioPlayerIdRef = useRef(activeAudioPlayerId);
+  const activeAudioShelfIdRef = useRef(activeAudioShelfId);
 
   // Update refs whenever state changes
   useEffect(() => {
     currentTrackRef.current = currentTrack;
     currentTracklistRef.current = currentTracklist;
-    activeAudioPlayerIdRef.current = activeAudioPlayerId;
-  }, [currentTrack, currentTracklist, activeAudioPlayerId]);
+    activeAudioShelfIdRef.current = activeAudioShelfId;
+  }, [currentTrack, currentTracklist, activeAudioShelfId]);
 
   // Initialize Web Audio API context when the component mounts
   useEffect(() => {
@@ -61,7 +61,7 @@ const AudioPlayerProvider = ({ children }) => {
     playNextTrack();
   };
 
-  const play = async (track, tracklist, audioPlayerId) => {
+  const play = async (track, tracklist, audioShelfId) => {
     // Resume the AudioContext if it is suspended
     if (audioContextRef.current.state === 'suspended') {
       console.log('AudioContext is suspended, resuming...');
@@ -73,7 +73,7 @@ const AudioPlayerProvider = ({ children }) => {
       await pause();
       setCurrentTrack(track);
       setCurrentTracklist(tracklist);
-      setActiveAudioPlayerId(audioPlayerId);
+      setActiveAudioShelfId(audioShelfId);
       audioElementRef.current.src = track.firebaseURL;
       audioElementRef.current.load();
 
@@ -110,7 +110,7 @@ const AudioPlayerProvider = ({ children }) => {
       const nextTrackNumber = currentTrackRef.current.trackNumber + 1;
       const nextTrack = currentTracklistRef.current.find(track => track.trackNumber === nextTrackNumber);
       if (nextTrack) {
-        play(nextTrack, currentTracklistRef.current, activeAudioPlayerIdRef.current);
+        play(nextTrack, currentTracklistRef.current, activeAudioShelfIdRef.current);
       } else {
         console.log('in play next track, no next track, pausing and resetting');
         pause();
@@ -127,7 +127,7 @@ const AudioPlayerProvider = ({ children }) => {
       const prevTrackNumber = currentTrack.trackNumber - 1;
       const prevTrack = currentTracklist.find(track => track.trackNumber === prevTrackNumber);
       if (prevTrack) {
-        play(prevTrack, currentTracklist, activeAudioPlayerId);
+        play(prevTrack, currentTracklist, activeAudioShelfId);
       }
     }
   };
@@ -139,6 +139,15 @@ const AudioPlayerProvider = ({ children }) => {
     }
   };
 
+  const reset = () => {
+    pause();
+    setCurrentTrack(null);
+    setCurrentTracklist(null);
+    setCurrentTime(0);
+    setTotalDuration(0);
+    setActiveAudioShelfId(null);
+  };
+
   return (
     <AudioPlayerContext.Provider
       value={{
@@ -147,7 +156,7 @@ const AudioPlayerProvider = ({ children }) => {
         currentTime,
         totalDuration,
         currentTracklist,
-        activeAudioPlayerId,
+        activeAudioShelfId,
         play,
         pause,
         playNextTrack,
@@ -155,7 +164,7 @@ const AudioPlayerProvider = ({ children }) => {
         setCurrentTime,
         setTotalDuration,
         setAudioTime,
-        
+        reset,
       }}
     >
       {children}

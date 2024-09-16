@@ -1,30 +1,30 @@
 import React, { useContext } from 'react';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
-const Controls = ({ audioPlayerId }) => {
-  const { playNextTrack, playPrevTrack, activeAudioPlayerId, currentTrack, currentTracklist } = useContext(AudioPlayerContext);
+const Controls = ({ audioShelfId }) => {
+  const { playNextTrack, playPrevTrack, activeAudioShelfId, currentTrack, currentTracklist } = useContext(AudioPlayerContext);
 
-  const isActiveAudioPlayer = activeAudioPlayerId === audioPlayerId;
-  const isInteractive = isActiveAudioPlayer && currentTrack;
+  const isActiveAudioShelf = activeAudioShelfId === audioShelfId;
+  const isInteractive = isActiveAudioShelf && currentTrack;
 
-  const hasPreviousTrack = isActiveAudioPlayer && currentTrack && currentTrack.trackNumber > 1;
-  const hasNextTrack = isActiveAudioPlayer && currentTrack && currentTracklist && currentTrack.trackNumber < currentTracklist.length;
+  const hasPreviousTrack = isActiveAudioShelf && currentTrack && currentTrack.trackNumber > 1;
+  const hasNextTrack = isActiveAudioShelf && currentTrack && currentTracklist && currentTrack.trackNumber < currentTracklist.length;
 
   const handlePrevious = () => {
-    if (isActiveAudioPlayer && hasPreviousTrack) {
+    if (isActiveAudioShelf && hasPreviousTrack) {
       playPrevTrack();
     }
   };
 
   const handleNext = () => {
-    if (isActiveAudioPlayer && hasNextTrack) {
+    if (isActiveAudioShelf && hasNextTrack) {
       playNextTrack();
     }
   };
 
   const buttonStyle = (isEnabled) => ({
     cursor: isInteractive && isEnabled ? 'pointer' : 'default',
-    opacity: isActiveAudioPlayer ? (isEnabled ? 1 : 0.5) : 0.5,
+    opacity: isActiveAudioShelf ? (isEnabled ? 1 : 0.5) : 0.5,
     pointerEvents: isInteractive && isEnabled ? 'auto' : 'none',
 
   });

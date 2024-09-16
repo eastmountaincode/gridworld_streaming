@@ -1,5 +1,4 @@
-import React, { useState, useContext } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState, useContext, useEffect } from 'react';
 import Playlist from './Playlist';
 import ProgressBar from './ProgressBar';
 import Controls from './Controls';
@@ -7,32 +6,40 @@ import PlayerHeader from './PlayerHeader';
 
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
-const AudioPlayer = ({ tracklist, albumArtworkUrl }) => {
-  // assign unique ID to help keep track of which audio player is active
-  const [audioPlayerId] = useState(() => uuidv4());
-  // get the ID of the active audio player
-  const { activeAudioPlayerId } = useContext(AudioPlayerContext);
+const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId }) => {
+  // get the ID of the active audio shelf
+  const { activeAudioShelfId, pause, reset } = useContext(AudioPlayerContext);
 
-  const isActive = activeAudioPlayerId === audioPlayerId;
+  const isActiveAudioPlayer = activeAudioShelfId === audioShelfId;
+
+  // console.log('in audioplayer, audioShelfId is ', audioShelfId);
+  // console.log('in audioplayer, isActiveAudioPlayer: ', isActiveAudioPlayer)
+
+  useEffect(() => {
+    return () => {
+        pause();
+        reset();
+      }
+  }, []);
 
   return (
     <div
       className="audio-player"
       style={{
-        border: isActive ? '4px solid orange' : 'none',
+        border: isActiveAudioPlayer ? '4px solid orange' : 'none',
         padding: '10px',
         borderRadius: '8px'
       }}
     >
-      <PlayerHeader albumArtworkUrl={albumArtworkUrl} audioPlayerId={audioPlayerId} />
+      <PlayerHeader albumArtworkUrl={albumArtworkUrl} audioShelfId={audioShelfId} />
       <div style={{ display: 'flex', alignItems: 'center', gap: '0px', width: '100%' }}>
         <div style={{ flex: 1 }}>
-          <ProgressBar audioPlayerId={audioPlayerId} />
+          <ProgressBar audioShelfId={audioShelfId} />
         </div>
-        <Controls audioPlayerId={audioPlayerId} />
+        <Controls audioShelfId={audioShelfId} />
       </div>
 
-      <Playlist tracklist={tracklist} audioPlayerId={audioPlayerId} />
+      <Playlist tracklist={tracklist} audioShelfId={audioShelfId} />
     </div>
   );
 };

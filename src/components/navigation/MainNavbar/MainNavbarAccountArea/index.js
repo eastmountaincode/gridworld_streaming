@@ -7,7 +7,7 @@ const MainNavbarAccountArea = () => {
   const navigate = useNavigate();
 
   const handleAccountClick = () => {
-    navigate('/account', { replace: true });
+    navigate('/account');
   };
 
   if (isLoading) {

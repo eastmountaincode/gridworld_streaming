@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import AudioPlayer from '../AudioPlayer';
-import { FaChevronDown } from 'react-icons/fa';
+import { v4 as uuidv4 } from 'uuid';
+import { FaChevronDown, FaPlayCircle } from 'react-icons/fa';
+import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
 const AudioShelf = ({ albumTitle }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -8,6 +10,13 @@ const AudioShelf = ({ albumTitle }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [albumData, setAlbumData] = useState(null);
+  const [audioShelfId] = useState(() => uuidv4());
+
+  const { activeAudioShelfId, isPlaying } = useContext(AudioPlayerContext);
+
+  const isActiveAndPlaying = (activeAudioShelfId === audioShelfId) && isPlaying
+  // console.log("in audioshelf, active audio shelf: ", activeAudioShelfId)
+  // console.log("in audioshelf, this audio shelf: ", audioShelfId)
 
   useEffect(() => {
     const fetchAlbumData = async () => {
@@ -76,29 +85,38 @@ const AudioShelf = ({ albumTitle }) => {
         border: '1px solid #ccc',
         width: '500px',
       }}>
-        <div className="audio-shelf-header" onClick={toggleExpand} style={{
+        <div className="audio-shelf-header" style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '10px',
         }}>
-          <h3>{albumTitle}</h3>
-          <div 
+          <div style={{display: "flex", alignItems: "center"}}>
+            {/* ALBUM TITLE */}
+            <h3 style={{marginRight: "10px"}}>{albumTitle}</h3>
+
+            {/* PLAYING ICON */}
+            {isActiveAndPlaying && <FaPlayCircle style={{ color: 'green' }} />}
+          </div>
+          {/* EXPAND / COLLAPSE BUTTON */}
+          <div
             style={chevronStyle}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={toggleExpand}
           >
             <FaChevronDown />
           </div>
         </div>
-        {isExpanded && albumData && (
-          <div className="audio-shelf-content">
-            <AudioPlayer 
-              tracklist={albumData.tracklist} 
-              albumArtworkUrl={albumData.albumArtworkUrl} 
+        <div className="audio-shelf-content" style={{ display: isExpanded ? 'block' : 'none' }}>
+          {albumData && (
+            <AudioPlayer
+              tracklist={albumData.tracklist}
+              albumArtworkUrl={albumData.albumArtworkUrl}
+              audioShelfId={audioShelfId}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,17 +1,17 @@
 import React, { useContext, useState } from 'react';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
-const PlayerHeader = ({ albumArtworkUrl, audioPlayerId }) => {
-    const { currentTrack, currentTracklist, activeAudioPlayerId, isPlaying, play, pause } = useContext(AudioPlayerContext);
+const PlayerHeader = ({ albumArtworkUrl, audioShelfId }) => {
+    const { currentTrack, currentTracklist, activeAudioShelfId, isPlaying, play, pause } = useContext(AudioPlayerContext);
 
-    const isActiveAudioPlayer = activeAudioPlayerId === audioPlayerId;
+    const isActiveAudioPlayer = activeAudioShelfId === audioShelfId;
 
     const handlePlayPause = () => {
         if (currentTrack && isActiveAudioPlayer) {
             if (isPlaying) {
                 pause();
             } else {
-                play(currentTrack, currentTracklist, audioPlayerId);
+                play(currentTrack, currentTracklist, audioShelfId);
             }
         }
     };

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
-const Playlist = ({ tracklist, audioPlayerId }) => {
+const Playlist = ({ tracklist, audioShelfId }) => {
     const { currentTrack, isPlaying, play, pause } = useContext(AudioPlayerContext);
 
     const formatDuration = (seconds) => {
@@ -15,7 +15,7 @@ const Playlist = ({ tracklist, audioPlayerId }) => {
             console.log('current track is this one, and isPlaying is true. pausing.')
             pause();
         } else {
-            play(track, tracklist, audioPlayerId);
+            play(track, tracklist, audioShelfId);
         }
     };
 
