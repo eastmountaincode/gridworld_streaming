@@ -2,26 +2,26 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './ProgressBar.css'
 
-const ProgressBar = ({ audioPlayerId }) => {
+const ProgressBar = ({ audioShelfId }) => {
   const { currentTime,
     totalDuration,
     setAudioTime,
-    activeAudioPlayerId } = useContext(AudioPlayerContext);
+    activeAudioShelfId } = useContext(AudioPlayerContext);
   const [isDragging, setIsDragging] = useState(false);
   const [dragTime, setDragTime] = useState(null);
   const progressBarRef = useRef(null);
 
-  const isActiveAudioPlayer = activeAudioPlayerId === audioPlayerId;
+  const isActiveProgressBar = activeAudioShelfId === audioShelfId;
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      if (isDragging && isActiveAudioPlayer) {
+      if (isDragging && isActiveProgressBar) {
         updateDragTime(e);
       }
     };
 
     const handleMouseUp = () => {
-      if (isDragging && isActiveAudioPlayer) {
+      if (isDragging && isActiveProgressBar) {
         setIsDragging(false);
         setAudioTime(dragTime);
         document.body.classList.remove('no-select'); // Remove no-select class when dragging ends
@@ -38,7 +38,7 @@ const ProgressBar = ({ audioPlayerId }) => {
   }, [isDragging, dragTime, setAudioTime]);
 
   const handleMouseDown = (e) => {
-    if (isActiveAudioPlayer) {
+    if (isActiveProgressBar) {
       setIsDragging(true);
       updateDragTime(e);
       document.body.classList.add('no-select'); // Add no-select class when dragging starts
@@ -54,13 +54,13 @@ const ProgressBar = ({ audioPlayerId }) => {
   };
 
   const formatTime = (time) => {
-    if (!isActiveAudioPlayer) return '0:00';
+    if (!isActiveProgressBar) return '0:00';
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const progress = isActiveAudioPlayer && totalDuration > 0 
+  const progress = isActiveProgressBar && totalDuration > 0 
   ? ((isDragging ? dragTime : currentTime) / totalDuration) * 100 
   : 0;
   
@@ -73,7 +73,7 @@ const ProgressBar = ({ audioPlayerId }) => {
           width: '100%',
           height: '10px',
           backgroundColor: '#ddd',
-          cursor: isActiveAudioPlayer ? 'pointer' : 'default',
+          cursor: isActiveProgressBar ? 'pointer' : 'default',
           position: 'relative',
           margin: '10px 0',
           borderRadius: '5px'

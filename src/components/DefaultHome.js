@@ -18,7 +18,6 @@ const DefaultHome = () => {
 
   return (
     <div className="default-home">
-      <h1>Gridworld Streaming</h1>
       {userData.hasAccessToken ? <PaidView /> : <FreeView />}
     </div>
   );
