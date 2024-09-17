@@ -1,4 +1,18 @@
 @font-face {
+  font-family: 'Alcala';
+  src: url('./fonts/Alcala.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Alcala-Italic';
+  src: url('./fonts/Alcala-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Dina';
   src: url('./fonts/DinaRemasterCollection.ttc') format('truetype');
   font-weight: normal;

@@ -24,13 +24,13 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId }) => {
     };
 
     return (
-        <div className="player-header" style={{ height: '350px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '2px solid blue', borderRadius: '5px' }}>
+        <div className="player-header" style={{ height: '450px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '2px solid blue', borderRadius: '5px' }}>
             {/* ALBUM ARTWORK */}
             {albumArtworkUrl && (
                 <img
                     src={albumArtworkUrl}
                     alt="Album artwork"
-                    style={{ width: '200px', height: '200px' }}
+                    style={{ width: '300px', height: '300px' }}
                 />
             )}
 

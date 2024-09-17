@@ -9,7 +9,7 @@ const MainNavbar = () => {
       {/* LOGO */}
       <div className="logo-area" style={{ marginRight: '20px' }}>
         <Link to="/">
-          <img src="/images/site_logo/logo_small.png" alt="Logo" style={{ height: '100px' }} />
+          <img src="/images/site_logo/logo_sm_goga.png" alt="Logo" style={{ height: '100px' }} />
         </Link>
       </div>
 

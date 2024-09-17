@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AdminPanel from './components/admin/AdminPanel';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import DefaultHome from './components/DefaultHome';
 import CreateAccount from './components/account/CreateAccount';

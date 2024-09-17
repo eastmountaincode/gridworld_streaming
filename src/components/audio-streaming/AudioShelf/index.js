@@ -15,9 +15,7 @@ const AudioShelf = ({ albumTitle }) => {
   const { activeAudioShelfId, isPlaying } = useContext(AudioPlayerContext);
 
   const isActiveAndPlaying = (activeAudioShelfId === audioShelfId) && isPlaying
-  // console.log("in audioshelf, active audio shelf: ", activeAudioShelfId)
-  // console.log("in audioshelf, this audio shelf: ", audioShelfId)
-
+  
   useEffect(() => {
     const fetchAlbumData = async () => {
       const storedSession = localStorage.getItem('userSession');
@@ -84,6 +82,8 @@ const AudioShelf = ({ albumTitle }) => {
       <div className="audio-shelf" style={{
         border: '1px solid #ccc',
         width: '500px',
+        margin: '5px 20px',
+        overflow: 'hidden',
       }}>
         <div className="audio-shelf-header" style={{
           display: 'flex',
@@ -91,12 +91,23 @@ const AudioShelf = ({ albumTitle }) => {
           alignItems: 'center',
           padding: '10px',
         }}>
-          <div style={{display: "flex", alignItems: "center"}}>
-            {/* ALBUM TITLE */}
-            <h3 style={{marginRight: "10px"}}>{albumTitle}</h3>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {/* ALBUM TITLE */}
+              <h2 style={{ marginLeft: "5px", textAlign: "left", border: "1px solid red" }}>{albumTitle}</h2>
+
+              {/* ALBUM ARTWORK ICON */}
+              {albumData && albumData.albumArtworkUrl && (
+                <img
+                  src={albumData.albumArtworkUrl}
+                  alt="Album artwork"
+                  style={{ width: '40px', height: '40px', marginLeft: '16px' }}
+                />
+              )}
+            </div>
 
             {/* PLAYING ICON */}
-            {isActiveAndPlaying && <FaPlayCircle style={{ color: 'green' }} />}
+            {isActiveAndPlaying && <FaPlayCircle style={{ color: 'green', width: '38px', height: '38px', marginRight: '8px' }} />}
           </div>
           {/* EXPAND / COLLAPSE BUTTON */}
           <div
@@ -105,7 +116,7 @@ const AudioShelf = ({ albumTitle }) => {
             onMouseLeave={() => setIsHovered(false)}
             onClick={toggleExpand}
           >
-            <FaChevronDown />
+            <FaChevronDown style={{ width: '20px', height: '20px' }} />
           </div>
         </div>
         <div className="audio-shelf-content" style={{ display: isExpanded ? 'block' : 'none' }}>
