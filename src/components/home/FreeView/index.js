@@ -10,9 +10,9 @@ const FreeView = () => {
         <AudioShelf albumTitle="Gridworld Lite" />
       </div>
 
-      <div style={{ marginTop: '20px' }}>
+      {/* <div style={{ marginTop: '20px' }}>
         <AudioShelf albumTitle="Gridworld Instrumentals" />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -7,9 +7,9 @@ const MainNavbar = () => {
   return (
     <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: 'slategray' }}>
       {/* LOGO */}
-      <div className="logo-area">
+      <div className="logo-area" style={{ marginRight: '20px' }}>
         <Link to="/">
-          <img src="/images/main_header.png" alt="Logo" style={{ height: '100px' }} />
+          <img src="/images/site_logo/logo_small.png" alt="Logo" style={{ height: '100px' }} />
         </Link>
       </div>
 
