@@ -3,7 +3,6 @@ require('dotenv').config();
 const express = require('express');
 
 const usersHandler = require('../api/users');
-const securityQuestionsHandler = require('../api/security-questions');
 const createAccountHandler = require('../api/auth/create-account');
 const loginHandler = require('../api/auth/login');
 const validateSessionHandler = require('../api/auth/validate-session')
@@ -30,10 +29,6 @@ app.use(express.json());
 
 app.all('/api/users', async (req, res) => {
   await usersHandler(req, res);
-});
-
-app.all('/api/security-questions', async (req, res) => {
-  await securityQuestionsHandler(req, res);
 });
 
 app.all('/api/auth/create-account', async (req, res) => {
