@@ -5,7 +5,7 @@ import { FaChevronDown, FaPlayCircle } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './AudioShelf.css'; // Import the CSS file
 
-const AudioShelf = ({ albumTitle }) => {
+const AudioShelf = ({ albumTitle, shelfColor }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -121,6 +121,7 @@ const AudioShelf = ({ albumTitle }) => {
               tracklist={albumData.tracklist}
               albumArtworkUrl={albumData.albumArtworkUrl}
               audioShelfId={audioShelfId}
+              shelfColor={shelfColor}
             />
           )}
         </div>

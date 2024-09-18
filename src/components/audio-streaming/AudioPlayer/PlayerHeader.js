@@ -4,7 +4,7 @@ import { FaPlay, FaPause } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './PlayerHeader.css';
 
-const PlayerHeader = ({ albumArtworkUrl, audioShelfId }) => {
+const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor }) => {
     const { currentTrack, currentTracklist, activeAudioShelfId, isPlaying, play, pause } = useContext(AudioPlayerContext);
 
     const isActiveAudioPlayer = activeAudioShelfId === audioShelfId;
@@ -22,7 +22,7 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId }) => {
     const buttonClass = isActiveAudioPlayer && currentTrack ? 'active-button' : 'inactive-button';
 
     const buttonStyle = {
-        backgroundColor: '#85b021', // Green background color
+        backgroundColor: shelfColor, // Green background color
         borderColor: 'white', // Tomato Red border color
         color: 'white', // White text color
         fontSize: '20px', // Font size

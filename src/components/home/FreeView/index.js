@@ -7,7 +7,7 @@ const FreeView = () => {
     <div className="free-view">
       <BuyAccessToken />
       <div style={{ marginTop: '20px' }}>
-        <AudioShelf albumTitle="Gridworld Lite" />
+        <AudioShelf albumTitle="Gridworld Lite" shelfColor="#b5b4db" />
       </div>
 
       {/* <div style={{ marginTop: '20px' }}>

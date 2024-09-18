@@ -6,7 +6,7 @@ import PlayerHeader from './PlayerHeader';
 
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
-const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId }) => {
+const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId, shelfColor }) => {
   // get the ID of the active audio shelf
   const { activeAudioShelfId, pause, reset } = useContext(AudioPlayerContext);
 
@@ -31,7 +31,7 @@ const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId }) => {
         borderRadius: '8px'
       }}
     >
-      <PlayerHeader albumArtworkUrl={albumArtworkUrl} audioShelfId={audioShelfId} />
+      <PlayerHeader albumArtworkUrl={albumArtworkUrl} audioShelfId={audioShelfId} shelfColor={shelfColor} />
       <div style={{ display: 'flex', alignItems: 'center', gap: '0px', width: '100%' }}>
         <div style={{ flex: 1 }}>
           <ProgressBar audioShelfId={audioShelfId} />
