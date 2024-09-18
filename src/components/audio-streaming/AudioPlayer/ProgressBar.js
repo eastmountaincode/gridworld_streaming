@@ -65,7 +65,7 @@ const ProgressBar = ({ audioShelfId }) => {
   : 0;
   
   return (
-    <div style={{ margin: "25px 15px" }}>
+    <div style={{ margin: "25px 15px 25px 20px" }}>
       <div
         ref={progressBarRef}
         onMouseDown={handleMouseDown}
@@ -105,9 +105,12 @@ const ProgressBar = ({ audioShelfId }) => {
         <span>{formatTime(isDragging ? dragTime : currentTime)}</span>
         <span>{formatTime(totalDuration)}</span>
       </div>
-      <div>
+
+      {/* PROGRESS DISPLAY */}
+      {/* <div>
         <span>Progress: {progress.toFixed(1)}%</span>
-      </div>
+      </div> */}
+
     </div>
   );
 };

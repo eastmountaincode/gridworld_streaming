@@ -1,4 +1,6 @@
 import React, { useContext } from 'react';
+import { Button } from 'antd';
+import { FaStepBackward, FaStepForward } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
 const Controls = ({ audioShelfId }) => {
@@ -26,14 +28,15 @@ const Controls = ({ audioShelfId }) => {
     cursor: isInteractive && isEnabled ? 'pointer' : 'default',
     opacity: isActiveAudioShelf ? (isEnabled ? 1 : 0.5) : 0.5,
     pointerEvents: isInteractive && isEnabled ? 'auto' : 'none',
-
+    margin: '-33px 0px', // Add margin to create space between buttons
   });
 
   return (
-    <div className="controls" style={{ display: 'flex', justifyContent: 'center', marginTop: '10px', border: '2px solid green', borderRadius: '5px', padding: '20px 20px' }}>
-      <button onClick={handlePrevious} style={buttonStyle(hasPreviousTrack)} className="control-button">⏮️</button>
-      <button onClick={handleNext} style={buttonStyle(hasNextTrack)} className="control-button">⏭️</button>
+    <div className="controls" style={{ display: 'flex', justifyContent: 'center', padding: '20px 20px' }}>
+      <Button onClick={handlePrevious} style={{...buttonStyle(hasPreviousTrack), marginRight: '10px'}} disabled={!hasPreviousTrack} icon={<FaStepBackward />} />
+      <Button onClick={handleNext} style={buttonStyle(hasNextTrack)} disabled={!hasNextTrack} icon={<FaStepForward />} />
     </div>
   );
 };
+
 export default Controls;

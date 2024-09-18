@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import AudioPlayer from '../AudioPlayer';
 import { v4 as uuidv4 } from 'uuid';
 import { FaChevronDown, FaPlayCircle } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
+import './AudioShelf.css'; // Import the CSS file
 
 const AudioShelf = ({ albumTitle }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -13,6 +14,7 @@ const AudioShelf = ({ albumTitle }) => {
   const [audioShelfId] = useState(() => uuidv4());
 
   const { activeAudioShelfId, isPlaying } = useContext(AudioPlayerContext);
+  const contentRef = useRef(null);
 
   const isActiveAndPlaying = (activeAudioShelfId === audioShelfId) && isPlaying
   
@@ -63,14 +65,21 @@ const AudioShelf = ({ albumTitle }) => {
     fetchAlbumData();
   }, [albumTitle]);
 
-  const toggleExpand = () => setIsExpanded(!isExpanded);
-
-  const chevronStyle = {
-    cursor: 'pointer',
-    transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)',
-    padding: '10px',
-    border: isHovered ? '1px solid #ccc' : '1px solid transparent',
-    borderRadius: '10%',
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+    if (contentRef.current) {
+      if (isExpanded) {
+        contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
+        setTimeout(() => {
+          contentRef.current.style.height = '0';
+        }, 0);
+      } else {
+        contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
+        setTimeout(() => {
+          contentRef.current.style.height = 'auto';
+        }, 1000); // Match the transition duration
+      }
+    }
   };
 
   if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Loading...</div>;
@@ -78,48 +87,35 @@ const AudioShelf = ({ albumTitle }) => {
   if (error) return <div>Error loading album data: {error.message}</div>;
 
   return (
-    <div className="audio-shelf-container" style={{ display: 'flex', justifyContent: 'center' }}>
-      <div className="audio-shelf" style={{
-        border: '1px solid #ccc',
-        width: '500px',
-        margin: '5px 20px',
-        overflow: 'hidden',
-      }}>
-        <div className="audio-shelf-header" style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '10px',
-        }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {/* ALBUM TITLE */}
-              <h2 style={{ marginLeft: "5px", textAlign: "left", border: "1px solid red" }}>{albumTitle}</h2>
+    <div className="audio-shelf-container">
+      <div className={`audio-shelf ${isExpanded ? '' : 'collapsed'}`}>
+        <div className="audio-shelf-header">
+          <div className="album-title-container">
+            {/* ALBUM TITLE */}
+            <h2 className="album-title">{albumTitle}</h2>
 
-              {/* ALBUM ARTWORK ICON */}
-              {albumData && albumData.albumArtworkUrl && (
+            {/* ALBUM ARTWORK ICON OR PLAYING ICON */}
+            {isActiveAndPlaying ? (
+              <img src="/images/music-0130.gif" className="album-icon" style={{ height: '35px', width: '35px' }} />
+            ) : (
+              albumData && albumData.albumArtworkUrl && (
                 <img
                   src={albumData.albumArtworkUrl}
                   alt="Album artwork"
-                  style={{ width: '40px', height: '40px', marginLeft: '16px' }}
+                  className="album-icon"
                 />
-              )}
-            </div>
-
-            {/* PLAYING ICON */}
-            {isActiveAndPlaying && <FaPlayCircle style={{ color: 'green', width: '38px', height: '38px', marginRight: '8px' }} />}
+              )
+            )}
           </div>
           {/* EXPAND / COLLAPSE BUTTON */}
           <div
-            style={chevronStyle}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            className="chevron-container"
             onClick={toggleExpand}
           >
-            <FaChevronDown style={{ width: '20px', height: '20px' }} />
+            <FaChevronDown style={{ width: '20px', height: '20px', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)' }} />
           </div>
         </div>
-        <div className="audio-shelf-content" style={{ display: isExpanded ? 'block' : 'none' }}>
+        <div className={`audio-shelf-content ${isExpanded ? 'expanded' : ''}`} ref={contentRef}>
           {albumData && (
             <AudioPlayer
               tracklist={albumData.tracklist}

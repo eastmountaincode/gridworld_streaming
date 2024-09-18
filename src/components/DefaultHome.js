@@ -6,18 +6,22 @@ import FreeView from './home/FreeView';
 const DefaultHome = () => {
   const { isLoading, isAuthenticated, userData } = useAuth();
 
+  const defaultHomeStyle = {
+    marginTop: '25px',
+  };
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div style={defaultHomeStyle}>Loading...</div>;
   }
 
   if (!isAuthenticated) {
-    return <div>
+    return <div style={defaultHomeStyle}>
       <FreeView />
     </div>;
   }
 
   return (
-    <div className="default-home">
+    <div style={defaultHomeStyle}>
       {userData.hasAccessToken ? <PaidView /> : <FreeView />}
     </div>
   );

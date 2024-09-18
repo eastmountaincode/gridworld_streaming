@@ -26,7 +26,7 @@ const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId }) => {
     <div
       className="audio-player"
       style={{
-        border: isActiveAudioPlayer ? '4px solid orange' : 'none',
+        // border: isActiveAudioPlayer ? '4px solid orange' : 'none',
         padding: '10px',
         borderRadius: '8px'
       }}
