@@ -1,5 +1,5 @@
 .album-artwork {
-    width: 80%;
+    width: 85%;
     max-width: 350px;
     height: auto;
     margin-top: 10px;
@@ -11,11 +11,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
 }
 
 .play-button-container {
-    /* border: 1px solid red; */
     padding-bottom: 10px;
 }
 
@@ -23,20 +22,18 @@
     display: flex;
     align-items: center;
     justify-content: flex-start; /* Align text to the start (left) */
-    flex: 1; /* Allow the text container to grow */
-    border: 1px solid blue;
     margin-left: 15px;
-    flex-shrink: 1; /* Allow the element to shrink */
-    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+    margin-top: 3px
 
 }
 
 .player-header-content {
     display: flex;
     align-items: center;
-    border: 1px solid green;
-    width: 80%;
+    text-align: left;
+    width: 85%;
     max-width: 350px;
-    overflow: hidden;
+    text-overflow: hidden; /* Add ellipsis for overflow text */
+    margin-top: 4px;
 
 }

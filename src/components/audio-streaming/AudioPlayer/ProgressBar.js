@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './ProgressBar.css'
 
-const ProgressBar = ({ audioShelfId }) => {
+const ProgressBar = ({ audioShelfId, shelfColor }) => {
   const { currentTime,
     totalDuration,
     setAudioTime,
@@ -70,14 +70,15 @@ const ProgressBar = ({ audioShelfId }) => {
         ref={progressBarRef}
         onMouseDown={handleMouseDown}
         className={`progress-bar ${isActiveProgressBar ? '' : 'progress-bar-inactive'}`}
+        style={{ '--shelf-color': shelfColor }}
       >
         <div
           className="progress-bar-fill"
-          style={{ width: `${progress}%` }}
+          style={{ width: `${progress}%`, backgroundColor: 'var(--shelf-color)' }}
         />
         <div
           className="progress-bar-thumb"
-          style={{ left: `${progress}%` }}
+          style={{ left: `${progress}%`, backgroundColor: 'var(--shelf-color)' }}
         />
       </div>
       <div className="progress-bar-timestamps">
@@ -87,5 +88,4 @@ const ProgressBar = ({ audioShelfId }) => {
     </div>
   );
 };
-
 export default ProgressBar;

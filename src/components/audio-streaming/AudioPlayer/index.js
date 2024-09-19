@@ -9,10 +9,7 @@ import './AudioPlayer.css';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
 const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId, shelfColor }) => {
-  // get the ID of the active audio shelf
-  const { activeAudioShelfId, pause, reset } = useContext(AudioPlayerContext);
-
-  const isActiveAudioPlayer = activeAudioShelfId === audioShelfId;
+  const { pause, reset } = useContext(AudioPlayerContext);
 
   useEffect(() => {
     return () => {
@@ -32,11 +29,12 @@ const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId, shelfColor }) =
       />
       <div className="progress-controls-container">
         <div className="progress-bar-wrapper">
-          <ProgressBar audioShelfId={audioShelfId} />
+          <ProgressBar audioShelfId={audioShelfId} shelfColor={shelfColor} />
         </div>
-        <Controls audioShelfId={audioShelfId} />
+        <Controls audioShelfId={audioShelfId} shelfColor={shelfColor} />
+
       </div>
-      <Playlist tracklist={tracklist} audioShelfId={audioShelfId} />
+      <Playlist tracklist={tracklist} audioShelfId={audioShelfId} shelfColor={shelfColor} />
     </div>
   );
 };

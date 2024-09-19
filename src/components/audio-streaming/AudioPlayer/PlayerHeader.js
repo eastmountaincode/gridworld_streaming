@@ -25,6 +25,7 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
         borderColor: 'white',
         color: 'white',
         fontSize: '20px',
+        paddingLeft: '1px',
         width: '50px',
         height: '50px',
         display: 'flex',
@@ -56,7 +57,7 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
                 </div>
 
                 <div className="current-track-info">
-                    {isActiveAudioPlayer && currentTrack && <h3>{currentTrack.trackTitle}</h3>}
+                    {isActiveAudioPlayer && currentTrack && <h4>{currentTrack.trackTitle}</h4>}
                 </div>
             </div>
         </div>
