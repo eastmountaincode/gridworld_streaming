@@ -65,52 +65,25 @@ const ProgressBar = ({ audioShelfId }) => {
   : 0;
   
   return (
-    <div style={{ margin: "25px 15px 25px 20px" }}>
+    <div className="progress-bar-container">
       <div
         ref={progressBarRef}
         onMouseDown={handleMouseDown}
-        style={{
-          width: '100%',
-          height: '10px',
-          backgroundColor: '#ddd',
-          cursor: isActiveProgressBar ? 'pointer' : 'default',
-          position: 'relative',
-          margin: '10px 0',
-          borderRadius: '5px'
-        }}
+        className={`progress-bar ${isActiveProgressBar ? '' : 'progress-bar-inactive'}`}
       >
         <div
-          style={{
-            width: `${progress}%`,
-            height: '100%',
-            backgroundColor: '#007bff',
-            borderRadius: '5px'
-          }}
+          className="progress-bar-fill"
+          style={{ width: `${progress}%` }}
         />
         <div
-          style={{
-            position: 'absolute',
-            left: `${progress}%`,
-            top: '-5px',
-            width: '20px',
-            height: '20px',
-            borderRadius: '50%',
-            backgroundColor: '#007bff',
-            transform: 'translateX(-50%)',
-            boxShadow: '0 0 5px rgba(0,0,0,0.2)'
-          }}
+          className="progress-bar-thumb"
+          style={{ left: `${progress}%` }}
         />
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '5px' }}>
+      <div className="progress-bar-timestamps">
         <span>{formatTime(isDragging ? dragTime : currentTime)}</span>
         <span>{formatTime(totalDuration)}</span>
       </div>
-
-      {/* PROGRESS DISPLAY */}
-      {/* <div>
-        <span>Progress: {progress.toFixed(1)}%</span>
-      </div> */}
-
     </div>
   );
 };

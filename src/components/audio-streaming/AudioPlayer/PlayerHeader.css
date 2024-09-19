@@ -1,36 +1,42 @@
 .album-artwork {
     width: 80%;
-    max-width: 300px;
+    max-width: 350px;
     height: auto;
+    margin-top: 10px;
+    margin-bottom: 5px;
+
 }
 
 .player-header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    border: 1px solid blue;
 }
 
 .play-button-container {
-    margin: 10px;
-}
-
-.active-button {
-    cursor: pointer;
-    opacity: 1;
-    pointer-events: auto;
-    margin-top: 10px;
-}
-
-.inactive-button {
-    cursor: default;
-    opacity: 0.5;
-    pointer-events: none;
-    margin-top: 10px;
+    /* border: 1px solid red; */
+    padding-bottom: 10px;
 }
 
 .current-track-info {
-    height: auto;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Align text to the start (left) */
+    flex: 1; /* Allow the text container to grow */
+    border: 1px solid blue;
+    margin-left: 15px;
+    flex-shrink: 1; /* Allow the element to shrink */
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+
+}
+
+.player-header-content {
+    display: flex;
+    align-items: center;
+    border: 1px solid green;
+    width: 80%;
+    max-width: 350px;
+    overflow: hidden;
+
 }

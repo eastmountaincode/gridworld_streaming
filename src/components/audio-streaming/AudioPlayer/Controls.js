@@ -28,11 +28,10 @@ const Controls = ({ audioShelfId }) => {
     cursor: isInteractive && isEnabled ? 'pointer' : 'default',
     opacity: isActiveAudioShelf ? (isEnabled ? 1 : 0.5) : 0.5,
     pointerEvents: isInteractive && isEnabled ? 'auto' : 'none',
-    margin: '-33px 0px', // Add margin to create space between buttons
   });
 
   return (
-    <div className="controls" style={{ display: 'flex', justifyContent: 'center', padding: '20px 20px' }}>
+    <div className="controls" style={{ display: 'flex', justifyContent: 'center', border: '1px solid black' }}>
       <Button onClick={handlePrevious} style={{...buttonStyle(hasPreviousTrack), marginRight: '10px'}} disabled={!hasPreviousTrack} icon={<FaStepBackward />} />
       <Button onClick={handleNext} style={buttonStyle(hasNextTrack)} disabled={!hasNextTrack} icon={<FaStepForward />} />
     </div>

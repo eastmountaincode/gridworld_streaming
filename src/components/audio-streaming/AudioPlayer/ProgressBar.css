@@ -1,6 +1,51 @@
+.progress-bar-container {
+  border: 1px solid red;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #ddd;
+    cursor: pointer;
+    position: relative;
+    margin: 10px 0;
+    border-radius: 5px;
+    overflow: visible; /* Ensure the thumb is not clipped */
+}
+
+.progress-bar-inactive {
+    cursor: default;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #007bff;
+    border-radius: 5px;
+    z-index: 1; /* Ensure the fill is behind the thumb */
+    position: relative;
+}
+
+.progress-bar-thumb {
+    position: absolute;
+    top: -5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #007bff;
+    transform: translateX(-50%);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 2; /* Ensure the thumb is above the fill */
+}
+
+.progress-bar-timestamps {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
 .no-select {
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-  }
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }

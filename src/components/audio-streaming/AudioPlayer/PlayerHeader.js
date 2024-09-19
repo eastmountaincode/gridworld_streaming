@@ -3,8 +3,7 @@ import { Button } from 'antd';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './PlayerHeader.css';
-
-const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor }) => {
+const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, firstTrack }) => {
     const { currentTrack, currentTracklist, activeAudioShelfId, isPlaying, play, pause } = useContext(AudioPlayerContext);
 
     const isActiveAudioPlayer = activeAudioShelfId === audioShelfId;
@@ -16,27 +15,29 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor }) => {
             } else {
                 play(currentTrack, currentTracklist, audioShelfId);
             }
+        } else if (tracklist && firstTrack) {
+            play(firstTrack, tracklist, audioShelfId);
         }
     };
 
-    const buttonClass = isActiveAudioPlayer && currentTrack ? 'active-button' : 'inactive-button';
-
     const buttonStyle = {
-        backgroundColor: shelfColor, // Green background color
-        borderColor: 'white', // Tomato Red border color
-        color: 'white', // White text color
-        fontSize: '20px', // Font size
-        width: '50px', // Button width
-        height: '50px', // Button height
+        backgroundColor: shelfColor,
+        borderColor: 'white',
+        color: 'white',
+        fontSize: '20px',
+        width: '50px',
+        height: '50px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        cursor: 'pointer',
+        opacity: 1,
+        pointerEvents: 'auto',
+        marginTop: '10px',
     };
-
 
     return (
         <div className="player-header">
-            {/* ALBUM ARTWORK */}
             {albumArtworkUrl && (
                 <img
                     className='album-artwork'
@@ -45,22 +46,20 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor }) => {
                 />
             )}
 
-            {/* GLOBAL PLAY BUTTON */}
-            <div className="play-button-container">
-                <Button
-                    onClick={handlePlayPause}
-                    className={buttonClass}
-                    icon={isActiveAudioPlayer && isPlaying ? <FaPause /> : <FaPlay />}
-                    style={buttonStyle}
-                />
-            </div>
+            <div className="player-header-content">
+                <div className="play-button-container">
+                    <Button
+                        onClick={handlePlayPause}
+                        icon={isActiveAudioPlayer && isPlaying ? <FaPause /> : <FaPlay />}
+                        style={buttonStyle}
+                    />
+                </div>
 
-            {/* CURRENT TRACK INFO */}
-            <div className="current-track-info">
-                {isActiveAudioPlayer && currentTrack && <h3>{currentTrack.trackTitle}</h3>}
+                <div className="current-track-info">
+                    {isActiveAudioPlayer && currentTrack && <h3>{currentTrack.trackTitle}</h3>}
+                </div>
             </div>
         </div>
     );
 };
-
 export default PlayerHeader;

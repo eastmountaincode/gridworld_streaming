@@ -1,0 +1,14 @@
+.progress-controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 0 auto;
+    /* Center the container */
+}
+
+.progress-bar-wrapper {
+    flex: 1;
+    margin-right: 10px;
+    /* Add some space between the progress bar and controls */
+}
