@@ -47,7 +47,7 @@ const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
                         borderRadius: '5px'
                     }}
                 >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', overflow: 'hidden' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                             <Button
                                 onClick={() => handlePlayPause(track)}
