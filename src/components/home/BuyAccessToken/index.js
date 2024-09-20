@@ -43,9 +43,15 @@ const BuyAccessToken = () => {
     }
   };
 
+  const buttonStyle = {
+    backgroundColor: 'slategrey',
+    color: 'black',
+    borderColor: 'black',
+  };
+
   return (
     <div style={{margin: "0px 20px"}}>
-      <Button type="default" onClick={handleBuyAccessToken}>Buy Access Token</Button> {/* Use Ant Design Button */}
+      <Button type="default" onClick={handleBuyAccessToken} style={buttonStyle}>Buy Access Token</Button> {/* Use Ant Design Button */}
       <img src='/images/access_token/bounce_2.gif' 
       alt="Token"
       style={{height: '100px', marginLeft: '5px'}}/>

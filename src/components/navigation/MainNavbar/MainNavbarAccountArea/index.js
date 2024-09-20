@@ -12,6 +12,12 @@ const MainNavbarAccountArea = () => {
     navigate('/account');
   };
 
+  const buttonStyle = {
+    backgroundColor: 'slategrey',
+    color: 'black',
+    borderColor: 'black',
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -20,10 +26,10 @@ const MainNavbarAccountArea = () => {
     return (
       <div className="auth-buttons">
         <Link to="/create-account">
-          <Button type="default">Create Account</Button>
+          <Button type="default" style={buttonStyle}>Create Account</Button>
         </Link>
         <Link to="/login">
-          <Button type="default">Login</Button>
+          <Button type="default" style={buttonStyle}>Login</Button>
         </Link>
       </div>
     );
@@ -50,7 +56,7 @@ const MainNavbarAccountArea = () => {
         </span>
       </div>
       <div style={{marginRight: '10px'}}>
-        <Button type="default" onClick={logout}>Logout</Button>
+        <Button type="default" onClick={logout} style={buttonStyle}>Logout</Button>
       </div>
     </div>
   );
