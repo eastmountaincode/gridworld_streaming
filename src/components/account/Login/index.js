@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNotification } from '../../../context/NotificationContext';
 import { useAuth } from '../../../context/AuthContext';
-
 import { Link, useNavigate } from 'react-router-dom';
-
+import { Button, Form, Input, Card } from 'antd'; // Import Button, Form, Input, and Card from antd
 
 const Login = () => {
   // State
@@ -16,8 +15,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
       const response = await fetch('http://localhost:3001/api/auth/login', {
         method: 'POST',
@@ -33,7 +31,7 @@ const Login = () => {
         // store the token and the userData in AuthContext
         login(data.token, data.userData);
         showNotification('Login successful', 'success');
-        navigate('/', {replace: true});
+        navigate('/', { replace: true });
 
       } else {
         const errorData = await response.json();
@@ -45,34 +43,44 @@ const Login = () => {
   };
 
   return (
-    <div className="login" style={{ textAlign: 'left', margin: '20px' }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+    <div style={{ display: 'flex', justifyContent: 'center', margin: '40px 20px' }}>
+      <Card title="Login" bordered={true} style={{ width: 400 }}>
+        <Form
+          layout="vertical"
+          onFinish={handleSubmit}
+          requiredMark={false} // Remove the red asterisk for required fields
+        >
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[{ required: true, message: 'Please input your email!' }]}
+          >
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: 'Please input your password!' }]}
+          >
+            <Input.Password
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Login
+            </Button>
+          </Form.Item>
+        </Form>
+        <div style={{ marginTop: '10px', textAlign: 'left' }}>
+          <Link to="/forgot-password">Forgot Password</Link>
         </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      <div>
-        <Link to="/forgot-password">Forgot Password</Link>
-      </div>
+      </Card>
     </div>
   );
 };

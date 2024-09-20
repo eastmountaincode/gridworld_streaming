@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-
 import { useNavigate } from 'react-router-dom';
-
 import { useNotification } from '../../../context/NotificationContext';
+import { Button, Form, Input, Select, Card } from 'antd';
+
+const { Option } = Select;
 
 const CreateAccount = () => {
   const [email, setEmail] = useState('');
@@ -25,7 +26,7 @@ const CreateAccount = () => {
 
   const fetchSecurityQuestions = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/security_questions');
+      const response = await fetch('http://localhost:3001/api/security-questions');
       const data = await response.json();
       const questions = data.records.map(record => record.question);
       setSecurityQuestions(questions);
@@ -34,29 +35,27 @@ const CreateAccount = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
     try {
-      const response = await fetch('http://localhost:3001/api/auth/create_account', {
+      const response = await fetch('http://localhost:3001/api/auth/create-account', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email,
-          password,
-          security_question: selectedQuestion,
-          security_question_answer: securityAnswer,
+          email: values.email,
+          password: values.password,
+          security_question: values.securityQuestion,
+          security_question_answer: values.securityAnswer,
         }),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         // Account created successfully
         showNotification('Account created successfully!', 'success');
         navigate('/');
-
       } else {
         // Handle errors
         if (data.message === 'Email already exists') {
@@ -64,76 +63,84 @@ const CreateAccount = () => {
         } else {
           showNotification(`Account creation failed: ${data.message}`, 'error');
         }
-
       }
     } catch (error) {
       console.error('Error creating account:', error);
       // Handle network errors
+      showNotification('An error occurred. Please try again.', 'error');
     }
   };
-  
 
   return (
-    <div className="create-account" style={{textAlign: 'left'}}>
-      <h2>Create Account</h2>
-      <form onSubmit={handleSubmit}>
-        {/* START FORM */}
-        {/* EMAIL */}
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        {/* PASSWORD */}
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {/* SECURITY QUESTION */}
-        <div>
-          <label htmlFor="security-question">Security Question:</label>
-          <select
-            id="security-question"
-            value={selectedQuestion}
-            onChange={(e) => setSelectedQuestion(e.target.value)}
-            required
+    <div style={{ display: 'flex', justifyContent: 'center', margin: '40px 20px' }}>
+      <Card title="Create Account" bordered={true} style={{ width: 400 }}>
+        <Form
+          layout="vertical"
+          onFinish={handleSubmit}
+          requiredMark={false}
+        >
+          {/* EMAIL */}
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[{ required: true, message: 'Please enter your email' }]}
           >
-            <option value="">Select a question</option>
-            {securityQuestions.map((q, index) => (
-              <option key={index} value={q}>
-                {q}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="security-answer">Answer:</label>
-          <input
-            type="text"
-            id="security-answer"
-            value={securityAnswer}
-            onChange={(e) => setSecurityAnswer(e.target.value)}
-            required
-          />
-        </div>
-        {/* END FORM */}
-        <button type="submit">Create Account</button>
-      </form>
-      <button onClick={() => showNotification("hello", "success")}>notify</button>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Item>
+          {/* PASSWORD */}
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: 'Please enter your password' }]}
+          >
+            <Input.Password
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Item>
+          {/* SECURITY QUESTION */}
+          <Form.Item
+            label="Security Question"
+            name="securityQuestion"
+            rules={[{ required: true, message: 'Please select a security question' }]}
+          >
+            <Select
+              value={selectedQuestion}
+              onChange={(value) => setSelectedQuestion(value)}
+            >
+              <Option value="">Select a question</Option>
+              {securityQuestions.map((q, index) => (
+                <Option key={index} value={q}>
+                  {q}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Answer"
+            name="securityAnswer"
+            rules={[{ required: true, message: 'Please enter your answer' }]}
+          >
+            <Input
+              type="text"
+              value={securityAnswer}
+              onChange={(e) => setSecurityAnswer(e.target.value)}
+            />
+          </Form.Item>
+          {/* END FORM */}
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Create Account
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
     </div>
   );
 };
 
 export default CreateAccount;
-

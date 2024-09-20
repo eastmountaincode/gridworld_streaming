@@ -8,7 +8,7 @@ const DefaultHome = () => {
 
   const defaultHomeStyle = {
     marginTop: '25px',
-    paddingBottom: '25px',
+    paddingBottom: '30px',
   };
 
   if (isLoading) {

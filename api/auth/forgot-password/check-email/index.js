@@ -18,7 +18,7 @@ const handler = async (req, res) => {
       if (user) {
         res.status(200).json({ securityQuestion: user.security_question });
       } else {
-        res.status(404).json({ message: 'Email not found' });
+        res.status(404).json({ message: 'Email not found.' });
       }
     } catch (error) {
       res.status(500).json({ message: 'Server error' });

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'antd'; // Import Button from antd
 import { useAuth } from '../../../context/AuthContext';
 import { useNotification } from '../../../context/NotificationContext';
 import validateSession from '../../../utils/validateSession';
@@ -43,11 +44,11 @@ const BuyAccessToken = () => {
   };
 
   return (
-    <div>
-      <button onClick={handleBuyAccessToken}>Buy Access Token</button>
+    <div style={{margin: "0px 20px"}}>
+      <Button type="default" onClick={handleBuyAccessToken}>Buy Access Token</Button> {/* Use Ant Design Button */}
       <img src='/images/access_token/bounce_2.gif' 
       alt="Token"
-      style={{height: '100px'}} />
+      style={{height: '100px', marginLeft: '5px'}}/>
     </div>
   );
 };

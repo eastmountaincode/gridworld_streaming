@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../context/AuthContext';
 import { Button } from 'antd';
+import './MainNavbarAccountArea.css';
 
 const MainNavbarAccountArea = () => {
   const { isAuthenticated, userData, logout, isLoading } = useAuth();
@@ -17,7 +18,7 @@ const MainNavbarAccountArea = () => {
 
   if (!isAuthenticated) {
     return (
-      <div style={{ display: 'flex', gap: '10px' }}>
+      <div className="auth-buttons">
         <Link to="/create-account">
           <Button type="default">Create Account</Button>
         </Link>
@@ -48,7 +49,9 @@ const MainNavbarAccountArea = () => {
           {userData.email}
         </span>
       </div>
-      <Button type="default" onClick={logout}>Logout</Button>
+      <div style={{marginRight: '10px'}}>
+        <Button type="default" onClick={logout}>Logout</Button>
+      </div>
     </div>
   );
 };

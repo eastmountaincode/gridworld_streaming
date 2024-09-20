@@ -1,0 +1,13 @@
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-right: 10px;
+    text-align: right;
+  }
+  
+  @media (max-width: 380px) {
+    .auth-buttons {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
