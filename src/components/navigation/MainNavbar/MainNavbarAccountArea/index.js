@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../context/AuthContext';
 import { Button } from 'antd';
-import './MainNavbarAccountArea.css';
+import './MainNavbarAccountArea.css'; // Import the CSS file
 
 const MainNavbarAccountArea = () => {
   const { isAuthenticated, userData, logout, isLoading } = useAuth();
@@ -18,45 +18,49 @@ const MainNavbarAccountArea = () => {
     borderColor: 'black',
   };
 
+  const accountButtonStyle = {
+    backgroundColor: 'orange',
+    color: 'black',
+    borderColor: 'black',
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   if (!isAuthenticated) {
     return (
-      <div className="auth-buttons">
-        <Link to="/create-account">
-          <Button type="default" style={buttonStyle}>Create Account</Button>
-        </Link>
-        <Link to="/login">
-          <Button type="default" style={buttonStyle}>Login</Button>
-        </Link>
+      <div className="navbar-account-area">
+        <div className="auth-buttons">
+          <Link to="/create-account">
+            <Button type="default" style={buttonStyle}>Create Account</Button>
+          </Link>
+          <Link to="/login">
+            <Button type="default" style={buttonStyle}>Login</Button>
+          </Link>
+        </div>
       </div>
     );
   }
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '25px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+    <div className="navbar-account-area">
+      <div className="logged-in-buttons">
+        <Button
+          type="default"
+          onClick={handleAccountClick}
+          className="account-button"
+          style={accountButtonStyle}
+        >
+          {userData.email}
+        </Button>
+
         <img
           src={userData.hasAccessToken ? "/images/access_token/bw_invert.png" : "/images/access_token/bw_empty.png"}
           alt="User status"
-          style={{ height: '50px' }}
+          className="user-status-icon"
         />
-        <span
-          onClick={handleAccountClick}
-          style={{
-            cursor: 'pointer',
-            textDecoration: 'none',
-            transition: 'text-decoration 0.3s'
-          }}
-          onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
-          onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
-        >
-          {userData.email}
-        </span>
-      </div>
-      <div style={{marginRight: '10px'}}>
-        <Button type="default" onClick={logout} style={buttonStyle}>Logout</Button>
+
+        <Button type="default" style={buttonStyle} onClick={logout} className="logout-button">Logout</Button>
       </div>
     </div>
   );

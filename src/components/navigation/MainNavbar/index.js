@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom';
 import MainNavbarAccountArea from './MainNavbarAccountArea';
 
 const MainNavbar = () => {
-
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: 'orange' }}>
-      {/* LOGO */}
-      <div className="logo-area" style={{ marginRight: '20px' }}>
+    <nav style={{ display: 'flex', backgroundColor: 'slategrey' }}>
+      {/* LOGO AREA */}
+      <div className="logo-area" style={{ backgroundColor: 'orange' }}>
         <Link to="/">
-          <img src="/images/site_logo/logo_sm_goga.png" alt="Logo" style={{ height: '100px' }} />
+          <img src="/images/site_logo/gws_logo_web.png" alt="Logo" style={{ height: '100px' }} />
         </Link>
       </div>
 
