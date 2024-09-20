@@ -2,7 +2,6 @@ const cors = require('cors');
 require('dotenv').config();
 const express = require('express');
 
-const usersHandler = require('../api/users');
 const securityQuestionsHandler = require('../api/security-questions');
 const createAccountHandler = require('../api/auth/create-account');
 const loginHandler = require('../api/auth/login');
@@ -16,7 +15,6 @@ const getAlbumHandler = require('../api/album');
 const getTracksHandler = require('../api/tracks');
 
 
-
 const app = express();
 const port = 3001; 
 
@@ -28,10 +26,6 @@ app.post('/api/webhook/stripeEventHandler', express.raw({type: 'application/json
 });
 
 app.use(express.json());
-
-app.all('/api/users', async (req, res) => {
-  await usersHandler(req, res);
-});
 
 app.all('/api/security-questions', async (req, res) => {
   await securityQuestionsHandler(req, res);
