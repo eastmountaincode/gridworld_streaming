@@ -11,6 +11,8 @@
     margin: 10px 0;
     border-radius: 5px;
     overflow: visible; /* Ensure the thumb is not clipped */
+    border: 1px solid black;
+
 }
 
 .progress-bar-inactive {
@@ -27,7 +29,7 @@
 
 .progress-bar-thumb {
     position: absolute;
-    top: -4px;
+    top: -4.7px;
     width: 18px;
     height: 18px;
     border-radius: 50%;
@@ -35,6 +37,8 @@
     transform: translateX(-50%);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     z-index: 2; /* Ensure the thumb is above the fill */
+    border: 1px solid black;
+
 }
 
 .progress-bar-timestamps {

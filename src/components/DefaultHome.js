@@ -7,8 +7,10 @@ const DefaultHome = () => {
   const { isLoading, isAuthenticated, userData } = useAuth();
 
   const defaultHomeStyle = {
-    marginTop: '25px',
+    paddingTop: '25px',
     paddingBottom: '30px',
+    backgroundColor: 'orange',
+
   };
 
   if (isLoading) {

@@ -22,8 +22,8 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
 
     const buttonStyle = {
         backgroundColor: shelfColor,
-        borderColor: 'white',
-        color: 'white',
+        borderColor: 'black',
+        color: 'black',
         fontSize: '20px',
         paddingLeft: '1px',
         width: '50px',

@@ -26,11 +26,12 @@ const Controls = ({ audioShelfId, shelfColor }) => {
   };
   const buttonStyle = (isEnabled) => ({
     cursor: isInteractive && isEnabled ? 'pointer' : 'default',
-    opacity: isActiveAudioShelf ? (isEnabled ? 1 : 0.5) : 0.5,
+    opacity: isActiveAudioShelf ? (isEnabled ? 1 : 0.4) : 0.4,
     pointerEvents: isInteractive && isEnabled ? 'auto' : 'none',
-    backgroundColor: 'white',
-    borderColor: shelfColor,
-    color: shelfColor,
+    backgroundColor: shelfColor,
+    borderColor: 'black',
+    color: 'black',
+
   });
 
   return (

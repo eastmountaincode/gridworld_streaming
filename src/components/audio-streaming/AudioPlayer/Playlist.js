@@ -20,18 +20,21 @@ const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
             play(track, tracklist, audioShelfId);
         }
     };
-
-    const buttonStyle = {
-        backgroundColor: 'white',
-        borderColor: shelfColor,
-        color: shelfColor,
-        display: 'flex',
-        justifyContent: 'center',
-        paddingLeft: '1px',
-        alignItems: 'center',
-        cursor: 'pointer',
-        opacity: 1,
-        pointerEvents: 'auto',
+    
+    const getButtonStyle = (track) => {
+        const isCurrentTrack = currentTrack?.trackId === track.trackId;
+        return {
+            backgroundColor: shelfColor,
+            borderColor: 'black',
+            color: 'black',
+            display: 'flex',
+            justifyContent: 'center',
+            paddingLeft: '1px',
+            alignItems: 'center',
+            cursor: 'pointer',
+            opacity: 1,
+            pointerEvents: 'auto',
+        };
     };
 
     return (
@@ -42,9 +45,9 @@ const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
                     style={{
                         margin: '10px',
                         padding: '10px',
-                        border: `1px solid ${currentTrack?.trackId === track.trackId ? shelfColor : '#ccc'}`,
-                        borderWidth: currentTrack?.trackId === track.trackId ? '1.3px' : '1px',
-                        borderRadius: '5px'
+                        border: `1px solid black`,
+                        borderWidth: currentTrack?.trackId === track.trackId ? '1px' : '1px',
+                        borderRadius: '6px'
                     }}
                 >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', overflow: 'hidden' }}>
@@ -52,14 +55,18 @@ const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
                             <Button
                                 onClick={() => handlePlayPause(track)}
                                 icon={currentTrack?.trackId === track.trackId && isPlaying ? <FaPause /> : <FaPlay />}
-                                style={buttonStyle}
+                                style={getButtonStyle(track)}
                             />
                             <span className="track-number" style={{ marginLeft: '10px' }}>{track.trackNumber}</span>
                         </div>
-                        <span className="track-title" style={{ fontWeight: currentTrack?.trackId === track.trackId ? '600' : 'normal', marginLeft: '20px', marginRight: '10px', textAlign: 'left', flex: 1 }}>
+                        <span className="track-title" style={{ fontWeight: currentTrack?.trackId === track.trackId ? '700' : 'normal',
+                              marginLeft: '20px',
+                              marginRight: '10px',
+                                textAlign: 'left',
+                                flex: 1 }}>
                             {track.trackTitle}
                         </span>
-                        <span className="track-duration">{formatDuration(track.trackDuration)}</span>
+                        <span className="track-duration" >{formatDuration(track.trackDuration)}</span>
                     </div>
                 </div>
             ))}
