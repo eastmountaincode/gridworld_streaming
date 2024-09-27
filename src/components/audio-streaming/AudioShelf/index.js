@@ -43,6 +43,9 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
         });
 
         if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error fetching album data:', errorText);
+
           const errorData = await response.json();
           if (errorData.error === 'token_invalid' || errorData.error === 'token_expired') {
             // Do not show any error message on the audio shelf for token errors
