@@ -6,7 +6,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 const uri = process.env.MONGODB_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-console.log('mongo uri:', uri)
+//console.log('mongo uri:', uri)
 
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
