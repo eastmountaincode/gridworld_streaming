@@ -21,7 +21,7 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   console.log('api base url:', API_BASE_URL)
-  
+
   useEffect(() => {
     const fetchAlbumData = async () => {
       const storedSession = localStorage.getItem('userSession');
@@ -35,8 +35,8 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
       }
 
       try {
-        const fullUrl = `${API_BASE_URL}/api/album?title=${albumTitle}`;
-        console.log('full url:', fullUrl)
+        const fullUrl = `${API_BASE_URL}/api/album?title=${encodeURIComponent(albumTitle)}`;
+        console.log('full url:', fullUrl);
         const response = await fetch(fullUrl, {
           method: 'GET',
           headers: headers
