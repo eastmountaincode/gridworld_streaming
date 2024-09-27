@@ -25,3 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 
 working.json
+
+# Local server file
+server/server.js
