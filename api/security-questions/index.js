@@ -2,61 +2,79 @@ const { MongoClient } = require('mongodb');
 
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+
 console.log('MongoDB URI:', process.env.MONGODB_URI);
+
 const uri = process.env.MONGODB_URI;
 
 module.exports = async function handler(req, res) {
   const { method } = req;
+
   console.log('Received request:', req.method, req.url);
-  console.log('before new MongoClient');
+  console.log('Before creating new MongoClient');
+
   const client = new MongoClient(uri);
-  console.log('Connected to MongoDB');
+
+  console.log('MongoClient created');
 
   try {
+    console.log('Connecting to MongoDB');
     await client.connect();
+    console.log('Connected to MongoDB');
+
     const database = client.db("main_db");
     const collection = database.collection("security_questions");
 
     switch (method) {
       case 'GET':
-        // Input: None required
-        // Output: JSON object with count of security_questions and array of security_question objects
+        console.log('Handling GET request');
         const records = await collection.find({}).toArray();
         const count = records.length;
+        console.log('GET request successful, returning data');
         res.status(200).json({ count, records });
         break;
+
       case 'POST':
-        // Input: Array of security question objects in request body
-        // Output: JSON object with message indicating number of questions inserted
+        console.log('Handling POST request');
         const result = await collection.insertMany(req.body);
+        console.log('POST request successful, inserted data');
         res.status(200).json({ message: `${result.insertedCount} security questions inserted` });
         break;
+
       case 'DELETE':
+        console.log('Handling DELETE request');
         if (req.query.all === 'true') {
-          // Delete all security questions
+          console.log('Deleting all security questions');
           const deleteAllResult = await collection.deleteMany({});
+          console.log('All security questions deleted');
           res.status(200).json({ message: `All ${deleteAllResult.deletedCount} security questions deleted` });
         } else if (req.query.id) {
-          // Delete a specific security question by ID
+          console.log(`Deleting security question with ID: ${req.query.id}`);
           const deleteOneResult = await collection.deleteOne({ _id: new ObjectId(req.query.id) });
           if (deleteOneResult.deletedCount === 1) {
+            console.log(`Security question with ID ${req.query.id} deleted`);
             res.status(200).json({ message: `Security question with ID ${req.query.id} deleted` });
           } else {
+            console.log(`Security question with ID ${req.query.id} not found`);
             res.status(404).json({ message: `Security question with ID ${req.query.id} not found` });
           }
         } else {
+          console.log('Invalid DELETE request');
           res.status(400).json({ message: 'Specify ?all=true to delete all security questions or provide an id to delete a specific question' });
         }
         break;
+
       default:
-        // Handle unsupported HTTP methods
+        console.log('Method not allowed');
         res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
         res.status(405).end(`Method ${method} Not Allowed`);
     }
   } catch (error) {
-    // Error handling: returns a JSON object with an error message
+    console.log('Error occurred:', error.message);
     res.status(500).json({ message: `Error: ${error.message}` });
   } finally {
+    console.log('Closing MongoDB connection');
     await client.close();
+    console.log('MongoDB connection closed');
   }
 };
