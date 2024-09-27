@@ -35,7 +35,9 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
       }
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/album?title=${albumTitle}`, {
+        const fullUrl = `${API_BASE_URL}/api/album?title=${albumTitle}`;
+        console.log('full url:', fullUrl)
+        const response = await fetch(fullUrl, {
           method: 'GET',
           headers: headers
         });

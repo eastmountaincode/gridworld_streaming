@@ -11,6 +11,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
     const { title } = req.query;
+    console.log('the title we got from the query:', title)
 
     const client = new MongoClient(uri);
 
