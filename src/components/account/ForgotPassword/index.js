@@ -13,6 +13,8 @@ const ForgotPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const { showNotification } = useNotification();
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -21,7 +23,7 @@ const ForgotPassword = () => {
 
   const handleEmailSubmit = async (values) => {
     try {
-      const response = await fetch('http://localhost:3001/api/auth/forgot-password/check-email', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password/check-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +44,7 @@ const ForgotPassword = () => {
 
   const handleSecurityAnswerSubmit = async (values) => {
     try {
-      const response = await fetch('http://localhost:3001/api/auth/forgot-password/answer-security-question', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password/answer-security-question`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +68,7 @@ const ForgotPassword = () => {
       return;
     }
     try {
-      const response = await fetch('http://localhost:3001/api/auth/forgot-password/change-password', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

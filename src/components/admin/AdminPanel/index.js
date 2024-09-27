@@ -15,6 +15,8 @@ const AdminPanel = () => {
   });
   const [trackMessage, setTrackMessage] = useState('');
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+
   const handleTrackInputChange = (e) => {
     setTrackData({ ...trackData, [e.target.name]: e.target.value });
   }
@@ -25,7 +27,7 @@ const AdminPanel = () => {
     const totalSeconds = (Number(trackData.minutes) * 60) + Number(trackData.seconds);
     console.log('totalSeconds', totalSeconds);
     try {
-      const response = await fetch('http://localhost:3001/api/tracks', {
+      const response = await fetch(`${API_BASE_URL}/api/tracks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +48,7 @@ const AdminPanel = () => {
 
   const handleClear = async (table) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/${table}?all=true`, { method: 'DELETE' });
+      const response = await fetch(`${API_BASE_URL}/api/${table}?all=true`, { method: 'DELETE' });
       const data = await response.json();
       setMessage(data.message);
     } catch (error) {
@@ -56,7 +58,7 @@ const AdminPanel = () => {
 
   const handleFetch = async (table) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/${table}`, { method: 'GET' });
+      const response = await fetch(`${API_BASE_URL}/api/${table}`, { method: 'GET' });
       const data = await response.json();
       setFetchedRecords(data.records);
       //const recordsString = JSON.stringify(data.records, null, 2);
@@ -71,7 +73,7 @@ const AdminPanel = () => {
   const handleSeed = async (table) => {
     try {
       const seedData = require(`./seed_data/${table}_seed.json`)[table];
-      const response = await fetch(`http://localhost:3001/api/${table}`, {
+      const response = await fetch(`${API_BASE_URL}/api/${table}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

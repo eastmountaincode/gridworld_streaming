@@ -1,9 +1,10 @@
 const refreshUserData = async () => {
   const storedSession = localStorage.getItem('userSession');
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
   if (storedSession) {
     const { token } = JSON.parse(storedSession);
     try {
-      const response = await fetch('http://localhost:3001/api/auth/refresh-user-data', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/refresh-user-data`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

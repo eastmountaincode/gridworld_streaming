@@ -20,13 +20,15 @@ const CreateAccount = () => {
   // - duration (ms) (optional)
   const { showNotification } = useNotification();
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+
   useEffect(() => {
     fetchSecurityQuestions();
   }, []);
 
   const fetchSecurityQuestions = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/security-questions');
+      const response = await fetch(`${API_BASE_URL}/api/security-questions`);
       const data = await response.json();
       const questions = data.records.map(record => record.question);
       setSecurityQuestions(questions);

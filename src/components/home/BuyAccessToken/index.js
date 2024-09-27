@@ -8,6 +8,8 @@ const BuyAccessToken = () => {
   const { isAuthenticated, logout, userData } = useAuth();
   const { showNotification } = useNotification();
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+
   const handleBuyAccessToken = async () => {
     if (!isAuthenticated) {
       showNotification('Please log in or create an account first.', 'warning', 4000);
@@ -23,7 +25,7 @@ const BuyAccessToken = () => {
 
     try {
       console.log("in BuyAccessToken. in handlebuyaccesstoken. userData.userId:", userData.userId);
-      const response = await fetch('http://localhost:3001/api/checkout/create-checkout-session', {
+      const response = await fetch(`${API_BASE_URL}/api/checkout/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

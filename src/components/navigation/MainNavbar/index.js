@@ -6,7 +6,7 @@ const MainNavbar = () => {
   return (
     <nav style={{ display: 'flex', backgroundColor: 'slategrey' }}>
       {/* LOGO AREA */}
-      <div className="logo-area" style={{ backgroundColor: 'orange' }}>
+      <div className="logo-area" style={{ backgroundColor: 'orange', borderTop: '1px solid black' }}>
         <Link to="/">
           <img src="/images/site_logo/gws_logo_web.png" alt="Logo" style={{ height: '100px' }} />
         </Link>
