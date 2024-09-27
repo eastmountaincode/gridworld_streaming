@@ -20,7 +20,7 @@ const CreateAccount = () => {
   // - duration (ms) (optional)
   const { showNotification } = useNotification();
 
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     fetchSecurityQuestions();
@@ -39,7 +39,7 @@ const CreateAccount = () => {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await fetch('http://localhost:3001/api/auth/create-account', {
+      const response = await fetch(`${API_BASE_URL}api/auth/create-account`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
