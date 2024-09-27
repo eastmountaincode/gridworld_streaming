@@ -12,6 +12,9 @@ module.exports = async function handler(req, res) {
 
   console.log('Received request:', req.method, req.url);
   console.log('Before creating new MongoClient');
+  console.log('MongoDB URI:', process.env.MONGODB_URI);
+  console.log('MongoDB uri:', uri);
+
 
   const client = new MongoClient(uri);
 
