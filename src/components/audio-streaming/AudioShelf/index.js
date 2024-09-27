@@ -19,6 +19,8 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
   const isActiveAndPlaying = (activeAudioShelfId === audioShelfId) && isPlaying
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+
+  console.log('api base url:', API_BASE_URL)
   
   useEffect(() => {
     const fetchAlbumData = async () => {
