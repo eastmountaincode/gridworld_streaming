@@ -46,7 +46,8 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
           const errorText = await response.text();
           console.error('Error fetching album data:', errorText);
 
-          const errorData = await response.json();
+          const errorData = JSON.parse(errorText);
+
           if (errorData.error === 'token_invalid' || errorData.error === 'token_expired') {
             // Do not show any error message on the audio shelf for token errors
             setLoading(false);
@@ -56,9 +57,13 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
           }
         }
 
-        console.log('response:', response);
-        console.log('response text:', await response.text());
-        const data = await response.json();
+        // Read the response body once
+        const responseBody = await response.text();
+        console.log('Response body:', responseBody);
+
+        // Parse the response body as JSON
+        const responseData = JSON.parse(responseBody);
+        console.log('Response data:', responseData);
 
         if (!data || !data.tracklist || !data.albumArtworkUrl) {
           throw new Error('Incomplete album data');
