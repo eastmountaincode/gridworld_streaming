@@ -56,6 +56,8 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
           }
         }
 
+        console.log('response:', response);
+        console.log('response text:', await response.text());
         const data = await response.json();
 
         if (!data || !data.tracklist || !data.albumArtworkUrl) {
