@@ -65,11 +65,11 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
         const responseData = JSON.parse(responseBody);
         console.log('Response data:', responseData);
 
-        if (!data || !data.tracklist || !data.albumArtworkUrl) {
+        if (!responseData || !responseData.tracklist || !responseData.albumArtworkUrl) {
           throw new Error('Incomplete album data');
         }
 
-        setAlbumData(data);
+        setAlbumData(responseData);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching album data:', error);
