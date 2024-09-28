@@ -1,6 +1,8 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const handler = async (req, res) => {
+  console.log('inside handler')
+  console.log('Received request:', req.body);
   if (req.method === 'POST') {
     try {
       const { userId } = req.body;
