@@ -10,42 +10,27 @@ const uri = process.env.MONGODB_URI;
 module.exports = async function handler(req, res) {
   const { method } = req;
 
-  console.log('Received request:', req.method, req.url);
-  console.log('Before creating new MongoClient');
-  console.log('MongoDB URI:', process.env.MONGODB_URI);
-  console.log('MongoDB uri:', uri);
-
-
   const client = new MongoClient(uri);
 
-  console.log('MongoClient created');
-
   try {
-    console.log('Connecting to MongoDB');
     await client.connect();
-    console.log('Connected to MongoDB');
 
     const database = client.db("main_db");
     const collection = database.collection("security_questions");
 
     switch (method) {
       case 'GET':
-        console.log('Handling GET request');
         const records = await collection.find({}).toArray();
         const count = records.length;
-        console.log('GET request successful, returning data');
         res.status(200).json({ count, records });
         break;
 
       case 'POST':
-        console.log('Handling POST request');
         const result = await collection.insertMany(req.body);
-        console.log('POST request successful, inserted data');
         res.status(200).json({ message: `${result.insertedCount} security questions inserted` });
         break;
 
       case 'DELETE':
-        console.log('Handling DELETE request');
         if (req.query.all === 'true') {
           console.log('Deleting all security questions');
           const deleteAllResult = await collection.deleteMany({});

@@ -20,7 +20,7 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-  console.log('api base url:', API_BASE_URL)
+  //console.log('api base url:', API_BASE_URL)
 
   useEffect(() => {
     const fetchAlbumData = async () => {
@@ -36,7 +36,7 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
 
       try {
         const fullUrl = `${API_BASE_URL}/api/album?title=${encodeURIComponent(albumTitle)}`;
-        console.log('full url:', fullUrl);
+        //console.log('full url:', fullUrl);
         const response = await fetch(fullUrl, {
           method: 'GET',
           headers: headers
@@ -59,11 +59,11 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
 
         // Read the response body once
         const responseBody = await response.text();
-        console.log('Response body:', responseBody);
+        //console.log('Response body:', responseBody);
 
         // Parse the response body as JSON
         const responseData = JSON.parse(responseBody);
-        console.log('Response data:', responseData);
+        //console.log('Response data:', responseData);
 
         if (!responseData || !responseData.tracklist || !responseData.albumArtworkUrl) {
           throw new Error('Incomplete album data');
