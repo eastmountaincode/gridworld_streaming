@@ -11,13 +11,16 @@ const PaymentResult = () => {
   const { showNotification } = useNotification();
   const { login } = useAuth();
 
+  const [successNotificationShown, setSuccessNotificationShown] = useState(false);
+
   useEffect(() => {
     const handlePaymentResult = async () => {
       const params = new URLSearchParams(location.search);
       const status = params.get('status');
 
-      if (status === 'success') {
+      if (status === 'success' && !successNotificationShown) {
         showNotification('Access token purchase successful!', 'success');
+        setSuccessNotificationShown(true);
 
         // Fetch updated user data
         const { isValid } = await validateSession();
