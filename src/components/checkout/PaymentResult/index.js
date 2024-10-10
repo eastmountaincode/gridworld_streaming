@@ -42,7 +42,7 @@ const PaymentResult = () => {
     };
 
     handlePaymentResult();
-  }, [location, navigate, showNotification, login]);
+  }, []);
 
   return null;
 };
