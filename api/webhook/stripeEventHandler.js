@@ -14,6 +14,7 @@ const parseEvent = (req) => {
 };
 
 const updateUserAccessToken = async (userId) => {
+  console.log('Updating user access token for userId:', userId);
   const client = new MongoClient(MONGODB_URI);
   try {
     await client.connect();
