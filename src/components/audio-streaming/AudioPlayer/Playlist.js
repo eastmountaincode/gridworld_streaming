@@ -20,20 +20,20 @@ const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
             play(track, tracklist, audioShelfId);
         }
     };
-    
-    const getButtonStyle = (track) => {
-        const isCurrentTrack = currentTrack?.trackId === track.trackId;
+
+    const getButtonStyle = (isPlayButton) => {
         return {
             backgroundColor: shelfColor,
             borderColor: 'black',
             color: 'black',
             display: 'flex',
             justifyContent: 'center',
-            paddingLeft: '1px',
+            paddingLeft: isPlayButton ? '1px' : '0px',
             alignItems: 'center',
             cursor: 'pointer',
             opacity: 1,
             pointerEvents: 'auto',
+            zIndex: 999,
         };
     };
 
@@ -55,15 +55,17 @@ const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
                             <Button
                                 onClick={() => handlePlayPause(track)}
                                 icon={currentTrack?.trackId === track.trackId && isPlaying ? <FaPause /> : <FaPlay />}
-                                style={getButtonStyle(track)}
+                                style={getButtonStyle(!(currentTrack?.trackId === track.trackId && isPlaying))}
                             />
                             <span className="track-number" style={{ marginLeft: '10px' }}>{track.trackNumber}</span>
                         </div>
-                        <span className="track-title" style={{ fontWeight: currentTrack?.trackId === track.trackId ? '700' : 'normal',
-                              marginLeft: '20px',
-                              marginRight: '10px',
-                                textAlign: 'left',
-                                flex: 1 }}>
+                        <span className="track-title" style={{
+                            fontWeight: currentTrack?.trackId === track.trackId ? '700' : 'normal',
+                            marginLeft: '20px',
+                            marginRight: '10px',
+                            textAlign: 'left',
+                            flex: 1
+                        }}>
                             {track.trackTitle}
                         </span>
                         <span className="track-duration" >{formatDuration(track.trackDuration)}</span>

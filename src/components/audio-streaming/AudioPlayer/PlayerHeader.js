@@ -25,8 +25,6 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
         borderColor: 'black',
         color: 'black',
         fontSize: '20px',
-        paddingLeft: '0px',
-        paddingBottom: '1px',
         width: '50px',
         height: '50px',
         display: 'flex',
@@ -38,6 +36,11 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
         marginTop: '10px',
     };
 
+    const playIconStyle = {
+        position: 'relative',
+        left: '1px',
+      };
+
     return (
         <div className="player-header">
             {albumArtworkUrl && (
@@ -48,13 +51,19 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
                 />
             )}
 
+            
+
             <div className="player-header-content">
                 <div className="play-button-container">
                     <Button
                         onClick={handlePlayPause}
-                        icon={isActiveAudioPlayer && isPlaying ? <FaPause /> : <FaPlay />}
                         style={buttonStyle}
-                    />
+                    >
+                        {isActiveAudioPlayer && isPlaying ?
+                            <FaPause /> :
+                            <FaPlay style={playIconStyle} />
+                        }
+                    </Button>
                 </div>
 
                 <div className="current-track-info">
