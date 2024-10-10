@@ -18,13 +18,14 @@ const PaymentResult = () => {
 
       if (status === 'success') {
         showNotification('Access token purchase successful!', 'success');
-        
+
         // Fetch updated user data
         const { isValid } = await validateSession();
         if (isValid) {
           const { isRefreshed, userData } = await refreshUserData();
           if (isRefreshed && userData) {
-            login(JSON.parse(localStorage.getItem('userSession')), userData);
+            const storedSession = JSON.parse(localStorage.getItem('userSession'));
+            login(storedSession.token, userData);
           }
         } else {
           showNotification('Session expired. Please log in again.', 'warning');
