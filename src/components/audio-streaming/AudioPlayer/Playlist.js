@@ -21,14 +21,13 @@ const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
         }
     };
 
-    const getButtonStyle = (isPlayButton) => {
+    const getButtonStyle = () => {
         return {
             backgroundColor: shelfColor,
             borderColor: 'black',
             color: 'black',
             display: 'flex',
             justifyContent: 'center',
-            paddingLeft: isPlayButton ? '1px' : '0px',
             alignItems: 'center',
             cursor: 'pointer',
             opacity: 1,
@@ -37,8 +36,18 @@ const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
         };
     };
 
+    const getPlayButtonStyle = () => ({
+        ...getButtonStyle(),
+        paddingLeft: '1px',
+    });
+
+    const getPauseButtonStyle = () => ({
+        ...getButtonStyle(),
+        paddingLeft: '0px',
+    });
+
     return (
-        <div className="playlist">
+        <div className="playlist" style={{paddingBottom: '3px'}}>
             {tracklist.map((track) => (
                 <div key={track.trackId}
                     className={`playlist-item ${currentTrack?.trackId === track.trackId ? 'active' : ''}`}
@@ -52,11 +61,19 @@ const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
                 >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', overflow: 'hidden' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                            <Button
-                                onClick={() => handlePlayPause(track)}
-                                icon={currentTrack?.trackId === track.trackId && isPlaying ? <FaPause /> : <FaPlay />}
-                                style={getButtonStyle(!(currentTrack?.trackId === track.trackId && isPlaying))}
-                            />
+                            {currentTrack?.trackId === track.trackId && isPlaying ? (
+                                <Button
+                                    onClick={() => handlePlayPause(track)}
+                                    icon={<FaPause />}
+                                    style={getPauseButtonStyle()}
+                                />
+                            ) : (
+                                <Button
+                                    onClick={() => handlePlayPause(track)}
+                                    icon={<FaPlay />}
+                                    style={getPlayButtonStyle()}
+                                />
+                            )}
                             <span className="track-number" style={{ marginLeft: '10px' }}>{track.trackNumber}</span>
                         </div>
                         <span className="track-title" style={{
