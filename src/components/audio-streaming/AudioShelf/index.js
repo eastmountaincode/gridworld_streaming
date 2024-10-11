@@ -138,6 +138,7 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
               albumArtworkUrl={albumData.albumArtworkUrl}
               audioShelfId={audioShelfId}
               shelfColor={shelfColor}
+              albumBlurb={albumData.albumBlurb}
             />
           )}
         </div>

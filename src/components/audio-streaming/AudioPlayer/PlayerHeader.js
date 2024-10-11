@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './PlayerHeader.css';
-const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, firstTrack }) => {
+const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, firstTrack, albumBlurb }) => {
     const { currentTrack, currentTracklist, activeAudioShelfId, isPlaying, play, pause } = useContext(AudioPlayerContext);
 
     const isActiveAudioPlayer = activeAudioShelfId === audioShelfId;
@@ -43,6 +43,9 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
 
     return (
         <div className="player-header">
+            {albumBlurb && (
+                <div className="album-blurb" dangerouslySetInnerHTML={{ __html: albumBlurb }} style={{ textAlign: 'left', margin: '5px 18px 10px 18px', fontSize: '18px',  }} />
+            )}
             {albumArtworkUrl && (
                 <img
                     className='album-artwork'

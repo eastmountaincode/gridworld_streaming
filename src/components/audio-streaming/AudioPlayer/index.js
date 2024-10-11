@@ -8,7 +8,7 @@ import './AudioPlayer.css';
 
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
-const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId, shelfColor }) => {
+const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId, shelfColor, albumBlurb }) => {
   const { pause, reset } = useContext(AudioPlayerContext);
 
   useEffect(() => {
@@ -26,6 +26,7 @@ const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId, shelfColor }) =
         shelfColor={shelfColor}
         tracklist={tracklist}
         firstTrack={tracklist[0]}
+        albumBlurb={albumBlurb}
       />
       <div className="progress-controls-container">
         <div className="progress-bar-wrapper">
