@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import AudioPlayer from '../AudioPlayer';
 import { v4 as uuidv4 } from 'uuid';
-import { FaChevronDown, FaPlayCircle } from 'react-icons/fa';
+import { FaChevronDown } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './AudioShelf.css'; // Import the CSS file
 
