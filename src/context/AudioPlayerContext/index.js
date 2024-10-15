@@ -1,4 +1,5 @@
 import React, { createContext, useState, useRef, useEffect } from 'react';
+import { Howl, Howler } from 'howler';
 
 const AudioPlayerContext = createContext();
 
@@ -11,138 +12,63 @@ const AudioPlayerProvider = ({ children }) => {
   const [totalDuration, setTotalDuration] = useState(0);
   const [activeAudioShelfId, setActiveAudioShelfId] = useState(null);
 
-  const audioContextRef = useRef(null);
-  const audioElementRef = useRef(null);
-  const sourceNodeRef = useRef(null);
-
-  const currentTrackRef = useRef(currentTrack);
-  const currentTracklistRef = useRef(currentTracklist);
-  const activeAudioShelfIdRef = useRef(activeAudioShelfId);
-
+  const soundRef = useRef(null);
 
   useEffect(() => {
-    currentTrackRef.current = currentTrack;
-    currentTracklistRef.current = currentTracklist;
-    activeAudioShelfIdRef.current = activeAudioShelfId;
-  }, [currentTrack, currentTracklist, activeAudioShelfId]);
+    return () => {
+      if (soundRef.current) {
+        soundRef.current.unload();
+      }
+    };
+  }, []);
 
-  // Initialize Web Audio API context when the component mounts
-  useEffect(() => {
-    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-    audioElementRef.current = new Audio();
+  const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
+    if (soundRef.current) {
+      soundRef.current.unload();
+    }
 
-    // Set crossOrigin attribute to allow loading audio from different domains
-    audioElementRef.current.crossOrigin = "anonymous";
-
-    // Create a MediaElementSource node from the Audio element
-    sourceNodeRef.current = audioContextRef.current.createMediaElementSource(audioElementRef.current);
-
-    // Connect the source node to the AudioContext's destination (speakers)
-    sourceNodeRef.current.connect(audioContextRef.current.destination);
-
-    // Add event listener to update currentTime state when audio time changes
-    audioElementRef.current.addEventListener('timeupdate', () => {
-      setCurrentTime(audioElementRef.current.currentTime);
+    soundRef.current = new Howl({
+      src: [track.firebaseURL],
+      html5: true,
+      onplay: () => setIsPlaying(true),
+      onpause: () => setIsPlaying(false),
+      onend: () => playNextTrack(),
+      onload: () => {
+        setTotalDuration(soundRef.current.duration());
+      },
     });
 
-    // Add event listener to trigger playNextTrack when the audio ends
-    audioElementRef.current.addEventListener('ended', handleEnded);
+    setCurrentTrack(track);
+    setCurrentTracklist(tracklist);
+    setActiveAudioShelfId(audioShelfId);
+    setAlbumArtworkUrl(albumArtworkUrl);
 
-    // Cleanup function to remove event listeners when component unmounts
-    return () => {
-      audioElementRef.current.removeEventListener('timeupdate', () => { });
-      audioElementRef.current.removeEventListener('ended', handleEnded);
-    };
-  }, []); // Empty dependency array ensures this effect runs only once on mount
+    soundRef.current.play();
 
-  const handleEnded = () => {
-    console.log('Audio ended');
-    console.log('in event listener, currentTrack:', currentTrackRef.current);
-    console.log('in event listener, currentTracklist:', currentTracklistRef.current);
-    playNextTrack();
+    // Update current time
+    const intervalId = setInterval(() => {
+      if (soundRef.current) {
+        setCurrentTime(soundRef.current.seek());
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
   };
 
-  const play = async (track, tracklist, audioShelfId, albumArtworkUrl) => {
-    // Resume the AudioContext if it is suspended
-    if (audioContextRef.current.state === 'suspended') {
-      console.log('AudioContext is suspended, resuming...');
-      await audioContextRef.current.resume();
-    }
-
-    // If track or tracklist is different than the current one, proceed with play operation
-    if (currentTrack?.trackId !== track.trackId || currentTracklist?._id !== tracklist._id) {
-      await pause();
-      setCurrentTrack(track);
-      setCurrentTracklist(tracklist);
-      setActiveAudioShelfId(audioShelfId);
-      setAlbumArtworkUrl(albumArtworkUrl);
-      audioElementRef.current.src = track.firebaseURL;
-      audioElementRef.current.load();
-
-      // Log the audio element and its properties
-      console.log('in context, in play, Audio element:', audioElementRef.current);
-      console.log('in context, in play, Audio element crossOrigin:', audioElementRef.current.crossOrigin);
-      console.log('in context, in play, Audio element src:', audioElementRef.current.src);
-
-      audioElementRef.current.onloadedmetadata = () => {
-        setTotalDuration(audioElementRef.current.duration);
-        audioElementRef.current.play();
-        setIsPlaying(true);
-      };
-
-      // Add Media Session metadata
-      if ('mediaSession' in navigator) {
-        console.log('in context, in play, mediaSession exists');
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: track.trackTitle,
-          artist: "Andrew Boylan",
-          album: tracklist.albumTitle,
-          artwork: [{ src: albumArtworkUrl, sizes: '512x512', type: 'image/jpeg' }]
-        });
-      }
-
-      // Send message to service worker
-      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({
-          type: 'PLAY_AUDIO',
-          payload: {
-            title: track.trackTitle,
-            artist: "Andrew Boylan",
-            album: tracklist.albumTitle
-          }
-        });
-      }
-    } else if (audioElementRef.current) {
-      audioElementRef.current.play();
-      setIsPlaying(true);
-    }
-  };
-
-  const pause = async () => {
-    console.log('pause function triggered.')
-    if (audioElementRef.current) {
-      console.log('there is an audioElementRef, continuing with pause')
-      audioElementRef.current.pause();
-      setIsPlaying(false);
+  const pause = () => {
+    if (soundRef.current) {
+      soundRef.current.pause();
     }
   };
 
   const playNextTrack = () => {
-    console.log('top of play next track');
-    console.log('in play next track, is there a current track? ', currentTrackRef.current);
-    console.log('in play next track, is there a current tracklist? ', currentTracklistRef.current);
-    if (currentTracklistRef.current && currentTrackRef.current) {
-      const nextTrackNumber = currentTrackRef.current.trackNumber + 1;
-      const nextTrack = currentTracklistRef.current.find(track => track.trackNumber === nextTrackNumber);
+    if (currentTracklist && currentTrack) {
+      const nextTrackNumber = currentTrack.trackNumber + 1;
+      const nextTrack = currentTracklist.find(track => track.trackNumber === nextTrackNumber);
       if (nextTrack) {
-        play(nextTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrl);
+        play(nextTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl);
       } else {
-        console.log('in play next track, no next track, pausing and resetting');
-        pause();
-        setCurrentTime(0);
-        setTotalDuration(null);
-        setCurrentTrack(null);
-        setIsPlaying(false);
+        reset();
       }
     }
   };
@@ -158,20 +84,23 @@ const AudioPlayerProvider = ({ children }) => {
   };
 
   const setAudioTime = (time) => {
-    if (audioElementRef.current) {
-      audioElementRef.current.currentTime = time;
+    if (soundRef.current) {
+      soundRef.current.seek(time);
       setCurrentTime(time);
     }
   };
 
   const reset = () => {
-    pause();
+    if (soundRef.current) {
+      soundRef.current.unload();
+    }
     setCurrentTrack(null);
     setCurrentTracklist(null);
     setAlbumArtworkUrl(null);
     setCurrentTime(0);
     setTotalDuration(0);
     setActiveAudioShelfId(null);
+    setIsPlaying(false);
   };
 
   return (
