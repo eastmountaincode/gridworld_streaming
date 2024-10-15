@@ -1,5 +1,5 @@
-import React, { createContext, useState, useRef, useEffect } from 'react';
 import { useMediaSession } from '@mebtte/react-media-session';
+import React, { createContext, useState, useRef, useEffect } from 'react';
 
 const AudioPlayerContext = createContext();
 
@@ -19,17 +19,6 @@ const AudioPlayerProvider = ({ children }) => {
   const currentTrackRef = useRef(currentTrack);
   const currentTracklistRef = useRef(currentTracklist);
   const activeAudioShelfIdRef = useRef(activeAudioShelfId);
-
-  useMediaSession({
-    title: currentTrack?.trackTitle,
-    artist: "Andrew Boylan",
-    album: currentTracklist?.albumTitle,
-    artwork: [{ src: albumArtworkUrl }],
-    onPlay: () => play(currentTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl),
-    onPause: pause,
-    onPreviousTrack: playPrevTrack,
-    onNextTrack: playNextTrack,
-  });
 
 
   useEffect(() => {
@@ -161,6 +150,17 @@ const AudioPlayerProvider = ({ children }) => {
     setTotalDuration(0);
     setActiveAudioShelfId(null);
   };
+
+  useMediaSession({
+    title: currentTrack?.trackTitle,
+    artist: "Andrew Boylan",
+    album: currentTracklist?.albumTitle,
+    artwork: [{ src: albumArtworkUrl }],
+    onPlay: () => play(currentTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl),
+    onPause: pause,
+    onPreviousTrack: playPrevTrack,
+    onNextTrack: playNextTrack,
+  });
 
   return (
     <AudioPlayerContext.Provider
