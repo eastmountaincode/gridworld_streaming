@@ -100,6 +100,18 @@ const AudioPlayerProvider = ({ children }) => {
           artwork: [{ src: albumArtworkUrl, sizes: '512x512', type: 'image/jpeg' }]
         });
       }
+
+      // Send message to service worker
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'PLAY_AUDIO',
+          payload: {
+            title: track.trackTitle,
+            artist: "Andrew Boylan",
+            album: tracklist.albumTitle
+          }
+        });
+      }
     } else if (audioElementRef.current) {
       audioElementRef.current.play();
       setIsPlaying(true);
