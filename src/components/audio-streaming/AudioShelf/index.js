@@ -119,6 +119,7 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
                   src={albumData.albumArtworkUrl}
                   alt="Album artwork"
                   className="album-icon"
+                  style={{height: '40px', width: '40px'}}
                 />
               )
             )}
