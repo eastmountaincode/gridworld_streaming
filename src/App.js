@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import AdminPanel from './components/admin/AdminPanel';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,6 +16,19 @@ import PaymentResult from './components/checkout/PaymentResult';
 
 
 function App() {
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      console.log('mediaSession is in navigator');
+      // Set up media session handlers here
+      navigator.mediaSession.setActionHandler('play', function() {/* Your play logic */});
+      navigator.mediaSession.setActionHandler('pause', function() {/* Your pause logic */});
+      // Add more handlers as needed
+    } else {
+      console.log('mediaSession is not in navigator');
+    }
+  }, []);
+
+
   return (
     <Router>
       <div className="App">
