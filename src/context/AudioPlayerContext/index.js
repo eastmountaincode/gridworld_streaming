@@ -69,7 +69,7 @@ const AudioPlayerProvider = ({ children }) => {
       await audioContextRef.current.resume();
     }
 
-    // If track or tracklist is different than the current one, proceed
+    // If track or tracklist is different than the current one, proceed with play operation
     if (currentTrack?.trackId !== track.trackId || currentTracklist?._id !== tracklist._id) {
       await pause();
       setCurrentTrack(track);
@@ -89,6 +89,17 @@ const AudioPlayerProvider = ({ children }) => {
         audioElementRef.current.play();
         setIsPlaying(true);
       };
+
+      // Add Media Session metadata
+      if ('mediaSession' in navigator) {
+        console.log('in context, in play, mediaSession exists');
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: track.trackTitle,
+          artist: "Andrew Boylan",
+          album: tracklist.albumTitle,
+          artwork: [{ src: albumArtworkUrl, sizes: '512x512', type: 'image/jpeg' }]
+        });
+      }
     } else if (audioElementRef.current) {
       audioElementRef.current.play();
       setIsPlaying(true);
@@ -145,6 +156,7 @@ const AudioPlayerProvider = ({ children }) => {
     pause();
     setCurrentTrack(null);
     setCurrentTracklist(null);
+    setAlbumArtworkUrl(null);
     setCurrentTime(0);
     setTotalDuration(0);
     setActiveAudioShelfId(null);
@@ -154,6 +166,7 @@ const AudioPlayerProvider = ({ children }) => {
     <AudioPlayerContext.Provider
       value={{
         currentTrack,
+        albumArtworkUrl,
         isPlaying,
         currentTime,
         totalDuration,

@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import AdminPanel from './components/admin/AdminPanel';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,15 +14,18 @@ import ForgotPassword from './components/account/ForgotPassword';
 import AccountPage from './components/account/AccountPage';
 import PaymentResult from './components/checkout/PaymentResult';
 
+import { AudioPlayerContext } from './context/AudioPlayerContext';
+
 
 function App() {
+  const { play, pause, currentTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl } = useContext(AudioPlayerContext);
+
   useEffect(() => {
     if ('mediaSession' in navigator) {
-      console.log('mediaSession is in navigator');
+      console.log('in App.js, mediaSession is in navigator');
       // Set up media session handlers here
-      navigator.mediaSession.setActionHandler('play', function() {/* Your play logic */});
-      navigator.mediaSession.setActionHandler('pause', function() {/* Your pause logic */});
-      // Add more handlers as needed
+      navigator.mediaSession.setActionHandler('play', () => play(currentTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl));
+      navigator.mediaSession.setActionHandler('pause', pause);
     } else {
       console.log('mediaSession is not in navigator');
     }
