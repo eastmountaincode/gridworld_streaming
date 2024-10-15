@@ -1,4 +1,4 @@
-import { useMediaSession, HAS_MEDIA_SESSION } from '@mebtte/react-media-session';
+import { useMediaSession } from '@mebtte/react-media-session';
 import React, { createContext, useState, useRef, useEffect } from 'react';
 
 const AudioPlayerContext = createContext();
@@ -151,8 +151,7 @@ const AudioPlayerProvider = ({ children }) => {
     setActiveAudioShelfId(null);
   };
 
-  if (HAS_MEDIA_SESSION) {
-    useMediaSession({
+  useMediaSession({
       title: currentTrack?.trackTitle,
       artist: "Andrew Boylan",
       album: currentTracklist?.albumTitle,
@@ -161,8 +160,8 @@ const AudioPlayerProvider = ({ children }) => {
       onPause: pause,
       onPreviousTrack: playPrevTrack,
       onNextTrack: playNextTrack,
-    });
-  }
+  });
+  
 
   return (
     <AudioPlayerContext.Provider
