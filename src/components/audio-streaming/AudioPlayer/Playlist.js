@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 
-const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
+const Playlist = ({ tracklist, audioShelfId, shelfColor, albumArtworkUrl }) => {
     const { currentTrack, isPlaying, play, pause } = useContext(AudioPlayerContext);
 
     const formatDuration = (seconds) => {
@@ -17,7 +17,7 @@ const Playlist = ({ tracklist, audioShelfId, shelfColor }) => {
             console.log('current track is this one, and isPlaying is true. pausing.')
             pause();
         } else {
-            play(track, tracklist, audioShelfId);
+            play(track, tracklist, audioShelfId, albumArtworkUrl);
         }
     };
 

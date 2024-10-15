@@ -1,10 +1,12 @@
 import React, { createContext, useState, useRef, useEffect } from 'react';
+import { useMediaSession } from '@mebtte/react-media-session';
 
 const AudioPlayerContext = createContext();
 
 const AudioPlayerProvider = ({ children }) => {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [currentTracklist, setCurrentTracklist] = useState(null);
+  const [albumArtworkUrl, setAlbumArtworkUrl] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
@@ -18,7 +20,18 @@ const AudioPlayerProvider = ({ children }) => {
   const currentTracklistRef = useRef(currentTracklist);
   const activeAudioShelfIdRef = useRef(activeAudioShelfId);
 
-  // Update refs whenever state changes
+  useMediaSession({
+    title: currentTrack?.trackTitle,
+    artist: "Andrew Boylan",
+    album: currentTracklist?.albumTitle,
+    artwork: [{ src: albumArtworkUrl }],
+    onPlay: () => play(currentTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl),
+    onPause: pause,
+    onPreviousTrack: playPrevTrack,
+    onNextTrack: playNextTrack,
+  });
+
+
   useEffect(() => {
     currentTrackRef.current = currentTrack;
     currentTracklistRef.current = currentTracklist;
@@ -61,7 +74,7 @@ const AudioPlayerProvider = ({ children }) => {
     playNextTrack();
   };
 
-  const play = async (track, tracklist, audioShelfId) => {
+  const play = async (track, tracklist, audioShelfId, albumArtworkUrl) => {
     // Resume the AudioContext if it is suspended
     if (audioContextRef.current.state === 'suspended') {
       console.log('AudioContext is suspended, resuming...');
@@ -74,6 +87,7 @@ const AudioPlayerProvider = ({ children }) => {
       setCurrentTrack(track);
       setCurrentTracklist(tracklist);
       setActiveAudioShelfId(audioShelfId);
+      setAlbumArtworkUrl(albumArtworkUrl);
       audioElementRef.current.src = track.firebaseURL;
       audioElementRef.current.load();
 

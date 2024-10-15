@@ -13,10 +13,10 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
             if (isPlaying) {
                 pause();
             } else {
-                play(currentTrack, currentTracklist, audioShelfId);
+                play(currentTrack, currentTracklist, audioShelfId, albumArtworkUrl);
             }
         } else if (tracklist && firstTrack) {
-            play(firstTrack, tracklist, audioShelfId);
+            play(firstTrack, tracklist, audioShelfId, albumArtworkUrl);
         }
     };
 

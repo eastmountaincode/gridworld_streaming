@@ -35,7 +35,12 @@ const AudioPlayer = ({ tracklist, albumArtworkUrl, audioShelfId, shelfColor, alb
         <Controls audioShelfId={audioShelfId} shelfColor={shelfColor} />
 
       </div>
-      <Playlist tracklist={tracklist} audioShelfId={audioShelfId} shelfColor={shelfColor} />
+      <Playlist
+        tracklist={tracklist}
+        audioShelfId={audioShelfId}
+        shelfColor={shelfColor}
+        albumArtworkUrl={albumArtworkUrl}
+      />
     </div>
   );
 };
