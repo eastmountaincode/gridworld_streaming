@@ -23,51 +23,39 @@ const AudioPlayerProvider = ({ children }) => {
   }, []);
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
-    if (soundRef.current) {
-      soundRef.current.unload();
-    }
+    if (soundRef.current && currentTrack && track.id === currentTrack.id) {
+      // Resume the current track
+      soundRef.current.play();
+    } else {
+      // Start a new track
+      if (soundRef.current) {
+        soundRef.current.unload();
+      }
 
-    soundRef.current = new Howl({
-      src: [track.firebaseURL],
-      html5: true,
-      onplay: () => {
-        setIsPlaying(true);
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.playbackState = 'playing';
-        }
-      },
-      onpause: () => {
-        setIsPlaying(false);
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.playbackState = 'paused';
-        }
-      },
-      onend: () => playNextTrack(),
-      onload: () => {
-        setTotalDuration(soundRef.current.duration());
-      },
-    });
-
-    setCurrentTrack(track);
-    setCurrentTracklist(tracklist);
-    setActiveAudioShelfId(audioShelfId);
-    setAlbumArtworkUrl(albumArtworkUrl);
-
-    soundRef.current.play();
-
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: track.trackTitle,
-        artist: "Andrew Boylan",
-        album: tracklist.albumTitle,
-        artwork: [{ src: albumArtworkUrl, sizes: '512x512', type: 'image/jpeg' }]
+      soundRef.current = new Howl({
+        src: [track.firebaseURL],
+        html5: true,
+        onplay: () => {
+          setIsPlaying(true);
+        },
+        onpause: () => {
+          setIsPlaying(false);
+        },
+        onend: () => playNextTrack(),
+        onload: () => {
+          setTotalDuration(soundRef.current.duration());
+        },
       });
 
-      navigator.mediaSession.setActionHandler('play', () => soundRef.current.play());
-      navigator.mediaSession.setActionHandler('pause', () => soundRef.current.pause());
-      navigator.mediaSession.setActionHandler('previoustrack', playPrevTrack);
-      navigator.mediaSession.setActionHandler('nexttrack', playNextTrack);
+      setCurrentTrack(track);
+      setCurrentTracklist(tracklist);
+      setActiveAudioShelfId(audioShelfId);
+      setAlbumArtworkUrl(albumArtworkUrl);
+
+      soundRef.current.play();
     }
+
+    setIsPlaying(true);
 
     const intervalId = setInterval(() => {
       if (soundRef.current) {
@@ -85,7 +73,6 @@ const AudioPlayerProvider = ({ children }) => {
 
     return () => clearInterval(intervalId);
   };
-
   const pause = () => {
     if (soundRef.current) {
       soundRef.current.pause();
@@ -139,9 +126,6 @@ const AudioPlayerProvider = ({ children }) => {
     setTotalDuration(0);
     setActiveAudioShelfId(null);
     setIsPlaying(false);
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = null;
-    }
   };
 
   return (
