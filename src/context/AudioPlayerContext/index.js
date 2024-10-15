@@ -113,7 +113,7 @@ const AudioPlayerProvider = ({ children }) => {
       const nextTrackNumber = currentTrackRef.current.trackNumber + 1;
       const nextTrack = currentTracklistRef.current.find(track => track.trackNumber === nextTrackNumber);
       if (nextTrack) {
-        play(nextTrack, currentTracklistRef.current, activeAudioShelfIdRef.current);
+        play(nextTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrl);
       } else {
         console.log('in play next track, no next track, pausing and resetting');
         pause();
@@ -130,7 +130,7 @@ const AudioPlayerProvider = ({ children }) => {
       const prevTrackNumber = currentTrack.trackNumber - 1;
       const prevTrack = currentTracklist.find(track => track.trackNumber === prevTrackNumber);
       if (prevTrack) {
-        play(prevTrack, currentTracklist, activeAudioShelfId);
+        play(prevTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl);
       }
     }
   };
