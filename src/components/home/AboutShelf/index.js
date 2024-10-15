@@ -44,7 +44,10 @@ const AboutShelf = () => {
             I created <b>Gridworld Streaming</b> 🌈🎶 as a way for people to support my music with the minimum possible barrier in terms of processing fees 💰✨. The site uses Square as a payment processor 💳, which charges 2.9% + 30¢ per transaction, which is the lowest fee I've found after researching such things 🕵️‍♂️📊.
           </p>
           <p>
-            This is an experiment 🧪🎭 that asks, "what does it look like for an artist to own their platform?" 🤔🎨 If you are a band / artist / label that wants a site like this, or would like to create a non-traditional internet experience 🌐🎨, get in touch and let's have a chat 💬🤝.
+            This is an experiment 🧪🎭 that asks, "what does it look like for an artist to own their platform?" 🤔🎨 If you are an artist / label / etc. that wants a site like this, or would like to create a non-traditional internet experience 🌐🎨, get in touch and let's have a chat 💬🤝.
+          </p>
+          <p>
+            andreweboylan /// at /// gmail /// dot /// com
           </p>
         </div>
       </div>
