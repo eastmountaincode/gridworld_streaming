@@ -30,8 +30,18 @@ const AudioPlayerProvider = ({ children }) => {
     soundRef.current = new Howl({
       src: [track.firebaseURL],
       html5: true,
-      onplay: () => setIsPlaying(true),
-      onpause: () => setIsPlaying(false),
+      onplay: () => {
+        setIsPlaying(true);
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.playbackState = 'playing';
+        }
+      },
+      onpause: () => {
+        setIsPlaying(false);
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.playbackState = 'paused';
+        }
+      },
       onend: () => playNextTrack(),
       onload: () => {
         setTotalDuration(soundRef.current.duration());
@@ -45,10 +55,31 @@ const AudioPlayerProvider = ({ children }) => {
 
     soundRef.current.play();
 
-    // Update current time
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: track.trackTitle,
+        artist: "Andrew Boylan",
+        album: tracklist.albumTitle,
+        artwork: [{ src: albumArtworkUrl, sizes: '512x512', type: 'image/jpeg' }]
+      });
+
+      navigator.mediaSession.setActionHandler('play', () => soundRef.current.play());
+      navigator.mediaSession.setActionHandler('pause', () => soundRef.current.pause());
+      navigator.mediaSession.setActionHandler('previoustrack', playPrevTrack);
+      navigator.mediaSession.setActionHandler('nexttrack', playNextTrack);
+    }
+
     const intervalId = setInterval(() => {
       if (soundRef.current) {
-        setCurrentTime(soundRef.current.seek());
+        const currentTime = soundRef.current.seek();
+        setCurrentTime(currentTime);
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.setPositionState({
+            duration: soundRef.current.duration(),
+            playbackRate: 1,
+            position: currentTime
+          });
+        }
       }
     }, 1000);
 
@@ -87,6 +118,13 @@ const AudioPlayerProvider = ({ children }) => {
     if (soundRef.current) {
       soundRef.current.seek(time);
       setCurrentTime(time);
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.setPositionState({
+          duration: totalDuration,
+          playbackRate: 1,
+          position: time
+        });
+      }
     }
   };
 
@@ -101,6 +139,9 @@ const AudioPlayerProvider = ({ children }) => {
     setTotalDuration(0);
     setActiveAudioShelfId(null);
     setIsPlaying(false);
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = null;
+    }
   };
 
   return (
