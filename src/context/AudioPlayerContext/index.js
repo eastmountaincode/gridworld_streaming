@@ -17,20 +17,23 @@ const AudioPlayerProvider = ({ children }) => {
   const silentLoopRef = useRef(null);
 
   const initializeSilentLoop = useCallback(() => {
-    if (!silentLoopInitialized) {
-      silentLoopRef.current = new Howl({
-        src: ['/misc/silent_loop.mp3'],
-        loop: true,
-        html5: true,
-        volume: 0.2,
-        onplay: () => {
-          console.log('Silent loop started');
-        }
-      });
-      silentLoopRef.current.play();
-      setSilentLoopInitialized(true);
+    if (silentLoopRef.current) {
+      silentLoopRef.current.stop();
     }
-  }, [silentLoopInitialized]);
+  
+    silentLoopRef.current = new Howl({
+      src: ['/misc/silent_loop.mp3'],
+      loop: true,
+      html5: true,
+      volume: 0.2,
+      onplay: () => {
+        console.log('Silent loop started');
+      }
+    });
+  
+    silentLoopRef.current.play();
+    setSilentLoopInitialized(true);
+  }, []);
 
   useEffect(() => {
     return () => {
