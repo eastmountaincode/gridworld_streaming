@@ -20,7 +20,7 @@ const AudioPlayerProvider = ({ children }) => {
     console.log('Initializing silent loop');
   
     silentLoopRef.current = new Howl({
-      src: ['/misc/white_noise_loop.mp3'],
+      src: ['/misc/silent_loop.mp3'],
       loop: true,
       html5: true,
       format: ['mp3'],
