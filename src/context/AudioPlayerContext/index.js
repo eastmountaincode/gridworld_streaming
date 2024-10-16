@@ -18,36 +18,7 @@ const AudioPlayerProvider = ({ children }) => {
   const albumArtworkUrlRef = useRef(null);
   const silentLoopRef = useRef(null);
 
-  const initializeSilentLoop = useCallback(() => {
-
-    if (!silentLoopInitialized) {
-      console.log('Initializing silent loop');
-      silentLoopRef.current = new Howl({
-        src: ['/misc/white_noise_loop.mp3'],
-        loop: true,
-        html5: true,
-        format: ['mp3'],
-        volume: 0.1,
-      });
-
-      silentLoopRef.current.play();
-      setSilentLoopInitialized(true);
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   return () => {
-  //     if (soundRef.current) {
-  //       soundRef.current.unload();
-  //     }
-  //     if (silentLoopRef.current) {
-  //       silentLoopRef.current.unload();
-  //     }
-  //   };
-  // }, []);
-
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
-    //initializeSilentLoop();
 
     // if we already have a current song, just resume it
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
@@ -63,24 +34,11 @@ const AudioPlayerProvider = ({ children }) => {
         html5: true,
         onplay: () => {
           setIsPlaying(true);
-          // if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-          //   console.log('Sending PLAY_AUDIO message to service worker');
-          //   navigator.serviceWorker.controller.postMessage({
-          //     type: 'PLAY_AUDIO',
-          //     track: track
-          //   });
-          // }
         },
         onpause: () => {
           setIsPlaying(false);
         },
         onend: () => {
-          // if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-          //   console.log('Sending TRACK_ENDED message to service worker');
-          //   navigator.serviceWorker.controller.postMessage({
-          //     type: 'TRACK_ENDED'
-          //   });
-          // }
           playNextTrack();
         },
         onload: () => {
