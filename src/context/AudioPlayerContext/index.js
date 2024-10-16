@@ -17,18 +17,19 @@ const AudioPlayerProvider = ({ children }) => {
   const silentLoopRef = useRef(null);
 
   const initializeSilentLoop = useCallback(() => {
-    console.log('Initializing silent loop');
-  
-    silentLoopRef.current = new Howl({
-      src: ['/misc/silent_loop.mp3'],
-      loop: true,
-      html5: false,
-      format: ['mp3'],
-      volume: 0.1,
-    });
-  
-    silentLoopRef.current.play();
-    setSilentLoopInitialized(true);
+    if (!silentLoopInitialized) {
+      console.log('Initializing silent loop');
+      silentLoopRef.current = new Howl({
+        src: ['/misc/white_noise_loop.mp3'],
+        loop: true,
+        html5: true,
+        format: ['mp3'],
+        volume: 0.1,
+      });
+
+      silentLoopRef.current.play();
+      setSilentLoopInitialized(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -44,24 +45,18 @@ const AudioPlayerProvider = ({ children }) => {
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
     initializeSilentLoop();
-    console.log('Play function called with:', { track, audioShelfId, albumArtworkUrl });
 
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
-      console.log('Playing current track');
       soundRef.current.play();
     } else {
-      console.log('Setting up new track');
       if (soundRef.current) {
-        console.log('Unloading previous sound');
         soundRef.current.unload();
       }
 
-      console.log('Creating new Howl instance');
       soundRef.current = new Howl({
         src: [track.firebaseURL],
         html5: true,
         onplay: () => {
-          console.log('Howl onplay triggered');
           setIsPlaying(true);
           if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
             console.log('Sending PLAY_AUDIO message to service worker');
@@ -72,40 +67,32 @@ const AudioPlayerProvider = ({ children }) => {
           }
         },
         onpause: () => {
-          console.log('Howl onpause triggered');
           setIsPlaying(false);
         },
         onend: () => {
-          console.log('Howl onend triggered');
           if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
             console.log('Sending TRACK_ENDED message to service worker');
             navigator.serviceWorker.controller.postMessage({
               type: 'TRACK_ENDED'
             });
           }
-          console.log('Calling playNextTrack from onend');
           playNextTrack();
         },
         onload: () => {
-          console.log('Howl onload triggered');
           setTotalDuration(soundRef.current.duration());
         },
       });
 
-      console.log('Updating current track references');
       currentTrackRef.current = track;
       currentTracklistRef.current = tracklist;
       activeAudioShelfIdRef.current = audioShelfId;
       albumArtworkUrlRef.current = albumArtworkUrl;
 
-      console.log('Playing new track');
       soundRef.current.play();
-      console.log('After playing new track... did we get this far?');
     }
 
     setIsPlaying(true);
 
-    console.log('Setting up interval for updating current time');
     const intervalId = setInterval(() => {
       if (soundRef.current) {
         const currentTime = soundRef.current.seek();
@@ -114,7 +101,6 @@ const AudioPlayerProvider = ({ children }) => {
     }, 500);
 
     return () => {
-      console.log('Clearing interval');
       clearInterval(intervalId);
     };
   };
@@ -126,23 +112,13 @@ const AudioPlayerProvider = ({ children }) => {
   };
 
   const playNextTrack = () => {
-    console.log('playNextTrack called');
-    
     if (currentTracklistRef.current && currentTrackRef.current) {
-      console.log('Current track:', currentTrackRef.current);
-      console.log('Current tracklist:', currentTracklistRef.current);
-      
       const nextTrackNumber = currentTrackRef.current.trackNumber + 1;
-      console.log('Next track number:', nextTrackNumber);
-      
       const nextTrack = currentTracklistRef.current.find(track => track.trackNumber === nextTrackNumber);
-      console.log('Next track:', nextTrack);
-      
+
       if (nextTrack) {
-        console.log('Playing next track:', nextTrack);
         play(nextTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrlRef.current);
       } else {
-        console.log('No next track found, resetting player');
         reset();
       }
     } else {
