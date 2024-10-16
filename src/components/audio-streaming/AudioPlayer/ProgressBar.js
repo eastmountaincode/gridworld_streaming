@@ -3,10 +3,7 @@ import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './ProgressBar.css'
 
 const ProgressBar = ({ audioShelfId, shelfColor }) => {
-  const { currentTime,
-    totalDuration,
-    setAudioTime,
-    activeAudioShelfId } = useContext(AudioPlayerContext);
+  const { currentTime, totalDuration, setAudioTime, activeAudioShelfId } = useContext(AudioPlayerContext);
   const [isDragging, setIsDragging] = useState(false);
   const [dragTime, setDragTime] = useState(null);
   const progressBarRef = useRef(null);
@@ -14,41 +11,46 @@ const ProgressBar = ({ audioShelfId, shelfColor }) => {
   const isActiveProgressBar = activeAudioShelfId === audioShelfId;
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleDrag = (e) => {
       if (isDragging && isActiveProgressBar) {
         updateDragTime(e);
       }
     };
 
-    const handleMouseUp = () => {
+    const handleEndDrag = () => {
       if (isDragging && isActiveProgressBar) {
         setIsDragging(false);
         setAudioTime(dragTime);
-        document.body.classList.remove('no-select'); // Remove no-select class when dragging ends
+        document.body.classList.remove('no-select');
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mousemove', handleDrag);
+    window.addEventListener('mouseup', handleEndDrag);
+    window.addEventListener('touchmove', handleDrag);
+    window.addEventListener('touchend', handleEndDrag);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mousemove', handleDrag);
+      window.removeEventListener('mouseup', handleEndDrag);
+      window.removeEventListener('touchmove', handleDrag);
+      window.removeEventListener('touchend', handleEndDrag);
     };
-  }, [isDragging, dragTime, setAudioTime]);
+  }, [isDragging, dragTime, setAudioTime, isActiveProgressBar]);
 
-  const handleMouseDown = (e) => {
+  const handleStartDrag = (e) => {
     if (isActiveProgressBar) {
       setIsDragging(true);
       updateDragTime(e);
-      document.body.classList.add('no-select'); // Add no-select class when dragging starts
+      document.body.classList.add('no-select');
     }
   };
 
   const updateDragTime = (e) => {
     const progressBar = progressBarRef.current;
     const rect = progressBar.getBoundingClientRect();
-    const clickPosition = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clickPosition = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     const newTime = Math.min(clickPosition * totalDuration, totalDuration);
     setDragTime(newTime);
   };
@@ -61,14 +63,15 @@ const ProgressBar = ({ audioShelfId, shelfColor }) => {
   };
 
   const progress = isActiveProgressBar && totalDuration > 0 
-  ? ((isDragging ? dragTime : currentTime) / totalDuration) * 100 
-  : 0;
+    ? ((isDragging ? dragTime : currentTime) / totalDuration) * 100 
+    : 0;
   
   return (
     <div className="progress-bar-container">
       <div
         ref={progressBarRef}
-        onMouseDown={handleMouseDown}
+        onMouseDown={handleStartDrag}
+        onTouchStart={handleStartDrag}
         className={`progress-bar ${isActiveProgressBar ? '' : 'progress-bar-inactive'}`}
         style={{ '--shelf-color': shelfColor }}
       >
