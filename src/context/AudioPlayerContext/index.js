@@ -1,4 +1,4 @@
-import React, { createContext, useState, useRef, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useRef } from 'react';
 import { Howl, Howler } from 'howler';
 
 const AudioPlayerContext = createContext();
@@ -9,14 +9,12 @@ const AudioPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
-  const [silentLoopInitialized, setSilentLoopInitialized] = useState(false);
 
   const soundRef = useRef(null);
   const currentTrackRef = useRef(null);
   const currentTracklistRef = useRef(null);
   const activeAudioShelfIdRef = useRef(null);
   const albumArtworkUrlRef = useRef(null);
-  const silentLoopRef = useRef(null);
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
 
