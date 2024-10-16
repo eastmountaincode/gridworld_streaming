@@ -19,17 +19,17 @@ root.render(
     </AudioPlayerProvider>
 );
 
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/audio-service-worker.js')
-        .then(registration => {
-          console.log('Audio Service Worker registered successfully:', registration.scope);
-        })
-        .catch(error => {
-          console.error('Audio Service Worker registration failed:', error);
-        });
-    });
-  }
+// if ('serviceWorker' in navigator) {
+//     window.addEventListener('load', () => {
+//       navigator.serviceWorker.register('/audio-service-worker.js')
+//         .then(registration => {
+//           console.log('Audio Service Worker registered successfully:', registration.scope);
+//         })
+//         .catch(error => {
+//           console.error('Audio Service Worker registration failed:', error);
+//         });
+//     });
+//   }
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

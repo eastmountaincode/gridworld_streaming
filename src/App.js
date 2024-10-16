@@ -20,16 +20,16 @@ import { AudioPlayerContext } from './context/AudioPlayerContext';
 function App() {
   const { play, pause, currentTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl } = useContext(AudioPlayerContext);
 
-  useEffect(() => {
-    if ('mediaSession' in navigator) {
-      console.log('in App.js, mediaSession is in navigator');
-      // Set up media session handlers here
-      navigator.mediaSession.setActionHandler('play', () => play(currentTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl));
-      navigator.mediaSession.setActionHandler('pause', pause);
-    } else {
-      console.log('mediaSession is not in navigator');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if ('mediaSession' in navigator) {
+  //     console.log('in App.js, mediaSession is in navigator');
+  //     // Set up media session handlers here
+  //     navigator.mediaSession.setActionHandler('play', () => play(currentTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl));
+  //     navigator.mediaSession.setActionHandler('pause', pause);
+  //   } else {
+  //     console.log('mediaSession is not in navigator');
+  //   }
+  // }, []);
 
 
   return (
