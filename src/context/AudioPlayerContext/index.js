@@ -33,9 +33,25 @@ const AudioPlayerProvider = ({ children }) => {
       soundRef.current = new Howl({
         src: [track.firebaseURL],
         html5: true,
-        onplay: () => setIsPlaying(true),
+        onplay: () => {
+          setIsPlaying(true);
+          // Start the foreground service
+          if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+              type: 'PLAY_AUDIO',
+              track: track
+            });
+          }
+        },
         onpause: () => setIsPlaying(false),
-        onend: () => playNextTrack(),
+        onend: () => {
+          if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+              type: 'TRACK_ENDED'
+            });
+          }
+          playNextTrack();
+        },
         onload: () => setTotalDuration(soundRef.current.duration()),
       });
 
