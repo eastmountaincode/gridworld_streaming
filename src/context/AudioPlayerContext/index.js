@@ -45,6 +45,7 @@ const AudioPlayerProvider = ({ children }) => {
         },
         onpause: () => setIsPlaying(false),
         onend: () => {
+          console.log('Track ended');
           if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
             navigator.serviceWorker.controller.postMessage({
               type: 'TRACK_ENDED'
