@@ -51,9 +51,9 @@ const AudioPlayerProvider = ({ children }) => {
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
       soundRef.current.play();
     } else {
-      // if (soundRef.current) {
-      //   soundRef.current.unload();
-      // }
+      if (soundRef.current) {
+        soundRef.current.unload();
+      }
 
       soundRef.current = new Howl({
         src: [track.firebaseURL],
