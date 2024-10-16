@@ -1,4 +1,4 @@
-import React, { createContext, useState, useRef, useEffect } from 'react';
+import React, { createContext, useState, useRef, useEffect, useCallback } from 'react';
 import { Howl } from 'howler';
 
 const AudioPlayerContext = createContext();
@@ -7,36 +7,35 @@ const AudioPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
+  const [silentLoopInitialized, setSilentLoopInitialized] = useState(false);
 
   const soundRef = useRef(null);
   const currentTrackRef = useRef(null);
   const currentTracklistRef = useRef(null);
   const activeAudioShelfIdRef = useRef(null);
   const albumArtworkUrlRef = useRef(null);
+  const silentLoopRef = useRef(null);
+
+  const initializeSilentLoop = useCallback(() => {
+    if (!silentLoopInitialized) {
+      silentLoopRef.current = new Howl({
+        src: ['/misc/white_noise_loop.mp3'],
+        loop: true,
+        volume: 0.2,
+        onplay: () => {
+          console.log('Silent loop started');
+        }
+      });
+      silentLoopRef.current.play();
+      setSilentLoopInitialized(true);
+    }
+  }, [silentLoopInitialized]);
 
   useEffect(() => {
     return () => {
       if (soundRef.current) {
         soundRef.current.unload();
       }
-    };
-  }, []);
-
-  const silentLoopRef = useRef(null);
-
-  useEffect(() => {
-    // Create and start the silent loop
-    silentLoopRef.current = new Howl({
-      src: ['/misc/white_noise_loop.mp3'],
-      loop: true,
-      volume: 0.2,
-      onplay: () => {
-        console.log('Silent loop started');
-      }
-    });
-    silentLoopRef.current.play();
-
-    return () => {
       if (silentLoopRef.current) {
         silentLoopRef.current.unload();
       }
@@ -44,6 +43,7 @@ const AudioPlayerProvider = ({ children }) => {
   }, []);
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
+    initializeSilentLoop();
     console.log('Play function called with:', { track, audioShelfId, albumArtworkUrl });
 
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
