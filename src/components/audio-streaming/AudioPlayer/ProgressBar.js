@@ -14,7 +14,6 @@ const ProgressBar = ({ audioShelfId, shelfColor }) => {
     const handleMove = (e) => {
       if (isDragging && isActiveProgressBar) {
         e.preventDefault();
-        e.stopPropagation();
         updateDragTime(e);
       }
     };
@@ -22,14 +21,11 @@ const ProgressBar = ({ audioShelfId, shelfColor }) => {
     const handleEnd = (e) => {
       if (isDragging && isActiveProgressBar) {
         e.preventDefault();
-        e.stopPropagation();
         setIsDragging(false);
         setAudioTime(dragTime);
         document.body.classList.remove('no-select');
       }
     };
-
-    const options = { passive: false };
 
     window.addEventListener('mousemove', handleMove);
     window.addEventListener('mouseup', handleEnd);
@@ -47,7 +43,6 @@ const ProgressBar = ({ audioShelfId, shelfColor }) => {
   const handleStart = (e) => {
     if (isActiveProgressBar) {
       e.preventDefault();
-      e.stopPropagation();
       setIsDragging(true);
       updateDragTime(e);
       document.body.classList.add('no-select');
@@ -82,7 +77,6 @@ const ProgressBar = ({ audioShelfId, shelfColor }) => {
         onTouchStart={handleStart}
         onTouchMove={(e) => {
           e.preventDefault();
-          e.stopPropagation();
         }}
         className={`progress-bar ${isActiveProgressBar ? '' : 'progress-bar-inactive'}`}
         style={{ '--shelf-color': shelfColor }}
