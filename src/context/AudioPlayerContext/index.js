@@ -1,7 +1,10 @@
 import React, { createContext, useState, useRef, useEffect, useCallback } from 'react';
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 
 const AudioPlayerContext = createContext();
+
+Howler.autoUnlock = true;
+Howler.html5PoolSize = 100;
 
 const AudioPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -24,7 +27,7 @@ const AudioPlayerProvider = ({ children }) => {
     silentLoopRef.current = new Howl({
       src: ['/misc/white_noise_loop.mp3'],
       loop: true,
-      html5: false,
+      html5: true,
       volume: 0.2,
       onplay: () => {
         console.log('Silent loop started');
@@ -47,8 +50,12 @@ const AudioPlayerProvider = ({ children }) => {
   }, []);
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
-    initializeSilentLoop();
+    //initializeSilentLoop();
     console.log('Play function called with:', { track, audioShelfId, albumArtworkUrl });
+
+    if (soundRef.current) {
+      soundRef.current.unload();
+    }
 
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
       console.log('Playing current track');
@@ -64,16 +71,22 @@ const AudioPlayerProvider = ({ children }) => {
       soundRef.current = new Howl({
         src: [track.firebaseURL],
         html5: true,
+        preload: true,
+        onload: () => {
+          console.log('Track loaded successfully');
+          setTotalDuration(soundRef.current.duration());
+          soundRef.current.play();
+        },
         onplay: () => {
           console.log('Howl onplay triggered');
           setIsPlaying(true);
-          if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            console.log('Sending PLAY_AUDIO message to service worker');
-            navigator.serviceWorker.controller.postMessage({
-              type: 'PLAY_AUDIO',
-              track: track
-            });
-          }
+          // if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          //   console.log('Sending PLAY_AUDIO message to service worker');
+          //   navigator.serviceWorker.controller.postMessage({
+          //     type: 'PLAY_AUDIO',
+          //     track: track
+          //   });
+          // }
         },
         onpause: () => {
           console.log('Howl onpause triggered');
@@ -81,12 +94,12 @@ const AudioPlayerProvider = ({ children }) => {
         },
         onend: () => {
           console.log('Howl onend triggered');
-          if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            console.log('Sending TRACK_ENDED message to service worker');
-            navigator.serviceWorker.controller.postMessage({
-              type: 'TRACK_ENDED'
-            });
-          }
+          // if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          //   console.log('Sending TRACK_ENDED message to service worker');
+          //   navigator.serviceWorker.controller.postMessage({
+          //     type: 'TRACK_ENDED'
+          //   });
+          // }
           console.log('Calling playNextTrack from onend');
           playNextTrack();
         },
@@ -102,12 +115,7 @@ const AudioPlayerProvider = ({ children }) => {
       activeAudioShelfIdRef.current = audioShelfId;
       albumArtworkUrlRef.current = albumArtworkUrl;
 
-      console.log('Playing new track');
-      soundRef.current.play();
-      console.log('After playing new track... did we get this far?');
     }
-
-    setIsPlaying(true);
 
     console.log('Setting up interval for updating current time');
     const intervalId = setInterval(() => {
