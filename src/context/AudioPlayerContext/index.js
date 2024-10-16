@@ -38,7 +38,7 @@ const AudioPlayerProvider = ({ children }) => {
       console.log('Creating new Howl instance');
       soundRef.current = new Howl({
         src: [track.firebaseURL],
-        html5: true,
+        html5: false,
         onplay: () => {
           console.log('Howl onplay triggered');
           setIsPlaying(true);
