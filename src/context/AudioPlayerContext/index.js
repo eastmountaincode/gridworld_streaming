@@ -1,5 +1,5 @@
 import React, { createContext, useState, useRef, useEffect } from 'react';
-import { Howl, Howler } from 'howler';
+import { Howl } from 'howler';
 
 const AudioPlayerContext = createContext();
 
@@ -53,15 +53,8 @@ const AudioPlayerProvider = ({ children }) => {
       if (soundRef.current) {
         const currentTime = soundRef.current.seek();
         setCurrentTime(currentTime);
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.setPositionState({
-            duration: soundRef.current.duration(),
-            playbackRate: 1,
-            position: currentTime
-          });
-        }
       }
-    }, 1000);
+    }, 500);
 
     return () => clearInterval(intervalId);
   };
@@ -75,20 +68,11 @@ const AudioPlayerProvider = ({ children }) => {
   const playNextTrack = () => {
     console.log('playNextTrack called');
     if (currentTracklistRef.current && currentTrackRef.current) {
-      console.log('Current track:', currentTrackRef.current);
-      console.log('Current tracklist:', currentTracklistRef.current);
-  
-      const nextTrackNumber = currentTrackRef.current.trackNumber + 1;
-      console.log('Next track number:', nextTrackNumber);
-  
-      const nextTrack = currentTracklistRef.current.find(track => track.trackNumber === nextTrackNumber);
-      console.log('Next track found:', nextTrack);
-  
+      const nextTrackNumber = currentTrackRef.current.trackNumber + 1;  
+      const nextTrack = currentTracklistRef.current.find(track => track.trackNumber === nextTrackNumber);  
       if (nextTrack) {
-        console.log('Playing next track:', nextTrack);
         play(nextTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrlRef.current);
       } else {
-        console.log('No next track found, resetting player');
         reset();
       }
     } else {
@@ -110,13 +94,6 @@ const AudioPlayerProvider = ({ children }) => {
     if (soundRef.current) {
       soundRef.current.seek(time);
       setCurrentTime(time);
-      if ('mediaSession' in navigator) {
-        navigator.mediaSession.setPositionState({
-          duration: totalDuration,
-          playbackRate: 1,
-          position: time
-        });
-      }
     }
   };
 
