@@ -22,6 +22,24 @@ const AudioPlayerProvider = ({ children }) => {
     };
   }, []);
 
+  const silentLoopRef = useRef(null);
+
+  useEffect(() => {
+    // Create and start the silent loop
+    silentLoopRef.current = new Howl({
+      src: ['public/silent_loop.mpe'],
+      loop: true,
+      volume: 0.1, // Keep volume low but not zero
+    });
+    silentLoopRef.current.play();
+
+    return () => {
+      if (silentLoopRef.current) {
+        silentLoopRef.current.unload();
+      }
+    };
+  }, []);
+
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
     console.log('Play function called with:', { track, audioShelfId, albumArtworkUrl });
 
