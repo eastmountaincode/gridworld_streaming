@@ -1,7 +1,9 @@
 import React, { createContext, useState, useRef, useEffect, useCallback } from 'react';
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 
 const AudioPlayerContext = createContext();
+
+Howler.autoUnlock = true;
 
 const AudioPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -51,6 +53,7 @@ const AudioPlayerProvider = ({ children }) => {
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
       soundRef.current.play();
     } else {
+      // this prevents the previous track from playing if we go to the next one
       if (soundRef.current) {
         soundRef.current.unload();
       }
