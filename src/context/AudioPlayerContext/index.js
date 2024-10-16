@@ -18,9 +18,6 @@ const AudioPlayerProvider = ({ children }) => {
 
   const initializeSilentLoop = useCallback(() => {
     console.log('Initializing silent loop');
-    if (silentLoopRef.current) {
-      silentLoopRef.current.stop();
-    }
   
     silentLoopRef.current = new Howl({
       src: ['/misc/white_noise_loop.mp3'],
