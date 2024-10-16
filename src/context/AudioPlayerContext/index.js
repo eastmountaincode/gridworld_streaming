@@ -79,6 +79,7 @@ const AudioPlayerProvider = ({ children }) => {
 
       console.log('Playing new track');
       soundRef.current.play();
+      console.log('After playing new track... did we get this far?');
     }
 
     setIsPlaying(true);
