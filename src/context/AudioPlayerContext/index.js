@@ -33,50 +33,51 @@ const AudioPlayerProvider = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    return () => {
-      if (soundRef.current) {
-        soundRef.current.unload();
-      }
-      if (silentLoopRef.current) {
-        silentLoopRef.current.unload();
-      }
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     if (soundRef.current) {
+  //       soundRef.current.unload();
+  //     }
+  //     if (silentLoopRef.current) {
+  //       silentLoopRef.current.unload();
+  //     }
+  //   };
+  // }, []);
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
-    initializeSilentLoop();
+    //initializeSilentLoop();
 
+    // if we already have a current song, just resume it
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
       soundRef.current.play();
     } else {
-      if (soundRef.current) {
-        soundRef.current.unload();
-      }
+      // if (soundRef.current) {
+      //   soundRef.current.unload();
+      // }
 
       soundRef.current = new Howl({
         src: [track.firebaseURL],
         html5: true,
         onplay: () => {
           setIsPlaying(true);
-          if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            console.log('Sending PLAY_AUDIO message to service worker');
-            navigator.serviceWorker.controller.postMessage({
-              type: 'PLAY_AUDIO',
-              track: track
-            });
-          }
+          // if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          //   console.log('Sending PLAY_AUDIO message to service worker');
+          //   navigator.serviceWorker.controller.postMessage({
+          //     type: 'PLAY_AUDIO',
+          //     track: track
+          //   });
+          // }
         },
         onpause: () => {
           setIsPlaying(false);
         },
         onend: () => {
-          if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            console.log('Sending TRACK_ENDED message to service worker');
-            navigator.serviceWorker.controller.postMessage({
-              type: 'TRACK_ENDED'
-            });
-          }
+          // if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          //   console.log('Sending TRACK_ENDED message to service worker');
+          //   navigator.serviceWorker.controller.postMessage({
+          //     type: 'TRACK_ENDED'
+          //   });
+          // }
           playNextTrack();
         },
         onload: () => {
