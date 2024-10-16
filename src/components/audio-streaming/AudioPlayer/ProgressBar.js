@@ -11,35 +11,38 @@ const ProgressBar = ({ audioShelfId, shelfColor }) => {
   const isActiveProgressBar = activeAudioShelfId === audioShelfId;
 
   useEffect(() => {
-    const handleDrag = (e) => {
+    const handleMove = (e) => {
       if (isDragging && isActiveProgressBar) {
+        e.preventDefault();
         updateDragTime(e);
       }
     };
 
-    const handleEndDrag = () => {
+    const handleEnd = (e) => {
       if (isDragging && isActiveProgressBar) {
+        e.preventDefault();
         setIsDragging(false);
         setAudioTime(dragTime);
         document.body.classList.remove('no-select');
       }
     };
 
-    window.addEventListener('mousemove', handleDrag);
-    window.addEventListener('mouseup', handleEndDrag);
-    window.addEventListener('touchmove', handleDrag);
-    window.addEventListener('touchend', handleEndDrag);
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('touchmove', handleMove);
+    window.addEventListener('touchend', handleEnd);
 
     return () => {
-      window.removeEventListener('mousemove', handleDrag);
-      window.removeEventListener('mouseup', handleEndDrag);
-      window.removeEventListener('touchmove', handleDrag);
-      window.removeEventListener('touchend', handleEndDrag);
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchmove', handleMove);
+      window.removeEventListener('touchend', handleEnd);
     };
   }, [isDragging, dragTime, setAudioTime, isActiveProgressBar]);
 
-  const handleStartDrag = (e) => {
+  const handleStart = (e) => {
     if (isActiveProgressBar) {
+      e.preventDefault();
       setIsDragging(true);
       updateDragTime(e);
       document.body.classList.add('no-select');
@@ -62,19 +65,21 @@ const ProgressBar = ({ audioShelfId, shelfColor }) => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const progress = isActiveProgressBar && totalDuration > 0 
-    ? ((isDragging ? dragTime : currentTime) / totalDuration) * 100 
+  const progress = isActiveProgressBar && totalDuration > 0
+    ? ((isDragging ? dragTime : currentTime) / totalDuration) * 100
     : 0;
-  
+
   return (
     <div className="progress-bar-container">
       <div
         ref={progressBarRef}
-        onMouseDown={handleStartDrag}
-        onTouchStart={handleStartDrag}
+        onMouseDown={handleStart}
+        onTouchStart={handleStart}
+        onTouchMove={(e) => e.preventDefault()}
         className={`progress-bar ${isActiveProgressBar ? '' : 'progress-bar-inactive'}`}
         style={{ '--shelf-color': shelfColor }}
       >
+
         <div
           className="progress-bar-fill"
           style={{ width: `${progress}%`, backgroundColor: 'var(--shelf-color)' }}
