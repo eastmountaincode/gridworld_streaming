@@ -4,15 +4,15 @@ import { Howl, Howler } from 'howler';
 const AudioPlayerContext = createContext();
 
 const AudioPlayerProvider = ({ children }) => {
-  const [currentTrack, setCurrentTrack] = useState(null);
-  const [currentTracklist, setCurrentTracklist] = useState(null);
-  const [albumArtworkUrl, setAlbumArtworkUrl] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
-  const [activeAudioShelfId, setActiveAudioShelfId] = useState(null);
 
   const soundRef = useRef(null);
+  const currentTrackRef = useRef(null);
+  const currentTracklistRef = useRef(null);
+  const activeAudioShelfIdRef = useRef(null);
+  const albumArtworkUrlRef = useRef(null);
 
   useEffect(() => {
     return () => {
@@ -23,11 +23,9 @@ const AudioPlayerProvider = ({ children }) => {
   }, []);
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
-    if (soundRef.current && currentTrack && track.id === currentTrack.id) {
-      // Resume the current track
+    if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
       soundRef.current.play();
     } else {
-      // Start a new track
       if (soundRef.current) {
         soundRef.current.unload();
       }
@@ -35,22 +33,16 @@ const AudioPlayerProvider = ({ children }) => {
       soundRef.current = new Howl({
         src: [track.firebaseURL],
         html5: true,
-        onplay: () => {
-          setIsPlaying(true);
-        },
-        onpause: () => {
-          setIsPlaying(false);
-        },
+        onplay: () => setIsPlaying(true),
+        onpause: () => setIsPlaying(false),
         onend: () => playNextTrack(),
-        onload: () => {
-          setTotalDuration(soundRef.current.duration());
-        },
+        onload: () => setTotalDuration(soundRef.current.duration()),
       });
 
-      setCurrentTrack(track);
-      setCurrentTracklist(tracklist);
-      setActiveAudioShelfId(audioShelfId);
-      setAlbumArtworkUrl(albumArtworkUrl);
+      currentTrackRef.current = track;
+      currentTracklistRef.current = tracklist;
+      activeAudioShelfIdRef.current = audioShelfId;
+      albumArtworkUrlRef.current = albumArtworkUrl;
 
       soundRef.current.play();
     }
@@ -73,6 +65,7 @@ const AudioPlayerProvider = ({ children }) => {
 
     return () => clearInterval(intervalId);
   };
+
   const pause = () => {
     if (soundRef.current) {
       soundRef.current.pause();
@@ -80,23 +73,35 @@ const AudioPlayerProvider = ({ children }) => {
   };
 
   const playNextTrack = () => {
-    if (currentTracklist && currentTrack) {
-      const nextTrackNumber = currentTrack.trackNumber + 1;
-      const nextTrack = currentTracklist.find(track => track.trackNumber === nextTrackNumber);
+    console.log('playNextTrack called');
+    if (currentTracklistRef.current && currentTrackRef.current) {
+      console.log('Current track:', currentTrackRef.current);
+      console.log('Current tracklist:', currentTracklistRef.current);
+  
+      const nextTrackNumber = currentTrackRef.current.trackNumber + 1;
+      console.log('Next track number:', nextTrackNumber);
+  
+      const nextTrack = currentTracklistRef.current.find(track => track.trackNumber === nextTrackNumber);
+      console.log('Next track found:', nextTrack);
+  
       if (nextTrack) {
-        play(nextTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl);
+        console.log('Playing next track:', nextTrack);
+        play(nextTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrlRef.current);
       } else {
+        console.log('No next track found, resetting player');
         reset();
       }
+    } else {
+      console.log('No current track or tracklist');
     }
   };
 
   const playPrevTrack = () => {
-    if (currentTracklist && currentTrack) {
-      const prevTrackNumber = currentTrack.trackNumber - 1;
-      const prevTrack = currentTracklist.find(track => track.trackNumber === prevTrackNumber);
+    if (currentTracklistRef.current && currentTrackRef.current) {
+      const prevTrackNumber = currentTrackRef.current.trackNumber - 1;
+      const prevTrack = currentTracklistRef.current.find(track => track.trackNumber === prevTrackNumber);
       if (prevTrack) {
-        play(prevTrack, currentTracklist, activeAudioShelfId, albumArtworkUrl);
+        play(prevTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrlRef.current);
       }
     }
   };
@@ -119,25 +124,25 @@ const AudioPlayerProvider = ({ children }) => {
     if (soundRef.current) {
       soundRef.current.unload();
     }
-    setCurrentTrack(null);
-    setCurrentTracklist(null);
-    setAlbumArtworkUrl(null);
+    currentTrackRef.current = null;
+    currentTracklistRef.current = null;
+    albumArtworkUrlRef.current = null;
+    activeAudioShelfIdRef.current = null;
     setCurrentTime(0);
     setTotalDuration(0);
-    setActiveAudioShelfId(null);
     setIsPlaying(false);
   };
 
   return (
     <AudioPlayerContext.Provider
       value={{
-        currentTrack,
-        albumArtworkUrl,
+        currentTrack: currentTrackRef.current,
+        albumArtworkUrl: albumArtworkUrlRef.current,
         isPlaying,
         currentTime,
         totalDuration,
-        currentTracklist,
-        activeAudioShelfId,
+        currentTracklist: currentTracklistRef.current,
+        activeAudioShelfId: activeAudioShelfIdRef.current,
         play,
         pause,
         playNextTrack,
