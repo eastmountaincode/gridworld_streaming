@@ -17,10 +17,7 @@ const AudioPlayerProvider = ({ children }) => {
   const silentLoopRef = useRef(null);
 
   const initializeSilentLoop = useCallback(() => {
-    if (silentLoopRef.current) {
-      silentLoopRef.current.stop();
-    }
-    
+
     if (!silentLoopInitialized) {
       console.log('Initializing silent loop');
       silentLoopRef.current = new Howl({
