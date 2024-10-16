@@ -22,7 +22,7 @@ const AudioPlayerProvider = ({ children }) => {
     silentLoopRef.current = new Howl({
       src: ['/misc/silent_loop.mp3'],
       loop: true,
-      html5: true,
+      html5: false,
       format: ['mp3'],
       volume: 0.1,
     });
