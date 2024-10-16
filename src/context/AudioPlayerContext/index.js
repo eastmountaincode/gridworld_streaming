@@ -27,9 +27,12 @@ const AudioPlayerProvider = ({ children }) => {
   useEffect(() => {
     // Create and start the silent loop
     silentLoopRef.current = new Howl({
-      src: ['public/silent_loop.mpe'],
+      src: ['/misc/white_noise_loop.mp3'],
       loop: true,
-      volume: 0.1, // Keep volume low but not zero
+      volume: 0.2,
+      onplay: () => {
+        console.log('Silent loop started');
+      }
     });
     silentLoopRef.current.play();
 
