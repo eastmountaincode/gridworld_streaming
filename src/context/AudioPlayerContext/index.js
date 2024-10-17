@@ -19,6 +19,13 @@ const AudioPlayerProvider = ({ children }) => {
 
   useEffect(() => {
     initializeMediaSession();
+    soundRef.current = new Howl({
+      src: ['/misc/silent_loop.mp3'],
+      html5: true,
+
+    })
+    soundRef.current.play();
+
   }, []);
 
   const initializeMediaSession = () => {
