@@ -1,5 +1,5 @@
-import React, { createContext, useState, useRef } from 'react';
-import { Howl, Howler } from 'howler';
+import React, { createContext, useState, useRef, useEffect } from 'react';
+import { Howl, Howler } from 'loudest';
 
 const AudioPlayerContext = createContext();
 
@@ -15,6 +15,25 @@ const AudioPlayerProvider = ({ children }) => {
   const currentTracklistRef = useRef(null);
   const activeAudioShelfIdRef = useRef(null);
   const albumArtworkUrlRef = useRef(null);
+
+  useEffect(() => {
+    initializeMediaSession();
+  }, []);
+
+  const initializeMediaSession = () => {
+    console.log('initializeMediaSession called');
+    if ('mediaSession' in navigator) {
+      console.log('initializing mediaSession')
+      navigator.mediaSession.setActionHandler('play', () => {
+        if (soundRef.current) {
+          soundRef.current.play();
+        }
+      });
+      navigator.mediaSession.setActionHandler('pause', pause);
+      navigator.mediaSession.setActionHandler('previoustrack', playPrevTrack);
+      navigator.mediaSession.setActionHandler('nexttrack', playNextTrack);
+    }
+  };
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
     console.log('instructed to play with these parameters:', track.trackTitle, tracklist, audioShelfId, albumArtworkUrl);
@@ -92,6 +111,7 @@ const AudioPlayerProvider = ({ children }) => {
 
       if (nextTrack) {
         play(nextTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrlRef.current);
+        updateMediaSession(nextTrack, currentTracklistRef.current, albumArtworkUrlRef.current);
       } else {
         reset();
       }
@@ -106,6 +126,8 @@ const AudioPlayerProvider = ({ children }) => {
       const prevTrack = currentTracklistRef.current.find(track => track.trackNumber === prevTrackNumber);
       if (prevTrack) {
         play(prevTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrlRef.current);
+        updateMediaSession(prevTrack, currentTracklistRef.current, albumArtworkUrlRef.current);
+
       }
     }
   };
@@ -128,6 +150,7 @@ const AudioPlayerProvider = ({ children }) => {
     setCurrentTime(0);
     setTotalDuration(0);
     setIsPlaying(false);
+
   };
 
   const updateMediaSession = (track, tracklist, albumArtworkUrl) => {
@@ -142,7 +165,11 @@ const AudioPlayerProvider = ({ children }) => {
           { src: albumArtworkUrl, sizes: '512x512', type: 'image/jpeg' }
         ]
       });
+    } else {
+      navigator.mediaSession.metadata = null;
     }
+    navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+
   };
 
   return (

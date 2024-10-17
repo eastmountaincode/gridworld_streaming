@@ -16,6 +16,7 @@
     "dotenv": "^16.4.5",
     "howler": "^2.2.4",
     "jsonwebtoken": "^9.0.2",
+    "loudest": "github:profispojka/loudest",
     "mongodb": "^6.8.0",
     "p5": "^1.10.0",
     "path": "^0.12.7",
