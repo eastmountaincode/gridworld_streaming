@@ -18,15 +18,7 @@ const AudioPlayerProvider = ({ children }) => {
   const albumArtworkUrlRef = useRef(null);
 
   useEffect(() => {
-    soundRef.current = new Howl({
-      src: ['/misc/white_noise_loop.mp3'],
-      html5: true,
-
-    })
-    soundRef.current.play();
     initializeMediaSession();
-    
-
   }, []);
 
   const initializeMediaSession = () => {
@@ -46,6 +38,12 @@ const AudioPlayerProvider = ({ children }) => {
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
     console.log('instructed to play with these parameters:', track.trackTitle, tracklist, audioShelfId, albumArtworkUrl);
+    soundRef.current = new Howl({
+      src: ['/misc/white_noise_loop.mp3'],
+      html5: true,
+
+    })
+    soundRef.current.play();
 
     // if we already have a current song, just resume it
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
