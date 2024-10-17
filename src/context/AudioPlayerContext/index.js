@@ -18,13 +18,14 @@ const AudioPlayerProvider = ({ children }) => {
   const albumArtworkUrlRef = useRef(null);
 
   useEffect(() => {
-    initializeMediaSession();
     soundRef.current = new Howl({
-      src: ['/misc/silent_loop.mp3'],
+      src: ['/misc/white_noise_loop.mp3'],
       html5: true,
 
     })
     soundRef.current.play();
+    initializeMediaSession();
+    
 
   }, []);
 
