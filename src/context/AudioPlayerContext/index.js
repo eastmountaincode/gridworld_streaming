@@ -4,6 +4,7 @@ import { Howl, Howler } from 'howler';
 const AudioPlayerContext = createContext();
 
 Howler.autoUnlock = true;
+Howler.autoUnlock = true;
 
 const AudioPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -17,6 +18,7 @@ const AudioPlayerProvider = ({ children }) => {
   const albumArtworkUrlRef = useRef(null);
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
+    console.log('instructed to play with these parameters:', track, tracklist, audioShelfId, albumArtworkUrl);
 
     // if we already have a current song, just resume it
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
@@ -32,11 +34,23 @@ const AudioPlayerProvider = ({ children }) => {
         html5: true,
         onplay: () => {
           setIsPlaying(true);
+          //updateMediaSession(track, tracklist, albumArtworkUrl);
+
+        },
+        onplayerror: () => {
+          console.error('Error playing audio');
+          currentTrackRef.current = track;
+          currentTracklistRef.current = tracklist;
+          activeAudioShelfIdRef.current = audioShelfId;
+          albumArtworkUrlRef.current = albumArtworkUrl;
+
+          soundRef.current.play();
         },
         onpause: () => {
           setIsPlaying(false);
         },
         onend: () => {
+          console.log('track ended, calling playNextTrack');
           playNextTrack();
         },
         onload: () => {
@@ -116,6 +130,21 @@ const AudioPlayerProvider = ({ children }) => {
     setTotalDuration(0);
     setIsPlaying(false);
   };
+
+  // const updateMediaSession = (track, tracklist, albumArtworkUrl) => {
+  //   console.log('in AudioPlayerContext, updateMediaSession called');
+  //   if ('mediaSession' in navigator) {
+  //     console.log('in AudioPlayerContext, mediaSession is in navigator');
+  //     navigator.mediaSession.metadata = new MediaMetadata({
+  //       title: track.trackTitle,
+  //       artist: "Andrew Boylan",
+  //       album: tracklist.albumTitle,
+  //       artwork: [
+  //         { src: albumArtworkUrl, sizes: '512x512', type: 'image/jpeg' }
+  //       ]
+  //     });
+  //   }
+  // };
 
   return (
     <AudioPlayerContext.Provider
