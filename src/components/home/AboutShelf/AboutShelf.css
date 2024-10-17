@@ -1,7 +1,10 @@
+
+
 .about-shelf-container {
-  margin-bottom: 20px;
   display: flex;
   justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .about-shelf {
@@ -25,6 +28,8 @@
   display: flex;
   align-items: center;
 }
+
+
 
 .about-title {
   font-size: 27px; /* Default font size */
@@ -60,8 +65,29 @@
     width: 19px;
     height: 19px;
   }
+
+  .about-shelf-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+  }
 }
 
+@media (max-width: 380px) {
+  .about-title {
+    font-size: 17px;
+    margin-top: 12px;
+
+  }
+}
+
+@media (max-width: 355px) {
+  .about-title {
+    font-size: 16px;
+    margin-top: 12px;
+
+  }
+}
 
 
 

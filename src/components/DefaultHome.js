@@ -25,7 +25,7 @@ const DefaultHome = () => {
       ) : (
         userData.hasAccessToken ? <PaidView /> : <FreeView />
       )}
-      <div style={{marginTop: '20px'}}>
+      <div>
         <AboutShelf />
       </div>
 

@@ -51,6 +51,7 @@ module.exports = async (req, res) => {
       const tracklistsCollection = db.collection('tracklists');
       const tracksCollection = db.collection('tracks');
       const albumArtworksCollection = db.collection('album_artworks');
+      const downloadablesCollection = db.collection('downloadables');
 
       let tracklistWithDetails = null;
       try {
@@ -89,10 +90,20 @@ module.exports = async (req, res) => {
         console.error('Error fetching album artwork:', error);
       }
 
+      let downloadable = null;
+      if (album.downloadableId && album.downloadableId !== '') {
+        try {
+          downloadable = await downloadablesCollection.findOne({ _id: ObjectId.createFromHexString(album.downloadableId) });
+        } catch (error) {
+          console.error('Error fetching downloadable:', error);
+        }
+      }
+
       const result = {
         ...album,
         tracklist: tracklistWithDetails ? tracklistWithDetails.tracks : [],
-        albumArtworkUrl
+        albumArtworkUrl,
+        downloadable
       };
 
       res.status(200).json(result);

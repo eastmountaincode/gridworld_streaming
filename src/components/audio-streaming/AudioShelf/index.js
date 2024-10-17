@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FaChevronDown } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './AudioShelf.css'; // Import the CSS file
+import DownloadArea from './DownloadArea';
 
 const AudioShelf = ({ albumTitle, shelfColor }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -142,7 +143,8 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
               albumBlurb={albumData.albumBlurb}
             />
           )}
-        </div>
+        {albumData.downloadable && <DownloadArea formats={albumData.downloadable.formats} shelfColor={shelfColor} audioShelfId />}
+      </div>
       </div>
     </div>
   );
