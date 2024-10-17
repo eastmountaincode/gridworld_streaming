@@ -48,9 +48,6 @@ const AudioPlayerProvider = ({ children }) => {
         soundRef.current.unload();
       }
 
-      Howler.stop();
-      Howler.unload();
-
       soundRef.current = new Howl({
         src: [track.firebaseURL],
         html5: true,
@@ -78,12 +75,13 @@ const AudioPlayerProvider = ({ children }) => {
       albumArtworkUrlRef.current = albumArtworkUrl;
 
       soundRef.current.play();
-      
+
       if ('mediaSession' in navigator) {
         console.log('initializing mediaSession')
         navigator.mediaSession.setActionHandler('play', () => {
           if (soundRef.current) {
             soundRef.current.play();
+            setIsPlaying(true);
           }
         });
         navigator.mediaSession.setActionHandler('pause', pause);
