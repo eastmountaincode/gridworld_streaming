@@ -16,9 +16,21 @@ const AudioPlayerProvider = ({ children }) => {
   const currentTracklistRef = useRef(null);
   const activeAudioShelfIdRef = useRef(null);
   const albumArtworkUrlRef = useRef(null);
+  const dummySoundRef = useRef(null);
 
   useEffect(() => {
     initializeMediaSession();
+    dummySoundRef.current = new Howl({
+      src: ['/misc/silent_loop.mp3'],
+      html5: true,
+      onplayerror: function() {
+        dummySoundRef.current.once('unlock', function() {
+          dummySoundRef.current.play();
+        });
+      }
+
+    })
+    dummySoundRef.current.play();
   }, []);
 
   const initializeMediaSession = () => {
@@ -38,12 +50,12 @@ const AudioPlayerProvider = ({ children }) => {
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
     console.log('instructed to play with these parameters:', track.trackTitle, tracklist, audioShelfId, albumArtworkUrl);
-    soundRef.current = new Howl({
-      src: ['/misc/white_noise_loop.mp3'],
-      html5: true,
+    dummySoundRef.current = new Howl({
+      src: ['/misc/silent_loop.mp3'],
+      html5: false,
 
     })
-    soundRef.current.play();
+    dummySoundRef.current.play();
 
     // if we already have a current song, just resume it
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
