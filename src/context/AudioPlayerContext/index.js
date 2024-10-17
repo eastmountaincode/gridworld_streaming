@@ -33,7 +33,7 @@ const AudioPlayerProvider = ({ children }) => {
         html5: true,
         onplay: () => {
           setIsPlaying(true);
-          //updateMediaSession(track, tracklist, albumArtworkUrl);
+          updateMediaSession(track, tracklist, albumArtworkUrl);
 
         },
         onplayerror: () => {
@@ -130,20 +130,20 @@ const AudioPlayerProvider = ({ children }) => {
     setIsPlaying(false);
   };
 
-  // const updateMediaSession = (track, tracklist, albumArtworkUrl) => {
-  //   console.log('in AudioPlayerContext, updateMediaSession called');
-  //   if ('mediaSession' in navigator) {
-  //     console.log('in AudioPlayerContext, mediaSession is in navigator');
-  //     navigator.mediaSession.metadata = new MediaMetadata({
-  //       title: track.trackTitle,
-  //       artist: "Andrew Boylan",
-  //       album: tracklist.albumTitle,
-  //       artwork: [
-  //         { src: albumArtworkUrl, sizes: '512x512', type: 'image/jpeg' }
-  //       ]
-  //     });
-  //   }
-  // };
+  const updateMediaSession = (track, tracklist, albumArtworkUrl) => {
+    console.log('in AudioPlayerContext, updateMediaSession called');
+    if ('mediaSession' in navigator) {
+      console.log('in AudioPlayerContext, mediaSession is in navigator');
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: track.trackTitle,
+        artist: "Andrew Boylan",
+        album: tracklist.albumTitle,
+        artwork: [
+          { src: albumArtworkUrl, sizes: '512x512', type: 'image/jpeg' }
+        ]
+      });
+    }
+  };
 
   return (
     <AudioPlayerContext.Provider
