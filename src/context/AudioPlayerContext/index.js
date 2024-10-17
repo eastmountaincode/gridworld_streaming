@@ -6,7 +6,6 @@ const AudioPlayerContext = createContext();
 Howler.autoUnlock = true;
 Howler.html5PoolSize=100; 
 
-
 const AudioPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -79,6 +78,18 @@ const AudioPlayerProvider = ({ children }) => {
       albumArtworkUrlRef.current = albumArtworkUrl;
 
       soundRef.current.play();
+      
+      if ('mediaSession' in navigator) {
+        console.log('initializing mediaSession')
+        navigator.mediaSession.setActionHandler('play', () => {
+          if (soundRef.current) {
+            soundRef.current.play();
+          }
+        });
+        navigator.mediaSession.setActionHandler('pause', pause);
+        navigator.mediaSession.setActionHandler('previoustrack', playPrevTrack);
+        navigator.mediaSession.setActionHandler('nexttrack', playNextTrack);
+      }
     }
 
     setIsPlaying(true);
