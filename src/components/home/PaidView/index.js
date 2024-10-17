@@ -12,6 +12,10 @@ const PaidView = () => {
         <AudioShelf albumTitle="Gridworld Instrumentals" shelfColor="#b13a4c" />
       </div>
 
+      <div style={{ marginTop: '20px' }}>
+        <AudioShelf albumTitle="Windy Gridworld" shelfColor="#bbbcb6" />
+      </div>
+
     </div>
   );
 };
