@@ -4,7 +4,6 @@ import { Howl, Howler } from 'howler';
 const AudioPlayerContext = createContext();
 
 Howler.autoUnlock = true;
-Howler.autoUnlock = true;
 
 const AudioPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -18,7 +17,7 @@ const AudioPlayerProvider = ({ children }) => {
   const albumArtworkUrlRef = useRef(null);
 
   const play = (track, tracklist, audioShelfId, albumArtworkUrl) => {
-    console.log('instructed to play with these parameters:', track, tracklist, audioShelfId, albumArtworkUrl);
+    console.log('instructed to play with these parameters:', track.trackTitle, tracklist, audioShelfId, albumArtworkUrl);
 
     // if we already have a current song, just resume it
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {

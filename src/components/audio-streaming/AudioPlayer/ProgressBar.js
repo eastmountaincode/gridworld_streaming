@@ -70,7 +70,7 @@ const ProgressBar = ({ audioShelfId, shelfColor }) => {
     : 0;
 
   return (
-    <div className="progress-bar-container">
+    <div className="progress-bar-container" style={{ touchAction: 'none' }}>
       <div
         ref={progressBarRef}
         onMouseDown={handleStart}
