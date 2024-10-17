@@ -4,6 +4,8 @@ import { Howl, Howler } from 'loudest';
 const AudioPlayerContext = createContext();
 
 Howler.autoUnlock = true;
+Howler.html5PoolSize=100; 
+
 
 const AudioPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -47,22 +49,16 @@ const AudioPlayerProvider = ({ children }) => {
         soundRef.current.unload();
       }
 
+      Howler.stop();
+      Howler.unload();
+
       soundRef.current = new Howl({
         src: [track.firebaseURL],
         html5: true,
+        preload: true,
         onplay: () => {
           setIsPlaying(true);
           updateMediaSession(track, tracklist, albumArtworkUrl);
-
-        },
-        onplayerror: () => {
-          console.error('Error playing audio');
-          currentTrackRef.current = track;
-          currentTracklistRef.current = tracklist;
-          activeAudioShelfIdRef.current = audioShelfId;
-          albumArtworkUrlRef.current = albumArtworkUrl;
-
-          soundRef.current.play();
         },
         onpause: () => {
           setIsPlaying(false);
@@ -73,6 +69,7 @@ const AudioPlayerProvider = ({ children }) => {
         },
         onload: () => {
           setTotalDuration(soundRef.current.duration());
+          updateMediaSession(track, tracklist, albumArtworkUrl);
         },
       });
 
