@@ -44,15 +44,12 @@ const StyledButton = styled(Button)`
     }
   }
 `;
-
 const DownloadArea = ({ formats, shelfColor, audioShelfId }) => {
   const [selectedFormat, setSelectedFormat] = useState('');
-  const [isFormatSelected, setIsFormatSelected] = useState(false);
 
   const handleFormatChange = useCallback((event) => {
     const newSelectedFormat = event.target.value;
     setSelectedFormat(newSelectedFormat);
-    setIsFormatSelected(true);
   }, []);
 
   const handleDownload = () => {
@@ -77,8 +74,8 @@ const DownloadArea = ({ formats, shelfColor, audioShelfId }) => {
               {formats.map((format) => (
                 <label key={format.formatName} style={{
                   marginRight: '10px',
-                  display: 'inline-flex',
-                  alignItems: 'center'
+                  display: 'inline-flex', // this vertically centers the radio button and label
+                  alignItems: 'center' // same with this
                 }}>
                   <input
                     type="radio"
@@ -101,7 +98,7 @@ const DownloadArea = ({ formats, shelfColor, audioShelfId }) => {
           <StyledButton
             type="primary"
             onClick={handleDownload}
-            disabled={!isFormatSelected}
+            disabled={!selectedFormat}
             style={{ marginTop: '15px' }}
             shelfColor={shelfColor}
           >
@@ -111,4 +108,6 @@ const DownloadArea = ({ formats, shelfColor, audioShelfId }) => {
       </StyledPanel>
     </StyledCollapse>
   );
-}; export default DownloadArea;
+}; 
+
+export default DownloadArea;

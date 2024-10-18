@@ -135,6 +135,12 @@ const AudioPlayerProvider = ({ children }) => {
 
       if (nextTrack) {
         play(nextTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrlRef.current);
+        dummySoundRef.current = new Howl({
+          src: ['/misc/silent_loop.mp3'],
+          html5: false,
+    
+        })
+        dummySoundRef.current.play();
         updateMediaSession(nextTrack, currentTracklistRef.current, albumArtworkUrlRef.current);
       } else {
         reset();
@@ -150,6 +156,12 @@ const AudioPlayerProvider = ({ children }) => {
       const prevTrack = currentTracklistRef.current.find(track => track.trackNumber === prevTrackNumber);
       if (prevTrack) {
         play(prevTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrlRef.current);
+        dummySoundRef.current = new Howl({
+          src: ['/misc/silent_loop.mp3'],
+          html5: false,
+    
+        })
+        dummySoundRef.current.play();
         updateMediaSession(prevTrack, currentTracklistRef.current, albumArtworkUrlRef.current);
 
       }

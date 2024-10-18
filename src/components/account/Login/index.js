@@ -61,6 +61,7 @@ const Login = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              style={{ fontSize: '16px' }}
             />
           </Form.Item>
           <Form.Item
@@ -71,6 +72,8 @@ const Login = () => {
             <Input.Password
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              style={{ fontSize: '16px' }}
+
             />
           </Form.Item>
           <Form.Item>
