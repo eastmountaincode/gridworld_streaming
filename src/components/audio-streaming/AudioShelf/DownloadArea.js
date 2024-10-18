@@ -2,6 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { Button, Collapse as AntCollapse } from 'antd';
 import styled from 'styled-components';
 
+import { useDownloadRadioButton } from '../../../context/DownloadRadioButtonContext';
+
+
 const { Panel } = AntCollapse;
 
 const StyledCollapse = styled(AntCollapse)`
@@ -45,11 +48,18 @@ const StyledButton = styled(Button)`
   }
 `;
 const DownloadArea = ({ formats, shelfColor, audioShelfId }) => {
+  const { 
+    activeRadioComponentId, 
+    setActiveRadioComponentId
+  } = useDownloadRadioButton();
+
   const [selectedFormat, setSelectedFormat] = useState('');
 
   const handleFormatChange = useCallback((event) => {
     const newSelectedFormat = event.target.value;
     setSelectedFormat(newSelectedFormat);
+    setActiveRadioComponentId(audioShelfId);
+
   }, []);
 
   const handleDownload = () => {
@@ -60,6 +70,8 @@ const DownloadArea = ({ formats, shelfColor, audioShelfId }) => {
       window.open(selectedFormatData.formatLink, '_blank');
     }
   };
+
+  const isActive = activeRadioComponentId === audioShelfId;
 
   return (
     <StyledCollapse expandIconPosition="right">
@@ -81,25 +93,25 @@ const DownloadArea = ({ formats, shelfColor, audioShelfId }) => {
                     type="radio"
                     name={`format-${audioShelfId}`}
                     value={format.formatName}
-                    defaultChecked={selectedFormat === format.formatName}
+                    checked={isActive && selectedFormat === format.formatName}
                     onChange={handleFormatChange}
                     style={{
                       marginRight: '5px',
                       accentColor: shelfColor,
-                      height: '17px',
-                      width: '17px'
+                      height: '18px',
+                      width: '18px'
                     }}
                   />
                   <span style={{ lineHeight: '2' }}>{format.formatName}</span>
                 </label>
               ))}
-            </div>
+           </div>
           </div>
           <StyledButton
             type="primary"
             onClick={handleDownload}
-            disabled={!selectedFormat}
-            style={{ marginTop: '15px' }}
+            disabled={!isActive || !selectedFormat}
+            style={{ marginTop: '15px', color: 'black' }}
             shelfColor={shelfColor}
           >
             Go

@@ -134,7 +134,7 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
           </div>
         </div>
         <div className={`audio-shelf-content ${isExpanded ? 'expanded' : ''}`} ref={contentRef}>
-          {albumData && (
+          {/* {albumData && (
             <AudioPlayer
               tracklist={albumData.tracklist}
               albumArtworkUrl={albumData.albumArtworkUrl}
@@ -142,8 +142,8 @@ const AudioShelf = ({ albumTitle, shelfColor }) => {
               shelfColor={shelfColor}
               albumBlurb={albumData.albumBlurb}
             />
-          )}
-        {albumData.downloadable && <DownloadArea formats={albumData.downloadable.formats} shelfColor={shelfColor} audioShelfId />}
+          )} */}
+        {albumData.downloadable && <DownloadArea formats={albumData.downloadable.formats} shelfColor={shelfColor} audioShelfId={audioShelfId} />}
       </div>
       </div>
     </div>
