@@ -4,7 +4,14 @@ import { FaPlay, FaPause } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './PlayerHeader.css';
 const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, firstTrack, albumBlurb }) => {
-    const { currentTrack, currentTracklist, activeAudioShelfId, isPlaying, play, pause } = useContext(AudioPlayerContext);
+    const { currentTrack,
+        currentTracklist,
+        activeAudioShelfId,
+        isPlaying,
+        play,
+        pause,
+        playDummySound
+    } = useContext(AudioPlayerContext);
 
     const isActiveAudioPlayer = activeAudioShelfId === audioShelfId;
 
@@ -17,6 +24,7 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
             }
         } else if (tracklist && firstTrack) {
             play(firstTrack, tracklist, audioShelfId, albumArtworkUrl);
+            
         }
     };
 
@@ -39,12 +47,12 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
     const playIconStyle = {
         position: 'relative',
         left: '1px',
-      };
+    };
 
     return (
         <div className="player-header">
             {albumBlurb && (
-                <div className="album-blurb" dangerouslySetInnerHTML={{ __html: albumBlurb }} style={{ textAlign: 'left', margin: '5px 18px 10px 18px', fontSize: '18px',  }} />
+                <div className="album-blurb" dangerouslySetInnerHTML={{ __html: albumBlurb }} style={{ textAlign: 'left', margin: '5px 18px 10px 18px', fontSize: '18px', }} />
             )}
             {albumArtworkUrl && (
                 <img
@@ -54,7 +62,7 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
                 />
             )}
 
-            
+
 
             <div className="player-header-content">
                 <div className="play-button-container">
