@@ -9,8 +9,7 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfColor, tracklist, fi
         activeAudioShelfId,
         isPlaying,
         play,
-        pause,
-        playDummySound
+        pause
     } = useContext(AudioPlayerContext);
 
     const isActiveAudioPlayer = activeAudioShelfId === audioShelfId;

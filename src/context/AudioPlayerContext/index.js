@@ -36,10 +36,10 @@ const AudioPlayerProvider = ({ children }) => {
     if ('mediaSession' in navigator) {
       console.log('initializing mediaSession')
       navigator.mediaSession.setActionHandler('play', () => {
-        if (soundRef.current) {
+
           soundRef.current.play();
           setIsPlaying(true);
-        }
+
       });
       navigator.mediaSession.setActionHandler('pause', pause);
       navigator.mediaSession.setActionHandler('previoustrack', async () => {
@@ -83,7 +83,6 @@ const AudioPlayerProvider = ({ children }) => {
         preload: true,
         onplay: () => {
           setIsPlaying(true);
-          updateMediaSession(track, tracklist, albumArtworkUrl);
         },
         onpause: () => {
           setIsPlaying(false);
@@ -123,9 +122,11 @@ const AudioPlayerProvider = ({ children }) => {
   };
 
   const pause = () => {
+    console.log('pause function was called, in pause function');
     if (soundRef.current) {
       soundRef.current.pause();
       setIsPlaying(false);
+
     }
   };
 
