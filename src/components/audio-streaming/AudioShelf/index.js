@@ -84,18 +84,19 @@ const AudioShelf = ({ albumTitle, shelfcolor }) => {
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
-    if (contentRef.current) {
-      if (isExpanded) {
-        contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
-        setTimeout(() => {
-          contentRef.current.style.height = '0';
-        }, 0);
-      } else {
-        contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
-        setTimeout(() => {
-          contentRef.current.style.height = 'auto';
-        }, 1000); // Match the transition duration
-      }
+    // Add a guard clause to check if contentRef.current exists
+    if (!contentRef.current) return;
+
+    if (isExpanded) {
+      contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
+      setTimeout(() => {
+        contentRef.current.style.height = '0';
+      }, 0);
+    } else {
+      contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
+      setTimeout(() => {
+        contentRef.current.style.height = 'auto';
+      }, 1000);
     }
   };
 
@@ -120,7 +121,7 @@ const AudioShelf = ({ albumTitle, shelfcolor }) => {
                   src={albumData.albumArtworkUrl}
                   alt="Album artwork"
                   className="album-icon"
-                  style={{height: '40px', width: '40px'}}
+                  style={{ height: '40px', width: '40px' }}
                 />
               )
             )}
@@ -143,8 +144,8 @@ const AudioShelf = ({ albumTitle, shelfcolor }) => {
               albumBlurb={albumData.albumBlurb}
             />
           )}
-        {albumData.downloadable && <DownloadArea formats={albumData.downloadable.formats} shelfcolor={shelfcolor} audioShelfId={audioShelfId} />}
-      </div>
+          {albumData.downloadable && <DownloadArea formats={albumData.downloadable.formats} shelfcolor={shelfcolor} audioShelfId={audioShelfId} />}
+        </div>
       </div>
     </div>
   );

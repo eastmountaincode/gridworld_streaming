@@ -34,39 +34,39 @@ const AudioPlayerProvider = ({ children }) => {
     });
   };
 
-  const initializeMediaSession = () => {
+  const initializeMediaSession = async () => {
+    // this allows the controls to appear the FIRST time we press play, instead of 
+    // the second time we press play.
+    console.log('playing dummy sound in initializeMediaSession')
+    await playDummySound();
+
     console.log('initializeMediaSession called');
     if ('mediaSession' in navigator) {
       console.log('initializing mediaSession')
-      // navigator.mediaSession.setActionHandler('play', async () => {
-      //   console.log('Play button pressed, current Howler context state:', Howler.ctx.state);
-
-      //   if (Howler.ctx.state === 'suspended') {
-      //     console.log('Howler ctx is suspended, resuming');
-      //     await Howler.ctx.resume();
-      //   }
-      //   if (soundRef.current) {
-      //     soundRef.current.play();
-      //     setIsPlaying(true);
-      //   }
-      // });
-      // navigator.mediaSession.setActionHandler('pause', pause);
-      // navigator.mediaSession.setActionHandler('previoustrack', async () => {
-      //   await playDummySound();
-      //   playPrevTrack();
-      // });
-      // navigator.mediaSession.setActionHandler('nexttrack', async () => {
-      //   await playDummySound();
-      //   playNextTrack();
-      // });
+      navigator.mediaSession.setActionHandler('play', async () => {
+        console.log('Play button pressed, current Howler context state:', Howler.ctx.state);
+        if (soundRef.current) {
+          soundRef.current.play();
+          setIsPlaying(true);
+        }
+      });
+      navigator.mediaSession.setActionHandler('pause', () => pause(false));
+      navigator.mediaSession.setActionHandler('previoustrack', null);
+      navigator.mediaSession.setActionHandler('nexttrack', null);
+      navigator.mediaSession.setActionHandler('previoustrack', () => {
+        playPrevTrack();
+      });
+      navigator.mediaSession.setActionHandler('nexttrack', () => {
+        playNextTrack();
+      });
     }
   };
+
+
   useEffect(() => {
     const setup = async () => {
-      await playDummySound();
       initializeMediaSession();
     }
-
     setup();
   }, []);
 
@@ -74,10 +74,10 @@ const AudioPlayerProvider = ({ children }) => {
   const play = async (track, tracklist, audioShelfId, albumArtworkUrl) => {
     console.log('instructed to play with these parameters:', track.trackTitle, tracklist, audioShelfId, albumArtworkUrl);
 
-    await playDummySound();
-
-    // if we already have a current song, just resume it
+    // if we already have a current song, just RESUME it
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
+      await initializeMediaSession();
+      
       soundRef.current.play();
       setIsPlaying(true);
     } else {
@@ -111,7 +111,7 @@ const AudioPlayerProvider = ({ children }) => {
       activeAudioShelfIdRef.current = audioShelfId;
       albumArtworkUrlRef.current = albumArtworkUrl;
 
-      initializeMediaSession();
+      await initializeMediaSession();
 
       soundRef.current.play();
     }
@@ -123,31 +123,37 @@ const AudioPlayerProvider = ({ children }) => {
         const currentTime = soundRef.current.seek();
         setCurrentTime(currentTime);
       }
-    }, 500);
+    }, 400);
 
     return () => {
       clearInterval(intervalId);
     };
   };
 
-  const pause = () => {
+  const pause = (pauseFromApp) => {
     console.log('pause function was called, in pause function');
     if (soundRef.current) {
       soundRef.current.pause();
       setIsPlaying(false);
       console.log('Current Howler context state:', Howler.ctx.state);
 
+      if (pauseFromApp && 'mediaSession' in navigator) {
+        navigator.mediaSession.setActionHandler('play', null);
+        //navigator.mediaSession.setActionHandler('pause', null);
+        navigator.mediaSession.setActionHandler('previoustrack', null);
+        navigator.mediaSession.setActionHandler('nexttrack', null);
+
+      }
 
     }
   };
 
-  const playNextTrack = async () => {
+  const playNextTrack = () => {
     if (currentTracklistRef.current && currentTrackRef.current) {
       const nextTrackNumber = currentTrackRef.current.trackNumber + 1;
       const nextTrack = currentTracklistRef.current.find(track => track.trackNumber === nextTrackNumber);
 
       if (nextTrack) {
-        //await playDummySound();
         play(nextTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrlRef.current);
         updateMediaSession(nextTrack, currentTracklistRef.current, albumArtworkUrlRef.current);
       } else {
@@ -158,13 +164,12 @@ const AudioPlayerProvider = ({ children }) => {
     }
   };
 
-  const playPrevTrack = async () => {
+  const playPrevTrack = () => {
     if (currentTracklistRef.current && currentTrackRef.current) {
       const prevTrackNumber = currentTrackRef.current.trackNumber - 1;
       const prevTrack = currentTracklistRef.current.find(track => track.trackNumber === prevTrackNumber);
 
       if (prevTrack) {
-        //await playDummySound();
         play(prevTrack, currentTracklistRef.current, activeAudioShelfIdRef.current, albumArtworkUrlRef.current);
         updateMediaSession(prevTrack, currentTracklistRef.current, albumArtworkUrlRef.current);
       }
@@ -191,6 +196,15 @@ const AudioPlayerProvider = ({ children }) => {
     setTotalDuration(0);
     setIsPlaying(false);
 
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('play', null);
+      //navigator.mediaSession.setActionHandler('pause', null);
+      navigator.mediaSession.setActionHandler('previoustrack', null);
+      navigator.mediaSession.setActionHandler('nexttrack', null);
+      navigator.mediaSession.metadata = null;
+
+    }
+
   };
 
   const updateMediaSession = (track, tracklist, albumArtworkUrl) => {
@@ -205,10 +219,11 @@ const AudioPlayerProvider = ({ children }) => {
           { src: albumArtworkUrl, sizes: '512x512', type: 'image/jpeg' }
         ]
       });
-      navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
-    } else {
-      navigator.mediaSession.metadata = null;
+      //navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
     }
+    // } else {
+    //   navigator.mediaSession.metadata = null;
+    // }
 
   };
 

@@ -17,7 +17,7 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfcolor, tracklist, fi
     const handlePlayPause = () => {
         if (currentTrack && isActiveAudioPlayer) {
             if (isPlaying) {
-                pause();
+                pause(true);
             } else {
                 play(currentTrack, currentTracklist, audioShelfId, albumArtworkUrl);
             }
