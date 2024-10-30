@@ -1,0 +1,15 @@
+.account-page {
+    margin: 20px;
+    text-align: left;
+  }
+  
+  .account-page h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .account-page p {
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+  

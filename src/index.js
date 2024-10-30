@@ -4,11 +4,22 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { AuthProvider } from './context/AuthContext';
+import { NotificationProvider } from './context/NotificationContext';
+import { AudioPlayerProvider } from './context/AudioPlayerContext';
+import { DownloadRadioButtonProvider } from './context/DownloadRadioButtonContext';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <DownloadRadioButtonProvider>
+        <AudioPlayerProvider>
+            <NotificationProvider>
+                <AuthProvider>
+                    <App />
+                </AuthProvider>
+            </NotificationProvider>
+        </AudioPlayerProvider>
+    </DownloadRadioButtonProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

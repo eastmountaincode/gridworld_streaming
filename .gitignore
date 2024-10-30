@@ -12,6 +12,9 @@
 /build
 
 # misc
+._*
+cors.json
+.env
 .DS_Store
 .env.local
 .env.development.local
@@ -21,3 +24,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+working.json
+
+# Local server file
+server/server.js

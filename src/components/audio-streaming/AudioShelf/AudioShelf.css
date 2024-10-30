@@ -1,0 +1,110 @@
+.album-title {
+  font-size: 27px;
+  /* Default font size */
+  margin-left: 5px;
+  text-align: left;
+  margin-top: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+
+}
+
+.audio-shelf-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 481px) {
+  .album-title {
+    font-size: 19px;
+    margin-top: 12px;
+  }
+
+  .audio-shelf-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .album-title {
+    font-size: 17px;
+    margin-top: 12px;
+
+  }
+}
+
+@media (max-width: 355px) {
+  .album-title {
+    font-size: 16px;
+    margin-top: 12px;
+
+  }
+}
+
+
+.audio-shelf {
+  border: 1px solid black;
+  width: 550px;
+  margin: 2px 20px;
+  overflow: hidden;
+  background-color: slategray;
+
+}
+
+.audio-shelf.collapsed {
+  height: 70px;
+  /* Set a fixed height for the collapsed state */
+}
+
+.audio-shelf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.album-title-container {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  /* Allow the container to grow */
+  overflow: hidden;
+  /* Hide overflow content */
+}
+
+
+.album-icon {
+  margin-left: 14px;
+  margin-top: 3px;
+  margin-right: 10px;
+  border: 1px solid black;
+}
+
+.chevron-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 10%;
+}
+
+.chevron-container:hover {
+  border: 1px solid black;
+}
+
+.audio-shelf-content {
+  overflow: hidden;
+  transition: height 1.0s ease;
+  height: 0;
+  /* Initial height */
+}
+
+.audio-shelf-content.expanded {
+  height: auto;
+  /* Height will be set dynamically via JavaScript */
+}

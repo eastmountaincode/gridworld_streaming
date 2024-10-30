@@ -1,0 +1,69 @@
+/* .progress-bar-container {
+  border: 1px solid red;
+} */
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #ddd;
+    cursor: pointer;
+    position: relative;
+    margin: 10px 0;
+    border-radius: 5px;
+    overflow: visible; /* Ensure the thumb is not clipped */
+    border: 1px solid black;
+
+}
+
+.progress-bar-inactive {
+    cursor: default;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #007bff;
+    border-radius: 5px;
+    z-index: 1; /* Ensure the fill is behind the thumb */
+    position: relative;
+}
+
+.progress-bar-thumb {
+    position: absolute;
+    top: -4.7px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #007bff;
+    transform: translateX(-50%);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 2; /* Ensure the thumb is above the fill */
+    border: 1px solid black;
+
+}
+
+/* Add a transparent overlay around the thumb to make it easier to drag */
+.progress-bar-thumb::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 35px;
+    height: 35px;
+    background-color: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.progress-bar-timestamps {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.no-select {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }

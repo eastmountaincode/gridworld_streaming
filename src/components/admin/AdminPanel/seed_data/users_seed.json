@@ -1,0 +1,29 @@
+{
+    "users": [
+      {
+        "email": "john.doe@example.com",
+        "password": "hashedPassword123",
+        "security_question": "What was the name of your first pet?",
+        "security_question_answer": "Fluffy",
+        "date_created": "2023-01-15T12:00:00Z",
+        "has_access_token": true
+      },
+      {
+        "email": "jane.smith@example.com",
+        "password": "hashedPassword456",
+        "security_question": "In which city were you born?",
+        "security_question_answer": "New York",
+        "date_created": "2023-02-20T14:30:00Z",
+        "has_access_token": false
+      },
+      {
+        "email": "bob.johnson@example.com",
+        "password": "hashedPassword789",
+        "security_question": "What is your mother's maiden name?",
+        "security_question_answer": "Williams",
+        "date_created": "2023-03-10T09:45:00Z",
+        "has_access_token": true
+      }
+    ]
+  }
+  

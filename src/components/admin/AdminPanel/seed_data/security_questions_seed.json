@@ -1,0 +1,21 @@
+{
+    "security_questions": [
+      { "question": "What was the name of your first pet?" },
+      { "question": "In which city were you born?" },
+      { "question": "What is your mother's maiden name?" },
+      { "question": "What was the name of your elementary school?" },
+      { "question": "What is the middle name of your oldest sibling?" },
+      { "question": "What was the street name you lived on as a child?" },
+      { "question": "Who was your childhood best friend?" },
+      { "question": "What is your father's middle name?" },
+      { "question": "What was the name of your favorite teacher?" },
+      { "question": "What is the name of the hospital where you were born?" },
+      { "question": "What was the first concert you attended?" },
+      { "question": "What is the name of your favorite childhood book?" },
+      { "question": "What is your maternal grandmother's first name?" },
+      { "question": "In which year did you graduate from high school?" },
+      { "question": "What was the name of your first boss?" },
+      { "question": "What is the name of the street where you grew up?" }
+    ]
+  }
+  
