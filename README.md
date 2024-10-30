@@ -7,8 +7,6 @@ A modern React-based streaming platform with user authentication, audio playback
 - Audio streaming with custom player controls  
 - Stripe payment integration
 - MongoDB database integration
-- Download format selection
-- Real-time notifications
 
 ## Tech Stack
 - React 18
