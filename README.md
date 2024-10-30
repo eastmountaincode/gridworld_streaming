@@ -1,4 +1,4 @@
-# GridWorld Streaming
+# Gridworld Streaming
 
 A modern React-based streaming platform with user authentication, audio playback, and payment integration.
 
