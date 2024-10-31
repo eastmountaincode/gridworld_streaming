@@ -51,7 +51,7 @@ const PlayerHeader = ({ albumArtworkUrl, audioShelfId, shelfcolor, tracklist, fi
     return (
         <div className="player-header">
             {albumBlurb && (
-                <div className="album-blurb" dangerouslySetInnerHTML={{ __html: albumBlurb }} style={{ textAlign: 'left', margin: '5px 18px 10px 18px', fontSize: '18px', }} />
+                <div className="album-blurb" dangerouslySetInnerHTML={{ __html: albumBlurb }} style={{ textAlign: 'left', margin: '5px 18px 13px 18px', fontSize: '18px', }} />
             )}
             {albumArtworkUrl && (
                 <img

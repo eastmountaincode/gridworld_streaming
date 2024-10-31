@@ -3,7 +3,7 @@ import AudioShelf from '../../audio-streaming/AudioShelf';
 
 const PaidView = () => {
   return (
-    <div className="paid-view">
+    <div className="paid-view" style={{marginTop: '20px'}}>
       <div>
         <AudioShelf albumTitle="Gridworld" shelfcolor="#85b021" />
       </div>

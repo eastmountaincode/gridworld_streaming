@@ -5,23 +5,80 @@ import { FaChevronDown } from 'react-icons/fa';
 import { AudioPlayerContext } from '../../../context/AudioPlayerContext';
 import './AudioShelf.css'; // Import the CSS file
 import DownloadArea from './DownloadArea';
+import { Collapse } from 'antd';
+import styled from 'styled-components';
+
+const StyledCollapse = styled(Collapse)`
+  &&& {
+    width: 100%;
+    max-width: 550px;
+    border: 1px solid black;
+    border-radius: 3px;
+    color: black;
+    background-color: slategray;
+    margin: 0 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 20px; /* this is what controls the space between shelves */
+    min-width: 300px;
+
+    @media (max-width: 481px) {
+      margin-bottom: 16px; // Different margin for mobile
+    }
+
+  }
+
+  .ant-collapse-header {
+    display: flex;
+    align-items: center !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 70px;
+  }
+
+  .ant-collapse-content {
+    background-color: transparent;
+    border-top: 1px solid black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .album-title-container {
+    display: flex; /* allow content to be horizontally arranged */
+  }
+
+  .ant-collapse-content-box {
+    white-space: normal; /* give the text a margin */
+  }
+
+
+
+
+
+  
+
+
+
+
+
+
+`;
+
 
 const AudioShelf = ({ albumTitle, shelfcolor }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [albumData, setAlbumData] = useState(null);
   const [audioShelfId] = useState(() => uuidv4());
 
   const { activeAudioShelfId, isPlaying } = useContext(AudioPlayerContext);
-  const contentRef = useRef(null);
 
   const isActiveAndPlaying = (activeAudioShelfId === audioShelfId) && isPlaying
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-  //console.log('api base url:', API_BASE_URL)
 
   useEffect(() => {
     const fetchAlbumData = async () => {
@@ -37,7 +94,6 @@ const AudioShelf = ({ albumTitle, shelfcolor }) => {
 
       try {
         const fullUrl = `${API_BASE_URL}/api/album?title=${encodeURIComponent(albumTitle)}`;
-        //console.log('full url:', fullUrl);
         const response = await fetch(fullUrl, {
           method: 'GET',
           headers: headers
@@ -60,11 +116,9 @@ const AudioShelf = ({ albumTitle, shelfcolor }) => {
 
         // Read the response body once
         const responseBody = await response.text();
-        //console.log('Response body:', responseBody);
 
         // Parse the response body as JSON
         const responseData = JSON.parse(responseBody);
-        //console.log('Response data:', responseData);
 
         if (!responseData || !responseData.tracklist || !responseData.albumArtworkUrl) {
           throw new Error('Incomplete album data');
@@ -82,72 +136,66 @@ const AudioShelf = ({ albumTitle, shelfcolor }) => {
     fetchAlbumData();
   }, [albumTitle]);
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-    // Add a guard clause to check if contentRef.current exists
-    if (!contentRef.current) return;
-
-    if (isExpanded) {
-      contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
-      setTimeout(() => {
-        contentRef.current.style.height = '0';
-      }, 0);
-    } else {
-      contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
-      setTimeout(() => {
-        contentRef.current.style.height = 'auto';
-      }, 1000);
-    }
-  };
-
   if (loading) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>Loading...</div>;
   if (error && error.message !== 'Incomplete album data') return null;
   if (error) return <div>Error loading album data: {error.message}</div>;
 
   return (
     <div className="audio-shelf-container">
-      <div className={`audio-shelf ${isExpanded ? '' : 'collapsed'}`}>
-        <div className="audio-shelf-header">
-          <div className="album-title-container">
-            {/* ALBUM TITLE */}
-            <h2 className="album-title">{albumTitle}</h2>
+      <StyledCollapse
+        expandIconPosition='end'
+        collapsible='header'
+        className='audio-shelf-collapse'
 
-            {/* ALBUM ARTWORK ICON OR PLAYING ICON */}
-            {isActiveAndPlaying ? (
-              <img src="/images/music-0130.gif" className="album-icon" style={{ height: '35px', width: '35px' }} />
-            ) : (
-              albumData && albumData.albumArtworkUrl && (
-                <img
-                  src={albumData.albumArtworkUrl}
-                  alt="Album artwork"
-                  className="album-icon"
-                  style={{ height: '40px', width: '40px' }}
-                />
-              )
-            )}
-          </div>
-          {/* EXPAND / COLLAPSE BUTTON */}
-          <div
-            className="chevron-container"
-            onClick={toggleExpand}
-          >
-            <FaChevronDown style={{ width: '20px', height: '20px', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)' }} />
-          </div>
-        </div>
-        <div className={`audio-shelf-content ${isExpanded ? 'expanded' : ''}`} ref={contentRef}>
-          {albumData && (
-            <AudioPlayer
-              tracklist={albumData.tracklist}
-              albumArtworkUrl={albumData.albumArtworkUrl}
-              audioShelfId={audioShelfId}
-              shelfcolor={shelfcolor}
-              albumBlurb={albumData.albumBlurb}
-            />
-          )}
-          {albumData.downloadable && <DownloadArea formats={albumData.downloadable.formats} shelfcolor={shelfcolor} audioShelfId={audioShelfId} />}
-        </div>
-      </div>
+        expandIcon={({ isActive }) => (
+          <FaChevronDown
+            style={{
+              fontSize: '20px',
+              transform: `rotate(${isActive ? -90 : 0}deg)`,
+              transition: 'transform 0.3s'
+            }}
+          />
+        )}
+        items={[
+          {
+            key: "1",
+            label: (
+              <div className="album-title-container">
+                <h2 className='album-title'>{albumTitle}</h2>
+                {isActiveAndPlaying ? (
+                  <img src="/images/music-0130.gif" className="album-icon" style={{ height: '40px', width: '40px' }} />
+                ) : (
+                  albumData && albumData.albumArtworkUrl && (
+                    <img src={albumData.albumArtworkUrl} alt="Album artwork" className="album-icon" style={{ height: '40px', width: '40px' }} />
+                  )
+                )}
+              </div>
+            ),
+            children: (
+              <div className='audio-shelf-content' >
+                {albumData && (
+                  <AudioPlayer
+                    tracklist={albumData.tracklist}
+                    albumArtworkUrl={albumData.albumArtworkUrl}
+                    audioShelfId={audioShelfId}
+                    shelfcolor={shelfcolor}
+                    albumBlurb={albumData.albumBlurb}
+                  />
+                )}
+                {albumData.downloadable &&
+                  <DownloadArea
+                    formats={albumData.downloadable.formats}
+                    shelfcolor={shelfcolor}
+                    audioShelfId={audioShelfId}
+                  />
+                }
+              </div>
+            )
+          }
+        ]}
+      />
     </div>
   );
+
 };
 export default AudioShelf;

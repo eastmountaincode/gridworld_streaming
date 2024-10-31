@@ -1,110 +1,126 @@
-.album-title {
-  font-size: 27px;
-  /* Default font size */
-  margin-left: 5px;
-  text-align: left;
-  margin-top: 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
-
-}
-
 .audio-shelf-container {
   display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  width: 100%;
+  justify-content: center; /*centers the whole shelf horizontally */
+  user-select: none;
+  
 }
 
+.album-title {
+  font-size: 27px;
+  font-weight: 500;
+  margin-top: 2px;
+  margin-left: 0px;
+}
+
+
+/* 481 */
 @media (max-width: 481px) {
   .album-title {
-    font-size: 19px;
-    margin-top: 12px;
-  }
-
-  .audio-shelf-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
+    font-size: 25px;
+    margin-top: 4px;
   }
 }
 
-@media (max-width: 380px) {
+/* 429 */
+@media (max-width: 429px) {
+  .album-title {
+    font-size: 23px;
+    margin-top: 4px;
+    margin-left: -2px;
+
+  }
+}
+
+/* 405 */
+@media (max-width: 405px) {
+  .album-title {
+    font-size: 22px;
+    margin-top: 5px;
+
+  }
+}
+
+/* 385 */
+@media (max-width: 385px) {
+  .album-title {
+    font-size: 20px;
+    margin-top: 7px;
+
+  }
+}
+
+/* 372 */
+@media (max-width: 372px) {
+  .album-title {
+    font-size: 19px;
+    margin-top: 8px;
+
+  }
+}
+
+/* 361 */
+@media (max-width: 361px) {
+  .album-title {
+    font-size: 18px;
+    margin-top: 8px;
+  }
+}
+
+/* 348 */
+@media (max-width: 348px) {
   .album-title {
     font-size: 17px;
-    margin-top: 12px;
-
+    margin-top: 9px;
   }
 }
 
-@media (max-width: 355px) {
+/* 338 */
+@media (max-width: 338px) {
   .album-title {
     font-size: 16px;
-    margin-top: 12px;
-
+    margin-top: 10px;
   }
 }
 
-
-.audio-shelf {
-  border: 1px solid black;
-  width: 550px;
-  margin: 2px 20px;
-  overflow: hidden;
-  background-color: slategray;
-
+/* 329 */
+@media (max-width: 329px) {
+  .album-title {
+    font-size: 15px;
+    margin-top: 11px;
+  }
 }
 
-.audio-shelf.collapsed {
-  height: 70px;
-  /* Set a fixed height for the collapsed state */
+/* 320 */
+@media (max-width: 320px) {
+  .album-title {
+    font-size: 14px;
+    margin-top: 12px;
+  }
 }
 
-.audio-shelf-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
+/* 305 */
+@media (max-width: 305px) {
+  .album-title {
+    font-size: 13px;
+    margin-top: 13px;
+  }
 }
 
-.album-title-container {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  /* Allow the container to grow */
-  overflow: hidden;
-  /* Hide overflow content */
+/* 297 */
+@media (max-width: 297px) {
+  .album-title {
+    font-size: 12px;
+    margin-top: 14px;
+    white-space: normal;
+    text-align: left;
+  }
 }
 
 
 .album-icon {
-  margin-left: 14px;
-  margin-top: 3px;
-  margin-right: 10px;
   border: 1px solid black;
+  margin-left: 12px;
 }
 
-.chevron-container {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 10%;
-}
 
-.chevron-container:hover {
-  border: 1px solid black;
-}
-
-.audio-shelf-content {
-  overflow: hidden;
-  transition: height 1.0s ease;
-  height: 0;
-  /* Initial height */
-}
-
-.audio-shelf-content.expanded {
-  height: auto;
-  /* Height will be set dynamically via JavaScript */
-}

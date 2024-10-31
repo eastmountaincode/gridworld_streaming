@@ -6,7 +6,7 @@ const FreeView = () => {
   return (
     <div className="free-view">
       <BuyAccessToken />
-      <div>
+      <div style={{ marginTop: '20px' }}>
         <AudioShelf albumTitle="Gridworld Lite" shelfcolor="#b5b4db" />
       </div>
 

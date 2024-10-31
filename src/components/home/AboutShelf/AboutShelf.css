@@ -1,107 +1,102 @@
-
-
 .about-shelf-container {
   display: flex;
+  width: 100%;
   justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  user-select: none;
 }
-
-.about-shelf {
-  border: 1px solid black;
-  width: 550px;
-  margin: 2px 20px;
-  overflow: hidden;
-  background-color: orange;
-}
-
-.about-shelf-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background-color: orange;
-  cursor: pointer;
-}
-
-.about-title-container {
-  display: flex;
-  align-items: center;
-}
-
-
 
 .about-title {
-  font-size: 27px; /* Default font size */
-  margin-left: 5px;
-  text-align: left;
-  margin-top: 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 27px;
   font-weight: 500;
-
+  margin-top: 2px;
 }
 
 .about-icon {
   margin-left: 10px;
-  margin-top: 1px;
-  margin-right: 10px;
-  width: 23px;
-  height: 23px;
 }
 
 @media (max-width: 481px) {
   .about-title {
-    font-size: 19px;
-    margin-top: 12px;
-
-  }
-
-  .about-icon {
-    margin-left: 7px;
-    margin-top: 3px;
-    margin-right: 10px;
-    width: 19px;
-    height: 19px;
-  }
-
-  .about-shelf-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
+    font-size: 25px;
+    margin-top: 4px;
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 429px) {
+  .about-title {
+    font-size: 23px;
+    margin-top: 4px;
+  }
+
+
+}
+
+@media (max-width: 405px) {
+  .about-title {
+    font-size: 22px;
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 385px) {
+  .about-title {
+    font-size: 20px;
+    margin-top: 6px;
+  }
+}
+
+@media (max-width: 372px) {
+  .about-title {
+    font-size: 19px;
+    margin-top: 7px;
+  }
+}
+
+@media (max-width: 361px) {
+  .about-title {
+    font-size: 18px;
+    margin-top: 7px;
+  }
+}
+
+@media (max-width: 348px) {
   .about-title {
     font-size: 17px;
-    margin-top: 12px;
-
+    margin-top: 7px;
   }
 }
 
-@media (max-width: 355px) {
+@media (max-width: 338px) {
   .about-title {
     font-size: 16px;
-    margin-top: 12px;
-
+    margin-top: 7px;
   }
 }
 
-
-
-.chevron-container {
-  transition: transform 0.3s ease;
+@media (max-width: 329px) {
+  .about-title {
+    font-size: 15px;
+    margin-top: 7px;
+  }
 }
 
-.about-shelf-content {
-  height: 0;
-  overflow: hidden;
-  transition: height 0.3s ease;
-  margin: 0px 20px 5px 20px
+@media (max-width: 320px) {
+  .about-title {
+    font-size: 14px;
+    margin-top: 7px;
+  }
 }
 
-.about-shelf-content.expanded {
-  height: auto;
+@media (max-width: 305px) {
+  .about-title {
+    font-size: 13px;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 297px) {
+  .about-title {
+    font-size: 12px;
+    margin-top: 8px;
+  }
 }
