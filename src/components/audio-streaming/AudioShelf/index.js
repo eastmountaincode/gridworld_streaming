@@ -7,21 +7,41 @@ import './AudioShelf.css'; // Import the CSS file
 import DownloadArea from './DownloadArea';
 import { Collapse } from 'antd';
 import styled from 'styled-components';
+import { keyframes } from 'styled-components';
+
+
+const createGradientAnimation = (shelfcolor) => keyframes`
+  0% {
+    background-color: slategray;
+  }
+  100% {
+    background: linear-gradient(
+      to bottom,
+      slategray 0%,
+      slategray 50%,
+      ${shelfcolor || 'slategray'} 100%
+    );
+  }
+`;
 
 const StyledCollapse = styled(Collapse)`
   &&& {
     width: 100%;
     max-width: 550px;
     border: 1px solid black;
-    border-radius: 3px;
+    border-radius: 8px;
     color: black;
     background-color: slategray;
     margin: 0 20px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-bottom: 20px; /* this is what controls the space between shelves */
+    margin-bottom: 19px; /* this is what controls the space between shelves */
     min-width: 300px;
+
+    .ant-collapse-item-active {
+      animation: ${({ shelfcolor }) => createGradientAnimation(shelfcolor)} 0.5s linear forwards;
+    }
 
     @media (max-width: 481px) {
       margin-bottom: 16px; // Different margin for mobile
@@ -146,6 +166,7 @@ const AudioShelf = ({ albumTitle, shelfcolor }) => {
         expandIconPosition='end'
         collapsible='header'
         className='audio-shelf-collapse'
+        shelfcolor={shelfcolor}
 
         expandIcon={({ isActive }) => (
           <FaChevronDown

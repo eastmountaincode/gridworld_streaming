@@ -9,7 +9,7 @@ const StyledCollapse = styled(Collapse)`
     width: 100%;
     max-width: 550px;
     border: 1px solid black;
-    border-radius: 3px;
+    border-radius: 1px;
     background-color: orange;
     margin: 0px 20px;
     white-space: nowrap;

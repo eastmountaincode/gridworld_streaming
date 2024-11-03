@@ -11,10 +11,16 @@ const StyledCollapse = styled(AntCollapse)`
   &&& {
     background: transparent;
     border: 1px solid black;
-    border-radius: 6px;
+    border-radius: 9px;
     margin: 10px;
     margin-top: 0px;
     color: black;
+    overflow: hidden;
+
+    .ant-collapse-item,
+    .ant-collapse-item-active {
+      background: orange !important;
+    }
   }
 
   .ant-collapse-content {
@@ -27,6 +33,7 @@ const StyledCollapse = styled(AntCollapse)`
     background-color: transparent;
 
   }
+
 `;
 
 const StyledPanel = styled(Panel)`
@@ -40,7 +47,7 @@ const StyledButton = styled(Button)`
   &&& {
     &:not(:disabled) {
       background-color: ${props => props.shelfcolor};
-      border-color: ${props => props.shelfcolor};
+      border-color: black;
     }
     &:disabled {
       border: none;
