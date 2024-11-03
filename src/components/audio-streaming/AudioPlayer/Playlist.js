@@ -32,7 +32,6 @@ const Playlist = ({ tracklist, audioShelfId, shelfcolor, albumArtworkUrl }) => {
             cursor: 'pointer',
             opacity: 1,
             pointerEvents: 'auto',
-            zIndex: 999,
         };
     };
 
@@ -56,10 +55,11 @@ const Playlist = ({ tracklist, audioShelfId, shelfcolor, albumArtworkUrl }) => {
                         padding: '10px',
                         border: `1px solid black`,
                         borderWidth: currentTrack?.trackId === track.trackId ? '1px' : '1px',
-                        borderRadius: '6px'
+                        borderRadius: '6px',
+                        backgroundColor: 'orange',
                     }}
                 >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', overflow: 'hidden' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                             {currentTrack?.trackId === track.trackId && isPlaying ? (
                                 <Button

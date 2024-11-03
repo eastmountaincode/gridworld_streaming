@@ -39,15 +39,15 @@ const StyledPanel = styled(Panel)`
 const StyledButton = styled(Button)`
   &&& {
     &:not(:disabled) {
-      background-color: ${props => props.shelfColor};
-      border-color: ${props => props.shelfColor};
+      background-color: ${props => props.shelfcolor};
+      border-color: ${props => props.shelfcolor};
     }
     &:disabled {
       border: none;
     }
   }
 `;
-const DownloadArea = ({ formats, shelfColor, audioShelfId }) => {
+const DownloadArea = ({ formats, shelfcolor, audioShelfId }) => {
   const { 
     activeRadioComponentId, 
     setActiveRadioComponentId
@@ -97,9 +97,11 @@ const DownloadArea = ({ formats, shelfColor, audioShelfId }) => {
                     onChange={handleFormatChange}
                     style={{
                       marginRight: '5px',
-                      accentColor: shelfColor,
+                      accentColor: shelfcolor,
                       height: '18px',
-                      width: '18px'
+                      width: '18px',
+                      cursor: 'pointer',
+
                     }}
                   />
                   <span style={{ lineHeight: '2' }}>{format.formatName}</span>
@@ -112,7 +114,7 @@ const DownloadArea = ({ formats, shelfColor, audioShelfId }) => {
             onClick={handleDownload}
             disabled={!isActive || !selectedFormat}
             style={{ marginTop: '15px', color: 'black' }}
-            shelfColor={shelfColor}
+            shelfcolor={shelfcolor}
           >
             Go
           </StyledButton>
