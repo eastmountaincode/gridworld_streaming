@@ -1,19 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import MainNavbarAccountArea from './MainNavbarAccountArea';
+import './MainNavbar.css';
 
 const MainNavbar = () => {
   return (
-    <nav style={{ display: 'flex', backgroundColor: 'slategrey' }}>
-      {/* LOGO AREA */}
-      <div className="logo-area" style={{ backgroundColor: 'orange', borderTop: '1px solid black' }}>
+    <nav className="main-nav">
+      <div className="logo-area">
         <Link to="/">
-          <img src="/images/site_logo/gridworld_font_1.png" alt="Logo" style={{ height: '100px' }} />
+          <img src="/images/site_logo/gridworld_font_1_edit.png" alt="Logo" />
         </Link>
       </div>
-
-      {/* ACCOUNT AREA */}
-      <MainNavbarAccountArea />
+      <div className='account-area'>
+        <MainNavbarAccountArea />
+      </div>
     </nav>
   );
 };

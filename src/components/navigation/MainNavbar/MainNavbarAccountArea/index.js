@@ -25,10 +25,6 @@ const MainNavbarAccountArea = () => {
     borderColor: 'black',
   };
 
-  if (authIsLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (!isAuthenticated) {
     return (
       <div className="navbar-account-area">
@@ -52,7 +48,8 @@ const MainNavbarAccountArea = () => {
           className="account-button"
           style={accountButtonStyle}
         >
-          {userData.email}
+          <span className="email-text">{userData.email}</span>
+          <span className="short-text">My Account</span>
         </Button>
 
         <img

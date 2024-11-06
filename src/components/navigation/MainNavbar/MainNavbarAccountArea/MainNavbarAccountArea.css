@@ -1,53 +1,85 @@
-.auth-buttons {
-  display: flex;
-  gap: 10px;
-  margin-right: 10px
-}
-
-@media (max-width: 400px) {
-  .auth-buttons {
-    flex-direction: column;
-    gap: 5px;
-    text-align: right;
-  }
-}
-
-.logged-in-buttons {
-  display: flex;
-  gap: 15px;
-  margin-right: 15px;
-  align-items: center;
-}
-
-@media (max-width: 500px) {
-  .logged-in-buttons{
-    flex-direction: column;
-    gap: 10px;
-    text-align: right;
-    align-items: flex-end;
-  }
-  .user-status-icon{
-    display: none;
-  }
-}
-
 .navbar-account-area {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  padding: 10px;
-  border-bottom: 1px solid black;
-  border-left: 1px solid black;
-  
+  height: 100%;
+  padding: 0px 15px;
+
 }
 
-.user-info {
+.logged-in-buttons {
   display: flex;
+  gap: 15px;
   align-items: center;
-  flex-direction: column;
+
 }
 
 .user-status-icon {
   height: 50px;
 }
+
+.account-button {
+  max-width: min(550px, 55vw);
+}
+
+.account-button span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  text-align: left;
+}
+
+.account-button .email-text {
+  display: inline;
+}
+
+.account-button .short-text {
+  display: none;
+}
+
+
+@media (max-width: 470px) {
+  .account-button .email-text {
+    display: none;
+  }
+  
+  .account-button .short-text {
+    display: inline;
+  }
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+  margin-right: 10px;
+}
+
+@media (max-width: 830px) {
+  .navbar-account-area .logged-in-buttons {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+
+  }
+  
+  .navbar-account-area {
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .user-status-icon {
+    display: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .navbar-account-area .auth-buttons {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+
+  }
+}
+
