@@ -2,16 +2,21 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import validateSession from '../../utils/validateSession';
 import refreshUserData from '../../utils/refreshUserData';
 
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [userSession, setUserSession] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [authIsLoading, setAuthIsLoading] = useState(true);
 
   useEffect(() => {
     const validateAndRefresh = async () => {
-      setIsLoading(true);
-      const { isValid } = await validateSession();
+      setAuthIsLoading(true);
+
+      // Add artificial delay
+      //await new Promise(resolve => setTimeout(resolve, 1000)); // 2 second delay
+
+      const { isValid } = await validateSession()
       if (isValid) {
         const { isRefreshed, userData } = await refreshUserData();
         if (isRefreshed) {
@@ -25,7 +30,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         setUserSession(null);
       }
-      setIsLoading(false);
+      setAuthIsLoading(false);
     };
 
     validateAndRefresh();
@@ -46,7 +51,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={{
       isAuthenticated: !!userSession,
       userData: userSession?.userData,
-      isLoading,
+      authIsLoading,
       login,
       logout
     }}>

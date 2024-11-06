@@ -8,7 +8,7 @@ const MainNavbar = () => {
       {/* LOGO AREA */}
       <div className="logo-area" style={{ backgroundColor: 'orange', borderTop: '1px solid black' }}>
         <Link to="/">
-          <img src="/images/site_logo/gws_logo_web_transparent.png" alt="Logo" style={{ height: '100px' }} />
+          <img src="/images/site_logo/gridworld_font_1.png" alt="Logo" style={{ height: '100px' }} />
         </Link>
       </div>
 

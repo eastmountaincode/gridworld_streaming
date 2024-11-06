@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../context/AuthContext';
 import { Button } from 'antd';
-import './MainNavbarAccountArea.css'; // Import the CSS file
+import './MainNavbarAccountArea.css';
 
 const MainNavbarAccountArea = () => {
-  const { isAuthenticated, userData, logout, isLoading } = useAuth();
+  const { isAuthenticated, userData, logout, authIsLoading } = useAuth();
+
   const navigate = useNavigate();
 
   const handleAccountClick = () => {
@@ -24,7 +25,7 @@ const MainNavbarAccountArea = () => {
     borderColor: 'black',
   };
 
-  if (isLoading) {
+  if (authIsLoading) {
     return <div>Loading...</div>;
   }
 

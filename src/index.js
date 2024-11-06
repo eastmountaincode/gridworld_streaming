@@ -8,6 +8,8 @@ import { AuthProvider } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { AudioPlayerProvider } from './context/AudioPlayerContext';
 import { DownloadRadioButtonProvider } from './context/DownloadRadioButtonContext';
+import { Content } from 'antd/es/layout/layout';
+import { ContentProvider } from './context/ContentContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,11 +17,14 @@ root.render(
         <AudioPlayerProvider>
             <NotificationProvider>
                 <AuthProvider>
-                    <App />
+                    <ContentProvider>
+                        <App />
+                    </ContentProvider>
                 </AuthProvider>
             </NotificationProvider>
         </AudioPlayerProvider>
     </DownloadRadioButtonProvider>
+
 );
 
 // If you want to start measuring performance in your app, pass a function
