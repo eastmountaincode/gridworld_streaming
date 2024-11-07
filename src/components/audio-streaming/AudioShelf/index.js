@@ -76,19 +76,14 @@ const StyledCollapse = styled(Collapse)`
 `;
 
 
-const AudioShelf = ({ albumTitle, shelfcolor, audioShelfId, albumData }) => {
+const AudioShelf = ({ albumTitle, shelfcolor, audioShelfId, albumData, startExpanded }) => {
   console.log('hello')
   console.log(albumData)
   
-  const [error, setError] = useState(null);
-
   const { activeAudioShelfId, isPlaying } = useContext(AudioPlayerContext);
 
   const isActiveAndPlaying = (activeAudioShelfId === audioShelfId) && isPlaying
   
-  if (error && error.message !== 'Incomplete album data') return null;
-  if (error) return <div>Error loading album data: {error.message}</div>;
-
   return (
     <div className="audio-shelf-container">
       <StyledCollapse
@@ -96,7 +91,7 @@ const AudioShelf = ({ albumTitle, shelfcolor, audioShelfId, albumData }) => {
         collapsible='header'
         className='audio-shelf-collapse'
         shelfcolor={shelfcolor}
-
+        defaultActiveKey={startExpanded ? ["1"] : []}
         expandIcon={({ isActive }) => (
           <FaChevronDown
             style={{

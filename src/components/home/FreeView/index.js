@@ -16,6 +16,7 @@ const FreeView = () => {
           shelfcolor="#b5b4db"
           audioShelfId={uuidv4()}
           albumData={albumsData['Gridworld Lite']}
+          startExpanded={true}
         />
       </div>
     </div>

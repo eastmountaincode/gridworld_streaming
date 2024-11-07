@@ -14,6 +14,7 @@ const PaidView = () => {
           shelfcolor="#85b021"
           audioShelfId={uuidv4()}
           albumData={albumsData['Gridworld']}
+          startExpanded={true}
         />
       </div>
       <div>
