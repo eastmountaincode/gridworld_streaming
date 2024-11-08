@@ -46,7 +46,7 @@ const BuyAccessToken = () => {
   };
 
   const buttonStyle = {
-    backgroundColor: 'slategrey',
+    backgroundColor: 'whitesmoke',
     color: 'black',
     borderColor: 'black',
   };
