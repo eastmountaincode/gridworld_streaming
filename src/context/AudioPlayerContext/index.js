@@ -72,7 +72,7 @@ const AudioPlayerProvider = ({ children }) => {
 
 
   const play = async (track, tracklist, audioShelfId, albumArtworkUrl) => {
-    console.log('instructed to play with these parameters:', track.trackTitle, tracklist, audioShelfId, albumArtworkUrl);
+    //console.log('instructed to play with these parameters:', track.trackTitle, tracklist, audioShelfId, albumArtworkUrl);
 
     // if we already have a current song, just RESUME it
     if (soundRef.current && currentTrackRef.current && track.trackId === currentTrackRef.current.trackId) {
