@@ -77,8 +77,6 @@ const StyledCollapse = styled(Collapse)`
 
 
 const AudioShelf = ({ albumTitle, shelfcolor, audioShelfId, albumData, startExpanded }) => {
-  console.log('hello')
-  console.log(albumData)
   
   const { activeAudioShelfId, isPlaying } = useContext(AudioPlayerContext);
 
