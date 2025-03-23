@@ -47,7 +47,10 @@ const Playlist = ({ tracklist, audioShelfId, shelfcolor, albumArtworkUrl }) => {
 
     return (
         <div className="playlist" style={{paddingBottom: '3px'}}>
-            {tracklist.map((track) => (
+            {tracklist
+                .slice()
+                .sort((a, b) => a.trackNumber - b.trackNumber)
+                .map((track) => (
                 <div key={track.trackId}
                     className={`playlist-item ${currentTrack?.trackId === track.trackId ? 'active' : ''}`}
                     style={{
