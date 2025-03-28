@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaChevronDown, FaRegQuestionCircle } from 'react-icons/fa';
+import { FaChevronDown, FaRegQuestionCircle, FaInstagram, FaSpotify, FaGlobe } from 'react-icons/fa';
 import { Collapse } from 'antd';
 import styled from 'styled-components';
 import './AboutShelf.css';
@@ -57,6 +57,20 @@ const StyledCollapse = styled(Collapse)`
       white-space: normal; /* give the text a margin */
       margin-top: 10px;
     }
+
+    .social-icons-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 25px;
+        }
+
+        .social-icon {
+            color: inherit;
+            transition: transform 0.3s;
+        }
+
   }
 `;
 
@@ -101,6 +115,11 @@ const AboutShelf = () => {
                 <p>
                   andreweboylan /// at /// gmail /// dot /// com
                 </p>
+                <div className="social-icons-container">
+                                    <a href="https://andrew-boylan.com/" target="_blank" rel="noopener noreferrer" className="social-icon"><FaGlobe /></a>
+                                    <a href="https://open.spotify.com/artist/6150ZY2kIMKWAedOUXmfD4?si=BTEe-L5KQiye-_sfH4_lrw" target="_blank" rel="noopener noreferrer" className="social-icon"><FaSpotify /></a>
+                                    <a href="https://www.instagram.com/ndrewboylan/" target="_blank" rel="noopener noreferrer" className="social-icon"><FaInstagram /></a>
+                                </div>
               </div>
             )
           }
