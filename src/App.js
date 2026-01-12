@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import React, { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import AdminPanel from './components/admin/AdminPanel';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -37,6 +38,7 @@ function App() {
           <Route path="/account" element={<AccountPage />} />
           <Route path="/payment-result" element={<PaymentResult />} />
         </Routes>
+        <Analytics />
       </div>
     </Router>
   );

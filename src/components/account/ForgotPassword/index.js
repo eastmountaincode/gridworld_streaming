@@ -23,12 +23,12 @@ const ForgotPassword = () => {
 
   const handleEmailSubmit = async (values) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password/check-email`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: values.email }),
+        body: JSON.stringify({ action: 'check-email', email: values.email }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -44,12 +44,12 @@ const ForgotPassword = () => {
 
   const handleSecurityAnswerSubmit = async (values) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password/answer-security-question`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, answer: values.answer }),
+        body: JSON.stringify({ action: 'answer-security-question', email, answer: values.answer }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -68,12 +68,12 @@ const ForgotPassword = () => {
       return;
     }
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password/change-password`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, newPassword: values.newPassword }),
+        body: JSON.stringify({ action: 'change-password', email, newPassword: values.newPassword }),
       });
       const data = await response.json();
       if (response.ok) {
